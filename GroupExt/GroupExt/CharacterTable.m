@@ -94,7 +94,7 @@ GroupCharacterTableFinite[g_] := Module[{x, r, i, p},
 	Sort[Map[GroupCharacterTableNormalize[g, #]&, Table[x[[i, 1]], {i, r}]]]
 ] 
 
-GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin},
+GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin, x, jl, conjprod, smk, smkl},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	e = GroupExponent[g];
@@ -103,13 +103,20 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	t = (-1)^(2/e);
 	s = PowerMod[PrimitiveRoot[p], (p-1)/e, p];
 	fin = GroupCharacterTableFinite[g];
+	conjprod = GroupConjugacyClassProductTable[g];
 	Table[
 		Table[
 			FullSimplify[
 				Sum[
 					Mod[
+						jl = 1;
+						smkl = 1;
+						smk = PowerMod[s, -k, p];
 						einv*Sum[
-							fin[[i, GroupConjugacyClassPower[g, j, l]]]*PowerMod[s, -k*l, p]
+							x = Mod[fin[[i, jl]]*smkl, p];
+							jl = conjprod[[jl, j]];
+							smkl = Mod[smkl*smk, p];
+							x
 						, {l, 0, e-1}]
 					, p]*t^k
 				, {k, 0, e-1}]
