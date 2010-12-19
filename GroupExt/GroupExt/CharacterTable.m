@@ -104,12 +104,14 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	s = PowerMod[PrimitiveRoot[p], (p-1)/e, p];
 	fin = GroupCharacterTableFinite[g];
 	Table[
-		Sum[
-			Mod[
-				einv*Sum[
-					fin[[i, GroupConjugacyClassNum[g, repr[[j]]^l]]]*PowerMod[s, -k*l, p]
-				, {l, 0, e-1}]
-			, p]*t^k
-		, {k, 0, e-1}]
+		Simplify[
+			Sum[
+				Mod[
+					einv*Sum[
+						fin[[i, GroupConjugacyClassNum[g, repr[[j]]^l]]]*PowerMod[s, -k*l, p]
+					, {l, 0, e-1}]
+				, p]*t^k
+			, {k, 0, e-1}]
+		, TimeConstraint -> 1]
 	, {i, 1, r}, {j, 1, r}]
 ] 
