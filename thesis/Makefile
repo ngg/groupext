@@ -1,7 +1,7 @@
 NAME=szakdoli
 
 .PHONY: all
-all: pdf
+all: dvi ps pdf
 
 .PHONY: dvi ps pdf
 dvi: $(NAME).dvi
