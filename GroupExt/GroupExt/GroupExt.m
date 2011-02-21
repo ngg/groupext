@@ -8,7 +8,7 @@ GroupIdentity::usage = ""
 GroupElementOrder::usage = ""
 GroupExponent::usage = ""
 GroupCentralizer2::usage = "bugfix"
-GroupAreConjugates::usage = ""
+GroupConjugatesQ::usage = ""
 GroupConjugacyClass::usage = ""
 GroupConjugacyClassRepresentatives::usage = ""
 GroupNumOfConjugacyClasses::usage = ""
@@ -18,7 +18,7 @@ GroupConjugacyClassRepresentative::usage = ""
 GroupCharacterTable::usage = ""
 GroupCharacterScalarProduct::usage = ""
 
-PermutationGroupQ::usage = "PermutationGroupQ[g] determines whether g is a group or not."
+PermutationGroupQ::usage = "PermutationGroupQ[g] determines whether g is a permutation group or not."
 PermutationGroupElementFromImage::usage = ""
 PermutationGroupElementFromImages::usage = 
 

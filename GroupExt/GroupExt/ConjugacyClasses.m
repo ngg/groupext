@@ -11,7 +11,7 @@ GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentati
 		cent = GroupCentralizer2[g, x];
 		centorder = GroupOrder[cent];		
 		Catch[
-			Do[If[GroupAreConjugates[g, ret[[i]], x], Throw[True]], {i, 1, k}];
+			Do[If[GroupConjugatesQ[g, ret[[i]], x], Throw[True]], {i, 1, k}];
 			k = k+1;
 			ret = Append[ret, x];
 			sum = sum + n/centorder		
@@ -46,7 +46,7 @@ GroupConjugacyClass[g_?GroupQ, a_] :=
 GroupConjugacyClassNum[g_, a_] := Module[{classes},
 	classes = GroupConjugacyClassRepresentatives[g];
 	Do[
-		If[GroupAreConjugates[g, a, classes[[i]]],
+		If[GroupConjugatesQ[g, a, classes[[i]]],
 			Return[i]
 		]
 	, {i, Length[classes]}]

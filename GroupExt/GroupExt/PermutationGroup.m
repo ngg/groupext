@@ -67,7 +67,7 @@ PermutationGroupElementFromImages[g_?PermutationGroupQ, s_] := Module[{sc, wante
 	]
 ]
 
-PermutationGroupAreConjugatesBT[a_, b_, sc_, base_, cangoto_, follow_, img_] := Module[{e, imgn, newimg = img, basen, i, next},
+PermutationGroupConjugatesQBT[a_, b_, sc_, base_, cangoto_, follow_, img_] := Module[{e, imgn, newimg = img, basen, i, next},
 	Catch[
 		imgn = Length[newimg];
 		basen = Length[base];
@@ -85,7 +85,7 @@ PermutationGroupAreConjugatesBT[a_, b_, sc_, base_, cangoto_, follow_, img_] := 
 				Do[
 					next = cangoto[[imgn+1, i]];
 					If [Position[newimg, next, 1] == {},
-						If[PermutationGroupAreConjugatesBT[a, b, sc, base, cangoto, follow, Append[newimg, next]] == True, Throw[True]];
+						If[PermutationGroupConjugatesQBT[a, b, sc, base, cangoto, follow, Append[newimg, next]] == True, Throw[True]];
 					];
 				,{i,Length[cangoto[[imgn+1]]]}];
 				False
@@ -94,7 +94,7 @@ PermutationGroupAreConjugatesBT[a_, b_, sc_, base_, cangoto_, follow_, img_] := 
 	]
 ]
 
-PermutationGroupAreConjugates[g_, a_, b_] := Module[{as, bs, i, sc, basen, base, cangoto, follow, pos, bcyclelen, set, len},
+PermutationGroupConjugatesQ[g_, a_, b_] := Module[{as, bs, i, sc, basen, base, cangoto, follow, pos, bcyclelen, set, len},
 	Catch[
 		set = Union[Flatten[Map[#[[1]] &, GroupGenerators[g]]]];
 		as = Sort[a[[1]], (Length[#1] > Length[#2]) &];
@@ -115,21 +115,21 @@ PermutationGroupAreConjugates[g_, a_, b_] := Module[{as, bs, i, sc, basen, base,
 			Select[GroupOrbits[g, {base[[i]]}][[1]], (bcyclelen[[#]] == len)&]
 		, {i, basen}];		
 
-		PermutationGroupAreConjugatesBT[a, b, sc, base, cangoto, follow, {}]
+		PermutationGroupConjugatesQBT[a, b, sc, base, cangoto, follow, {}]
 	]
 ]
 
-GroupAreConjugates[g_?PermutationGroupQ, a_Cycles, b_Cycles] := 
+GroupConjugatesQ[g_?PermutationGroupQ, a_Cycles, b_Cycles] := 
 	If[!GroupElementQ[g, a],
-		Message[GroupAreConjugates::notelement, a, g];
+		Message[GroupConjugatesQ::notelement, a, g];
 		If[!GroupElementQ[g, b],
-			Message[GroupAreConjugates::notelement, b, g];
+			Message[GroupConjugatesQ::notelement, b, g];
 		];
 	, (* else *)
 		If[!GroupElementQ[g, b],
-			Message[GroupAreConjugates::notelement, b, g];
+			Message[GroupConjugatesQ::notelement, b, g];
 		, (* else *)	
-			PermutationGroupAreConjugates[g, a, b]
+			PermutationGroupConjugatesQ[g, a, b]
 		]
 	]	
   	
