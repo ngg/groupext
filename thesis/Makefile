@@ -22,10 +22,10 @@ $(NAME).dvi: $(wildcard *.tex */*.tex */*/*.tex */*/*/*.tex)
 	rm -f $(NAME).toc
 
 $(NAME).ps: $(NAME).dvi
-	dvips -Ppdf -G0 $(NAME).dvi
+	dvips -t a4 -Ppdf -G0 $(NAME).dvi
 
 $(NAME).pdf: $(NAME).ps
-	ps2pdf $(NAME).ps
+	ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true $(NAME).ps
 
 .PHONY: clean
 clean:
