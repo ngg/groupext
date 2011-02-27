@@ -9,7 +9,7 @@ ps: $(NAME).ps
 pdf: $(NAME).pdf
 
 
-$(NAME).dvi: $(wildcard *.tex */*.tex */*/*.tex */*/*/*.tex *.eps */*.eps */*/*.eps */*/*/*.eps)
+$(NAME).dvi: $(wildcard *.tex */*.tex */*/*.tex */*/*/*.tex *.eps */*.eps */*/*.eps */*/*/*.eps) hivatkozasok/ref.bib
 	latex $(NAME).tex
 	bibtex $(NAME).aux
 	latex $(NAME).tex
