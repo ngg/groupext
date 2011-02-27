@@ -20,6 +20,7 @@ $(NAME).dvi: $(wildcard *.tex */*.tex */*/*.tex */*/*/*.tex)
 	rm -f $(NAME).bbl
 	rm -f $(NAME).blg
 	rm -f $(NAME).toc
+	rm -f $(NAME).tdo
 
 $(NAME).ps: $(NAME).dvi
 	dvips -t a4 -Ppdf -G0 $(NAME).dvi
@@ -35,6 +36,7 @@ clean:
 	rm -f $(NAME).bbl
 	rm -f $(NAME).blg
 	rm -f $(NAME).toc
+	rm -f $(NAME).tdo
 	rm -f $(NAME).dvi
 	rm -f $(NAME).ps
 	rm -f $(NAME).pdf

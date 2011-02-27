@@ -1,4 +1,4 @@
-\documentclass[dvips,a4paper,oneside,titlepage,12pt]{article}
+\documentclass[dvips,a4paper,oneside,12pt]{article} %titlepage beállítás kelleni fog
 \usepackage[utf8]{inputenc}
 \usepackage[dvips]{graphicx}
 \usepackage[T1]{fontenc}
@@ -8,6 +8,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{dsfont}
+\usepackage{indentfirst}
+\usepackage[color=green]{todonotes} %disable majd a véglegesnél
 \usepackage[ps2pdf]{hyperref}
 \linespread{1.3}
 
@@ -24,5 +26,8 @@
 \input{csoport/csoport.tex}
 \input{karakter/karakter.tex}
 \input{hivatkozasok/hivatkozasok.tex}
+
+\todototoc
+\listoftodos
 
 \end{document}
