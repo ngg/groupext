@@ -12,7 +12,7 @@ Jelöljuk $G$ konjugáltosztályainak számát $r$-rel, az osztályokat $C_1, C_
 Legyen $i=1, 2, \dots, r$-re $h_i=|C_i|=|G:C_G(C_i)|$, a konjugáltosztályok elemszáma.
 Természetesen választhatjuk $g_1$-et $1$-nek, így $h_1=1$.
 
-Feltételezzük, hogy az \ref{sec:csoport} fejezetben leírtak szerint $g_i$-k, $h_i$-k már ki vannak számolva.
+Feltételezzük, hogy az \ref{sec:csoport}. fejezetben leírtak szerint $g_i$-k, $h_i$-k már ki vannak számolva.
 Azt is fel kell tennünk, hogy minden $g\in G$-re gyorsan meg tudjuk állapítani, hogy melyik konjugáltosztályba tartozik.
 Kisebb csoportok esetében, ha van elég memória, érdemes minden $g$-re előre kiszámolnunk ezt.
 
@@ -25,7 +25,7 @@ Ismert, hogy $c_{jkl}$ független $g_l$ megválasztásától, valamint hogy telj
 \label{eq:bdscjkl1}
 \frac{h_j\chi^i_j}{d_i}\frac{h_k\chi^i_k}{d_i}=\sum_{l=1}^r c_{jkl}\frac{h_l\chi^i_l}{d_i}
 \end{align}
-Legyen $M_j$ az az $r\times r$-es mátrix, aminek $(k,l)$-edik eleme $c_{jkl}$.
+Legyen $M_j$ az az $r\times r$-es mátrix, aminek $(k,l)$-edik eleme $c_{jkl}$, ezeket könnyen ki tudjuk számolni.
 Legyen $v^i=[h_1\chi^i_1/d_i, h_2\chi^i_2/d_i, \dots, h_r\chi^i_r/d_i]^T$.
 Ha $i, j$-t lerögzítjük, akkor ezekkel a jelölésekkel a (\ref{eq:bdscjkl1}) egyenlet átírható a következő alakba:
 \begin{align}
@@ -62,11 +62,67 @@ Ezalapján $d_i$ kifejezhető, tehát sikerült $\chi^i_j$-ket kiszámolnunk.
 
 \subsubsection{Schneider első módosítása}
 \label{subsubsec:bdssch1}
-\todo{alalfejezet: Schneider 1}
+Ezt a módosítást Schneider írta le \cite{Sch90}-ben.
+Nem annyira a sebességén javít az algoritmusnak, hanem inkább egyszerűbbé teszi azt, ezért ezt vesszük előre,
+annak ellenére is, hogy a \ref{subsubsec:bdsdixon}. részben leírt módosítást Dixon már jóval előtte kitalálta.
+
+Jelöljük $1\le j \le r$-re $j'$-vel azt a szintén $[1, r]$-beli számot, amire $g_j^{-1}$ és $g_{j'}$ konjugáltak,
+vagyis amire $C_{j'}=C_j^{-1}$. Mivel $|C_l|=h_l$, így azon $(x, y, z)\in C_j \times C_k \times C_l$ hármasok száma,
+amire $xy=z$ egyenlő $h_l c_{jkl}$, de szintén egyenlő azon hármasok számával, amikre $x^{-1}z=y$, vagyis $h_l c_{jkl}=h_k c_{j'lk}$.
+Ezt a (\ref{eq:bdscjkl1}) egyenlet jobb oldalába beírva, majd $j$-t és $j'$-t felcserélve kapjuk, hogy
+\begin{align}
+\label{eq:bdssch1}
+\frac{h_{j'}\chi^i_{j'}}{d_i}\chi^i_k=\sum_{l=1}^r c_{jlk}\chi^i_l
+\end{align}
+Vagyis a $[\chi^i_1, \chi^i_2, \dots, \chi^i_r]$ sorvektor baloldali sajátvektora $M_j$-nek.
+
+Konstansszorzók erejéig most is egyértelműen meghatározhatjuk $M_j$-kből ezeket a vektorokat, most viszont a konstansszorzó megállapításához
+kell használnunk a karakterek ortonormáltságát. Tegyük fel, hogy találtunk $r$ darab közös sajátvektort, jelöljük ezeket $w^i$-vel.
+A keresett szorzó $d_i/w^i_1$, mert az első elemnek $d_i$-nek kell lennie.
+\begin{align}
+\label{eq:bdssch2}
+1 = \langle \chi^i, \chi^i \rangle = \frac{1}{|G|}\sum_{j=1}^r h_j |\chi^i_j|^2 = \frac{1}{|G|}\sum_{j=1}^r h_j \left|\frac{d_i}{w^i_1} w^i_j\right|^2 = 
+\frac{d_i^2}{|G| |w^i_1|^2} \sum_{j=1}^r h_j |w^i_j|^2
+\end{align}
+Ezalapján $d_i$-ket megállapíthatjuk, amiből meg $\chi^i_j$-ket megkapjuk.
+
 
 \subsubsection{Dixon módosítása}
 \label{subsubsec:bdsdixon}
-\todo{alalfejezet: Dixon}
+Jelöljük $G$ exponensét, vagyis az elemrendek legkisebb közös többszörösét $e$-vel.
+Ismert, hogy $\chi^i_j$-k algebrai egészek, sőt éppen $d_i$ darab komplex $e$-edik egységgyök összege,
+vagyis az algoritmustól elvárható kell, hogy legyen, hogy a karaktertáblázat elemeit ne csak közelítő értékekkel, hanem pontos értékekkel kapjuk meg.
+Az eddig leírt módszer azonban csak közelítésre volt alkalmas, ugyanis az $M_j$ mátrixok közös sajátértékeit csak úgy tudjuk meghatározni.
+Erre Dixon talált egy megoldást, amit \cite{Dix67}-ben írt le. Az alapötlet az, hogy válasszunk egy alkalmas $p$ prímet, minden számítást $\mathbb{F}_p$
+felett végezzünk el, majd a kapott eredményt emeljük vissza $\mathbb{C}$-be.
+
+Jelöljünk egy $e$-edik komplex primitív egységgyököt $\zeta$-val. Minden karaktertáblázatbeli elem $\mathbb{Z}[\zeta]$-beli.
+$h_j\chi^i_j/d_i$-ről is ismert, hogy algebrai egész, tehát $h_j\chi^i_j/d_i \in \mathbb{Q}[\zeta] \cap \mathbb{A} = \mathbb{Z}[\zeta]$, így a
+(\ref{eq:bdscjkl1}), (\ref{eq:bdssch1}) egyenletek is $\mathbb{Z}[\zeta]$-beliek.
+
+Válasszunk egy olyan $p$ prímet, amire $e|p-1$ és $p > 2 d_i$ minden $1\le i\le r$-re. Mivel $d_i$-ket nem ismerjük még, de tudjuk, hogy 
+$\sum_{i=1}^r d_i^2 = |G|$, ezért $p > 2\lfloor \sqrt{|G|} \rfloor$ elegendő. Mivel $e|p-1$, ezért $\mathbb{F}_p$-ben van $e$-rendű elem, jelöljünk
+egy ilyet $\omega$-val. Így adódik egy $\Theta : \mathbb{Z}[\zeta] \to \mathbb{F}_p$ gyűrűhomomorfizmus, a következő hozzárendeléssel:
+$$\sum_{i=0}^{e-1} a_i \zeta^i \mapsto \sum_{i=0}^{e-1} a_i \omega^i$$
+$\Theta$-t alkalmazva az (\ref{eq:bdssch1}) egyenletre $\mathbb{F}_p$ feletti egyenletrendszert kapunk,
+tehát a $[\Theta(\chi^i_1), \Theta(\chi^i_2), \dots, \Theta(\chi^i_r)]$ sorvektorok $\mathbb{F}_p$ felett baloldali sajátvektorai $\Theta(M_j)$-knek.
+Be kell látnunk, hogy ezek a sorvektorok lineárisan függetlenek $\mathbb{F}_p$ felett.
+Legyen $X$ az a mátrix, aminek $(i, j)$-edik eleme $\chi^i_j$, vagyis $X$ maga a karaktertáblázat.
+Legyen $Y$ az a mátrix, aminek $(j, i)$-edik eleme $h_j\chi^i_j$.
+A karakterek ortonormáltsága miatt $XY=|G|I_r$.
+Erre alkalmazva $\Theta$-t azt kapjuk, hogy $\Theta(X)\Theta(Y)=\Theta(XY)=\Theta(|G|I_r)=\Theta(|G|)I_r$.
+Mivel $|G|$ minden $q$ prímosztójára $q|e$, ezért $q|p-1$, vagyis $\Theta(|G|)\ne 0$, tehát $\Theta(X)$ sorai tényleg lineárisan függetlenek $\mathbb{F}_p$ felett.
+Az $i_1$ és $i_2$-edik sorokhoz tartozó sajátértékek nem mind egyezhetnek meg, ugyanis akkor az a két sor lineárisan összefüggne.
+Így a $\Theta(M_j)$ mátrixok $\mathbb{F}_p$ felett is skalárszorzó erejéig egyértelműen meghatározzák a közös sajátvektoraikat.
+
+Tehát miután kiszámoltuk $\Theta(M_j)$-ket, kiszámolhatjuk a karakterisztikus polinomjaikat, amit faktorizálva megkapjuk a sajátértékeket, amiből végül meghatározhatjuk a sajátvektorokat.
+Ezeket a műveleteket véges testek felett mind könnyen el tudjuk végezni, a részletekbe most nem megyünk bele, mivel az tiszta lineáris algebra, nem tartozik lényegesen a dolgozat témájához.
+
+A kapott sajátvektorokat normalizálhatjuk úgy, hogy megszorozzuk az első elemük inverzével, vagyis azokat a sajátvektorokat nézzük, amiknek az első eleme 1.
+Ezeket a sajátvektorokat jelöljük $v^i$-vel. Mivel $\Theta(\chi^i_1)=\Theta(d_i)=d_i$, így $\Theta(\chi^i_j)=d_i v^i_j$, tehát $d_i$-t kell meghatároznunk.
+
+\todo{bekezdés: $d_i$-k meghatározása}
+\todo{bekezdés: $\Theta(\chi^i_j) \to \chi^i_j$}
 
 \subsubsection{Schneider második módosítása}
 \label{subsubsec:bdssch2}
