@@ -13,12 +13,12 @@
 \usepackage[ps2pdf]{hyperref}
 \linespread{1.3}
 
-\renewcommand\thesection{\arabic{section}}
-\renewcommand\thesubsection{\arabic{section}.\arabic{subsection}}
-\renewcommand\thesubsubsection{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
 \setcounter{secnumdepth}{3}
-
+\renewcommand\thesection{\arabic{section}.}
+\renewcommand\thesubsection{\thesection\arabic{subsection}.}
+\renewcommand\thesubsubsection{\thesubsection\arabic{subsubsection}.}
 \numberwithin{equation}{subsection}
+\renewcommand\theequation{\thesubsection\arabic{equation}}
 
 \begin{document}
 
