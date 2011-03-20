@@ -1,17 +1,23 @@
 \section{Csoportok megadása}
 \label{sec:csoport}
-Az algoritmikus csoportelméletben az egyik legelsőként felmerülő kérdés, hogy hogyan is adjuk meg a csoportot a számítógépnek.
-Mi csak véges csoportokkal foglalkozunk, így az elsőre legkézenfekvőbbnek tűnő megoldás az, ha a csoportot a Cayley-táblázatával definiáljuk.
+Az algoritmikus csoportelméletben az egyik legelsőként felmerülő kérdés, hogy hogyan is adjuk meg
+a csoportot a számítógépnek.
+Mi csak véges csoportokkal foglalkozunk, így az elsőre legkézenfekvőbbnek tűnő megoldás az, ha a
+csoportot a Cayley-táblázatával definiáljuk.
 Ehhez beszámozzuk a csoportelemeket $1$-től $n$-ig ($n$-nel jelöljük mostantól a csoport rendjét),
 és egy $n\times n$-es mátrixban megadjuk minden két elem szorzatának indexét.
 Ennek a módszernek a nyílvánvaló hátránya a nagyon nagy memóriaigény,
-hiszen például egy $100000$-rendű csoport megadásához így $10$ milliárd indexet kell felírnunk, azaz 40 GB memóriára lenne szükségünk.
+hiszen például egy $100000$-rendű csoport megadásához így $10$ milliárd indexet kell felírnunk,
+azaz 40 GB memóriára lenne szükségünk.
 
-Az igazából használt módszereknek egytől-egyig megvan az a hátrányuk, hogy mind kihasználják a csoportnak a speciális szerkezetét.
-A három leggyakrabban használt módszer a csoportot, mint véges halmazon ható permutációcsoportként, gyűrű feletti mátrixcsoportként, illetve végesen prezentált csoportként adja meg.
+Az igazából használt módszereknek egytől-egyig megvan az a hátrányuk, hogy mind kihasználják
+a csoportnak a speciális szerkezetét.
+A három leggyakrabban használt módszer a csoportot, mint véges halmazon ható permutációcsoportként,
+gyűrű feletti mátrixcsoportként, illetve végesen prezentált csoportként adja meg.
 Permutációcsoportok megadásával foglalkozunk az \ref{subsec:permutacio} alfejezetben.
 Mátrixcsoportokkal nem foglalkozunk, az egy különálló szakdolgozat témáját képezhetné.
-Végesen prezentált csoportok egy speciális típusáról, a policiklikus csoportokról lesz szó az \ref{subsec:policiklikus} alfejezetben.
+Végesen prezentált csoportok egy speciális típusáról, a policiklikus csoportokról lesz szó
+az \ref{subsec:policiklikus} alfejezetben.
 
 \todo{bekezdés: fekete doboz csoportok}
 
