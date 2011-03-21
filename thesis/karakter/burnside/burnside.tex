@@ -120,8 +120,18 @@ Ezeket a műveleteket véges testek felett mind könnyen el tudjuk végezni, a r
 
 A kapott sajátvektorokat normalizálhatjuk úgy, hogy megszorozzuk az első elemük inverzével, vagyis azokat a sajátvektorokat nézzük, amiknek az első eleme 1.
 Ezeket a sajátvektorokat jelöljük $v^i$-vel. Mivel $\Theta(\chi^i_1)=\Theta(d_i)=d_i$, így $\Theta(\chi^i_j)=d_i v^i_j$, tehát $d_i$-t kell meghatároznunk.
+Az ismert $\chi^i(g^{-1})=\overline{\chi^i(g)}$ azonosságból kapjuk, hogy
+\begin{align}
+\label{eq:bdssch2}
+1 = \langle \chi^i, \chi^i \rangle = \frac{1}{|G|}\sum_{j=1}^r h_j \chi^i_j \overline{\chi^i_j} = \frac{1}{|G|}\sum_{j=1}^r h_j \chi^i_j \chi^i_{j'}
+\end{align}
+$|G|$-vel szorozva, majd $\Theta$-t ráalkalmazva
+\begin{align}
+\label{eq:bdssch2}
+|G| \equiv \sum_{j=1}^r h_j \Theta(\chi^i_j) \Theta(\chi^i_{j'}) \equiv d_i^2 \sum_{j=1}^r h_j v^i_j v^i_{j'} \pmod(p)
+\end{align}
+Ebből $d_i^2$ $p$-s maradékát megkapjuk, amiből $d_i$ egyértelmű, mert $0<d_i<p/2$ lehet csak.
 
-\todo{bekezdés: $d_i$-k meghatározása}
 \todo{bekezdés: $\Theta(\chi^i_j) \to \chi^i_j$}
 
 \subsubsection{Schneider második módosítása}
