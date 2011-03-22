@@ -27,11 +27,20 @@
 \begin{document}
 
 \input{cimlap.tex}
-\input{tartalom.tex}
+
+\tableofcontents
+\addcontentsline{toc}{section}{\contentsname}
+\clearpage
+
 \input{bevezetes.tex}
 \input{csoport.tex}
 \input{karakter.tex}
-\input{hivatkozasok.tex}
+
+\nocite{*}
+\bibliographystyle{amsalpha}
+\addcontentsline{toc}{section}{\refname}
+\bibliography{ref}
+\clearpage
 
 \todototoc
 \listoftodos
