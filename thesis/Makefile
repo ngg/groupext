@@ -26,7 +26,11 @@ $(NAME).ps: $(NAME).dvi
 	dvips -t a4 -Ppdf -G0 $(NAME).dvi
 
 $(NAME).pdf: $(NAME).ps
+ifeq ($(windir),)
 	ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 $(NAME).ps
+else
+	ps2pdf $(NAME).ps
+endif
 
 .PHONY: clean
 clean:
