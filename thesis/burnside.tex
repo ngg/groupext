@@ -1,4 +1,4 @@
-18;5~\subsection{Burnside-Dixon-Schneider algoritmus}
+\subsection{Burnside-Dixon-Schneider algoritmus}
 \label{subsec:bds}
 Az első algoritmust karaktertáblázatok számítására Burnside írta le \cite{Bur11}-ben. Azóta is az ő módszere, és annak átalakított változatai
 az egyetlen minden csoportra alkalmazható ismert algoritmus.
@@ -21,17 +21,17 @@ Legyen $d_i=\chi^i_1$, azaz $\chi^i$ foka.
 
 $1 \le j, k, l \le r$-re legyen $c_{jkl}$ azon elempárok száma, ahol az egyik elem a $C_j$-beli, a másik elem $C_k$-beli és a szorzatuk $g_l$.
 Ismert, hogy $c_{jkl}$ független $g_l$ megválasztásától, valamint hogy teljesül a következő egyenlőség $\forall 1 \le i, j, k \le r$-re:
-\begin{align}
+\begin{equation}
 \label{eq:bdscjkl1}
 \frac{h_j\chi^i_j}{d_i}\frac{h_k\chi^i_k}{d_i}=\sum_{l=1}^r c_{jkl}\frac{h_l\chi^i_l}{d_i}
-\end{align}
+\end{equation}
 Legyen $M_j$ az az $r\times r$-es mátrix, aminek $(k,l)$-edik eleme $c_{jkl}$, ezeket könnyen ki tudjuk számolni.
 Legyen $v^i=[h_1\chi^i_1/d_i, h_2\chi^i_2/d_i, \dots, h_r\chi^i_r/d_i]^T$.
 Ha $i, j$-t lerögzítjük, akkor ezekkel a jelölésekkel a (\ref{eq:bdscjkl1}) egyenlet átírható a következő alakba:
-\begin{align}
+\begin{equation}
 \label{eq:bdscjkl2}
 \frac{h_j\chi^i_j}{d_i}v^i=M_j v^i
-\end{align}
+\end{equation}
 Vagyis $v^i$ jobboldali sajátvektora $M_j$-nek $\forall i, j$-re.
 Van tehát $r$ darab közös sajátvektorunk minden $M_j$-hez, amik közül semelyik kettőhöz sem tartozhat minden $M_j$ esetén ugyanazok a sajátértékek,
 így ezeket a sajátvektorokat $M_j$-kből konstansszorzó erejéig egyértelműen meghatározhatjuk lineáris algebrai ismereteink alapján.
@@ -40,16 +40,16 @@ A helyes konstansszorzókat könnyen megkaphatjuk, hiszen $v^i_1=h_1\chi^i_1/d_i
 Kérdés, hogy $v^i_j$-k ismeretében hogyan állapíthatjuk meg $\chi^i_j$-ket.
 $h_j$-ket ismerjük, tehát elegendő $d_i$-k kiszámolása.
 Szintén ismert, hogy a komplex-értékű osztályfüggvények terén értelmezhető egy természetes skalárszorzat a következőképpen:
-\begin{align}
+\begin{equation}
 \label{eq:bdsscalar}
 \langle \alpha, \beta \rangle = \frac{1}{|G|}\sum_{g\in G}\alpha(g)\overline{\beta(g)} = \frac{1}{|G|}\sum_{j=1}^r h_j \alpha(g_j) \overline{\beta(g_j)}
-\end{align}
+\end{equation}
 A karakterekre vonatkozó ortogonális relációk alapján $\langle \chi^i, \chi^j \rangle = \delta_{ij}$, ami alapján
-\begin{align}
+\begin{equation}
 \label{eq:bdsdi1}
 1 = \langle \chi^i, \chi^i \rangle = \frac{1}{|G|}\sum_{j=1}^r h_j |\chi^i_j|^2 = \frac{1}{|G|}\sum_{j=1}^r h_j \left|\frac{d_i v^i_j}{h_j}\right|^2 = 
 \frac{d_i^2}{|G|}\sum_{j=1}^r \frac{|v^i_j|^2}{h_j}
-\end{align}
+\end{equation}
 Ezalapján $d_i$ kifejezhető, tehát sikerült $\chi^i_j$-ket kiszámolnunk.
 
 \noindent
@@ -70,20 +70,20 @@ Jelöljük $1\le j \le r$-re $j'$-vel azt a szintén $[1, r]$-beli számot, amir
 vagyis amire $C_{j'}=C_j^{-1}$. Mivel $|C_l|=h_l$, így azon $(x, y, z)\in C_j \times C_k \times C_l$ hármasok száma,
 amire $xy=z$ egyenlő $h_l c_{jkl}$, de szintén egyenlő azon hármasok számával, amikre $x^{-1}z=y$, vagyis $h_l c_{jkl}=h_k c_{j'lk}$.
 Ezt a (\ref{eq:bdscjkl1}) egyenlet jobb oldalába beírva, majd $j$-t és $j'$-t felcserélve kapjuk, hogy
-\begin{align}
+\begin{equation}
 \label{eq:bdssch1}
 \frac{h_{j'}\chi^i_{j'}}{d_i}\chi^i_k=\sum_{l=1}^r c_{jlk}\chi^i_l
-\end{align}
+\end{equation}
 Vagyis a $[\chi^i_1, \chi^i_2, \dots, \chi^i_r]$ sorvektor baloldali sajátvektora $M_j$-nek.
 
 Konstansszorzók erejéig most is egyértelműen meghatározhatjuk $M_j$-kből ezeket a vektorokat, most viszont a konstansszorzó megállapításához
 kell használnunk a karakterek ortonormáltságát. Tegyük fel, hogy találtunk $r$ darab közös sajátvektort, jelöljük ezeket $w^i$-vel.
 A keresett szorzó $d_i/w^i_1$, mert az első elemnek $d_i$-nek kell lennie.
-\begin{align}
+\begin{equation}
 \label{eq:bdssch2}
 1 = \langle \chi^i, \chi^i \rangle = \frac{1}{|G|}\sum_{j=1}^r h_j |\chi^i_j|^2 = \frac{1}{|G|}\sum_{j=1}^r h_j \left|\frac{d_i}{w^i_1} w^i_j\right|^2 = 
 \frac{d_i^2}{|G| |w^i_1|^2} \sum_{j=1}^r h_j |w^i_j|^2
-\end{align}
+\end{equation}
 Ezalapján $d_i$-ket megállapíthatjuk, amiből meg $\chi^i_j$-ket megkapjuk.
 
 
@@ -103,7 +103,9 @@ $h_j\chi^i_j/d_i$-ről is ismert, hogy algebrai egész, tehát $h_j\chi^i_j/d_i 
 Válasszunk egy olyan $p$ prímet, amire $e|p-1$ és $p > 2 d_i$ minden $1\le i\le r$-re. Mivel $d_i$-ket nem ismerjük még, de tudjuk, hogy 
 $\sum_{i=1}^r d_i^2 = |G|$, ezért $p > 2\lfloor \sqrt{|G|} \rfloor$ elegendő. Mivel $e|p-1$, ezért $\mathbb{F}_p$-ben van $e$-rendű elem, jelöljünk
 egy ilyet $\omega$-val. Így adódik egy $\Theta : \mathbb{Z}[\zeta] \to \mathbb{F}_p$ gyűrűhomomorfizmus, a következő hozzárendeléssel:
-$$\sum_{i=0}^{e-1} a_i \zeta^i \mapsto \sum_{i=0}^{e-1} a_i \omega^i$$
+\begin{equation*}
+\sum_{i=0}^{e-1} a_i \zeta^i \mapsto \sum_{i=0}^{e-1} a_i \omega^i
+\end{equation*}
 $\Theta$-t alkalmazva az (\ref{eq:bdssch1}) egyenletre $\mathbb{F}_p$ feletti egyenletrendszert kapunk,
 tehát a $[\Theta(\chi^i_1), \Theta(\chi^i_2), \dots, \Theta(\chi^i_r)]$ sorvektorok $\mathbb{F}_p$ felett baloldali sajátvektorai $\Theta(M_j)$-knek.
 Be kell látnunk, hogy ezek a sorvektorok lineárisan függetlenek $\mathbb{F}_p$ felett.
@@ -121,40 +123,44 @@ Ezeket a műveleteket véges testek felett mind könnyen el tudjuk végezni, a r
 A kapott sajátvektorokat normalizálhatjuk úgy, hogy megszorozzuk az első elemük inverzével, vagyis azokat a sajátvektorokat nézzük, amiknek az első eleme 1.
 Ezeket a sajátvektorokat jelöljük $v^i$-vel. Mivel $\Theta(\chi^i_1)=\Theta(d_i)=d_i$, így $\Theta(\chi^i_j)=d_i v^i_j$, tehát $d_i$-t kell meghatároznunk.
 Az ismert $\chi^i(g^{-1})=\overline{\chi^i(g)}$ azonosságból kapjuk, hogy
-\begin{align}
-\label{eq:bdssch2}
+\begin{equation}
+\label{eq:bdssch3}
 1 = \langle \chi^i, \chi^i \rangle = \frac{1}{|G|}\sum_{j=1}^r h_j \chi^i_j \overline{\chi^i_j} = \frac{1}{|G|}\sum_{j=1}^r h_j \chi^i_j \chi^i_{j'}
-\end{align}
+\end{equation}
 $|G|$-vel szorozva, majd $\Theta$-t ráalkalmazva
-\begin{align}
-\label{eq:bdssch2}
+\begin{equation}
+\label{eq:bdssch4}
 |G| \equiv \sum_{j=1}^r h_j \Theta(\chi^i_j) \Theta(\chi^i_{j'}) \equiv d_i^2 \sum_{j=1}^r h_j v^i_j v^i_{j'} \pmod{p}
-\end{align}
+\end{equation}
 Ebből $d_i^2$ $p$-s maradékát megkapjuk, amiből $d_i$ egyértelmű, mert $0<d_i<p/2$ lehet csak.
 
 $\Theta(\chi^i_j)$-ket már tudjuk, az algoritmus utolsó lépése, hogy visszakapjuk $\chi^i_j$-ket, vagyis a komplex értékeket.
 Mivel $\chi^i_j$ $d_i$ darab $\zeta$-hatvány összege, ezért léteznek olyan $0\le m_{ijk}\le d_i < p$ számok, amikre:
-\begin{align}
+\begin{equation}
 \label{eq:bdsmijk1}
 \chi^i_j = \sum_{k=0}^{e-1} m_{ijk}\zeta^k
-\end{align}
+\end{equation}
 Jelöljük $j(l)$-lel annak a konjugáltosztálynak a számát, amiben $g_j^l$ van. Az előző egyenletből $\chi^i_{j(l)}$-t is ki tudjuk fejezni, mégpedig:
-\begin{align}
+\begin{equation}
 \label{eq:bdsmijk2}
 \chi^i_{j(l)} = \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{k'l}
-\end{align}
+\end{equation}
 Ha a következő összeget tekintjük, majd ezt belehelyettesítjük:
-\begin{align}
-\label{eq:bdsmijk3}
-\frac{1}{e}\sum_{l=0}^{e-1} \chi^i_{j(l)} \zeta^{-kl} = \frac{1}{e}\sum_{l=0}^{e-1} \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{(k'-k)l} =
-\frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} \sum_{l=0}^{e-1} \zeta^{(k'-k)l} = \frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} e \delta_{kk'} =
-m_{ijk}
-\end{align}
+\begin{equation*}
+\label{eq:bdsmijk3a}
+\frac{1}{e}\sum_{l=0}^{e-1} \chi^i_{j(l)} \zeta^{-kl} =
+\frac{1}{e}\sum_{l=0}^{e-1} \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{(k'-k)l} =
+\frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} \sum_{l=0}^{e-1} \zeta^{(k'-k)l} =
+\end{equation*}
+\begin{equation}
+\label{eq:bdsmijk3b}
+= \frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} e \delta_{kk'} = m_{ijk}
+\end{equation}
 $\Theta$-t ráalkalmazzuk az egyenletre:
-\begin{align}
+\begin{equation}
 \label{eq:bdsmijk4}
 m_{ijk} = \Theta(m_{ijk}) = \Theta(e)^{-1} \sum_{l=0}^{e-1} \Theta(\chi^i_{j(l)}) \omega^{-kl}
-\end{align}
+\end{equation}
 Ezzel $\Theta(\chi^i_j)$-kből ki tudtuk fejezni $\chi^i_j$-ket, vagyis készen vagyunk.
 \todo{rendes példa: Dixonra}
 
