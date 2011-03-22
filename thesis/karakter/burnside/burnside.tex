@@ -132,7 +132,31 @@ $|G|$-vel szorozva, majd $\Theta$-t ráalkalmazva
 \end{align}
 Ebből $d_i^2$ $p$-s maradékát megkapjuk, amiből $d_i$ egyértelmű, mert $0<d_i<p/2$ lehet csak.
 
-\todo{bekezdés: $\Theta(\chi^i_j) \to \chi^i_j$}
+$\Theta(\chi^i_j)$-ket már tudjuk, az algoritmus utolsó lépése, hogy visszakapjuk $\chi^i_j$-ket, vagyis a komplex értékeket.
+Mivel $\chi^i_j$ $d_i$ darab $\zeta$-hatvány összege, ezért léteznek olyan $0\le m_{ijk}\le d_i < p$ számok, amikre:
+\begin{align}
+\label{eq:bdsmijk1}
+\chi^i_j = \sum_{k=0}^{e-1} m_{ijk}\zeta^k
+\end{align}
+Jelöljük $j(l)$-lel annak a konjugáltosztálynak a számát, amiben $g_j^l$ van. Az előző egyenletből $\chi^i_{j(l)}$-t is ki tudjuk fejezni, mégpedig:
+\begin{align}
+\label{eq:bdsmijk2}
+\chi^i_{j(l)} = \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{k'l}
+\end{align}
+Ha a következő összeget tekintjük, majd ezt belehelyettesítjük:
+\begin{align}
+\label{eq:bdsmijk3}
+\frac{1}{e}\sum_{l=0}^{e-1} \chi^i_{j(l)} \zeta^{-kl} = \frac{1}{e}\sum_{l=0}^{e-1} \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{(k'-k)l} =
+\frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} \sum_{l=0}^{e-1} \zeta^{(k'-k)l} = \frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} e \delta_{kk'} =
+m_{ijk}
+\end{align}
+$\Theta$-t ráalkalmazzuk az egyenletre:
+\begin{align}
+\label{eq:bdsmijk4}
+m_{ijk} = \Theta(m_{ijk}) = \Theta(e)^{-1} \sum_{l=0}^{e-1} \Theta(\chi^i_{j(l)}) \omega^{-kl}
+\end{align}
+Ezzel $\Theta(\chi^i_j)$-kből ki tudtuk fejezni $\chi^i_j$-ket, vagyis készen vagyunk.
+\todo{rendes példa: Dixonra}
 
 \subsubsection{Schneider második módosítása}
 \label{subsubsec:bdssch2}
