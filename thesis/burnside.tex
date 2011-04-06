@@ -208,8 +208,17 @@ A szorzat első koordinátája $b_i$ és a mátrix első oszlopának skalárszor
 ezért az kell, hogy $b_i$ $j'$-edik koordinátája ne legyen $0$.
 Összefoglalva, akkor tudjuk $V$-t felbontani $M_j$-vel, ha $\exists 2\le i\le s$, amire $b_i$ $j'$-edik koordinátája nem $0$.
 
-\todo{bekezdés: $V=\langle b_1, b_2, \dots, b_s \rangle$ felbontása $M_j$-vel}
+Ha $V=\langle b_1, \dots, b_s \rangle$ oszlop-redukált alakban van megadva, $b_i$ első nemnulla koordinátája a $c_i$-edik,
+akkor a $\Theta(M_j)$ mátrix hatását $V$-n ki tudjuk számolni csak a $c_1, \dots, c_s$-edik oszlopok ismeretével.
+Ugyanis egy $V$-beli vektort egyértelműen meghatároznak a $c_1, \dots, c_s$-edik koordinátái, vagyis ha $\forall 1\le i\le s$-re $b_i\Theta(M_j)$-nek kiszámoljuk a $c_1, \dots, c_s$-edik koordinátáit,
+akkor azok alapján a szorzatot fel tudjuk írni $b_i$-k lineáris kombinációjaként, vagyis ezek alapján az oszlopok alapján fel tudunk írni egy olyan $s\times s$-es $A$ mátrixot,
+ami a $b_i$ bázisban felírt $\Theta(M_j)$-vel való szorzásnak felel meg.
+Ennek kell a sajátaltereit meghatároznunk.
+Ehhez kiszámoljuk a karakterisztikus polinomját, azt $F_p$ felett faktorizálni tudjuk például a Cantor-Zassenhaus algoritmussal \cite{CZ81}, így megkaptuk a $\lambda_i$ sajátértékeket.
+$A-\lambda_i I$ baloldali nulltere lesz az $i$-edik sajátaltér, amit az eredeti bázisba visszaírva megkapjuk $V$ és $\Theta(M_j)$ $i$-edik baloldali sajátalterének metszetét.
 
 \subsubsection{További módosítások}
 \label{subsubsec:bdstovabbi}
+Ha Schneider második módosítását követjük, akkor segít az algoritmusnak ha előre ki tudunk számolni pár irreducibilis karaktert.
+A triviális (csupa $1$) karaktert például mindig fel tudjuk használni.
 \todo{alalfejezet: További módosítások}
