@@ -1,0 +1,31 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{thesistitle}
+\RequirePackage{tikz}
+\RequirePackage{ifthen}
+
+\newcommand{\newtitleinfo}[1]{
+	\expandafter\providecommand\csname @#1\endcsname{}
+	\expandafter\providecommand\csname #1\endcsname{}
+	\expandafter\renewcommand\csname @#1\endcsname{Missing #1}
+	\expandafter\renewcommand\csname #1\endcsname[1]{\expandafter\renewcommand\csname @#1\endcsname{##1}}
+}
+
+\newtitleinfo{title}
+\newtitleinfo{author}
+\newtitleinfo{EHA}
+\newtitleinfo{supervisor}
+\newtitleinfo{supervisorrank}
+\newtitleinfo{department}
+
+\renewcommand\maketitle{
+	\begin{center}
+		\textsc{\@title}\\[1.5cm]
+		\@author (\@EHA.ELTE)\\
+		\@supervisor\\
+		\@supervisorrank\\
+		\@department\\[10cm]
+		\includegraphics[width=5cm]{elte_cimer_ff}
+	\end{center}
+	\thispagestyle{empty}
+	\clearpage
+}
