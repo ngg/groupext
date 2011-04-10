@@ -10,22 +10,20 @@
 
 \newtitleinfo{title}
 \newtitleinfo{author}
-\newtitleinfo{EHA}
 \newtitleinfo{supervisor}
 \newtitleinfo{supervisorrank}
 \newtitleinfo{department}
 
 \renewcommand\maketitle{
 	\centering
-	\textsc{Eötvös Loránd Tudományegyetem}\\
-	\textsc{Természettudományi Kar}
-	\vspace{1cm}
+	\textsc{Eötvös Loránd Tudományegyetem\\ Természettudományi Kar}
+	\vspace{0.5cm}
 	\hrule
-	\vspace{2cm}
-	{\Large\textsc{\@title}}\\[1cm]
-	\@author~(\@EHA.ELTE)\\
-	\@supervisor\\
-	\@supervisorrank\\
+	\vspace{4cm}
+	{\large\@author}\\[1cm]
+	{\Large\textsc{\@title}}\\[2cm]
+	Szakdolgozat\\[6cm]
+	Témavezető: \@supervisor, \@supervisorrank\\
 	\@department
 	\vfill
 	\includegraphics[width=5cm]{elte_cimer_ff}\\
