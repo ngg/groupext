@@ -12,6 +12,7 @@
 \usepackage{cite}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{dsfont}
 \usepackage{indentfirst}
 \usepackage{thesistitle}
@@ -24,6 +25,12 @@
 \renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
 \numberwithin{equation}{subsection}
 \renewcommand\theequation{\thesubsection.\arabic{equation}}
+
+\newtheorem{theorem}{Tétel}[subsection]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\DeclareMathOperator{\ab}{ab}
+\newcommand{\quotgroup}[2]{#1/#2}
 
 \begin{document}
 

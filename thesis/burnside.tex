@@ -19,7 +19,7 @@ Kisebb csoportok esetében, ha van elég memória, érdemes minden $g$-re előre
 Jelöljük $G$ irreducibilis karaktereit $\chi^1, \chi^2, \dots, \chi^r$-rel, és a rövidség kedvéért legyen $\chi^i_j=\chi^i(g_j)$.
 Legyen $d_i=\chi^i_1$, azaz $\chi^i$ foka.
 
-$1 \le j, k, l \le r$-re legyen $c_{jkl}$ azon elempárok száma, ahol az egyik elem a $C_j$-beli, a másik elem $C_k$-beli és a szorzatuk $g_l$.
+$1 \le j, k, l \le r$-re legyen $c_{jkl}$ azon elempárok száma, ahol az egyik elem $C_j$-beli, a másik elem $C_k$-beli és a szorzatuk $g_l$.
 Ismert, hogy $c_{jkl}$ független $g_l$ megválasztásától, valamint hogy teljesül a következő egyenlőség $\forall 1 \le i, j, k \le r$-re:
 \begin{equation}
 \label{eq:bdscjkl1}
@@ -117,8 +117,8 @@ Mivel $|G|$ minden $q$ prímosztójára $q|e$, ezért $q|p-1$, vagyis $\Theta(|G
 Az $i_1$ és $i_2$-edik sorokhoz tartozó sajátértékek nem mind egyezhetnek meg, ugyanis akkor az a két sor lineárisan összefüggne.
 Így a $\Theta(M_j)$ mátrixok $\mathbb{F}_p$ felett is skalárszorzó erejéig egyértelműen meghatározzák a közös sajátvektoraikat.
 
-Tehát miután kiszámoltuk $\Theta(M_j)$-ket, kiszámolhatjuk a karakterisztikus polinomjaikat, amit faktorizálva megkapjuk a sajátértékeket, amiből végül meghatározhatjuk a sajátvektorokat.
-Ezeket a műveleteket véges testek felett mind könnyen el tudjuk végezni, a részletekbe most nem megyünk bele, mivel az tiszta lineáris algebra, nem tartozik lényegesen a dolgozat témájához.
+Tehát miután kiszámoltuk $\Theta(M_j)$-ket, kiszámolhatjuk a karakterisztikus polinomjaikat, amit faktorizálva megkapjuk a sajátértékeket, amiből végül meghatározhatjuk a baloldali sajátvektorokat.
+Ezeket a műveleteket véges testek felett mind könnyen el tudjuk végezni, a részletekbe most nem megyünk bele.
 
 A kapott sajátvektorokat normalizálhatjuk úgy, hogy megszorozzuk az első elemük inverzével, vagyis azokat a sajátvektorokat nézzük, amiknek az első eleme 1.
 Ezeket a sajátvektorokat jelöljük $v^i$-vel. Mivel $\Theta(\chi^i_1)=\Theta(d_i)=d_i$, így $\Theta(\chi^i_j)=d_i v^i_j$, tehát $d_i$-t kell meghatároznunk.
@@ -166,8 +166,68 @@ Ezzel $\Theta(\chi^i_j)$-kből ki tudtuk fejezni $\chi^i_j$-ket, vagyis készen 
 
 \subsubsection{Schneider második módosítása}
 \label{subsubsec:bdssch2}
-\todo{alalfejezet: Schneider 2}
+Nem esett szó eddig arról, hogy hogyan lehet az $M_j$ mátrixokat kiszámolni.
+Egyszerre $M_j$ egy oszlopát (legyen most a $l$-edik) tudjuk megadni, mégpedig úgy hogy $\forall x \in C_j$-re kiszámoljuk
+$y=x^{-1}g_l$-t és azt, hogy $y$ melyik konjugáltosztályba esik.
+$M_j$ $(k,l)$-edik eleme azon $x$-ek száma, amikre $y\in C_k$.
+Általában az algoritmus futásának legnagyobb részét ez a számolás teszi ki, ezért arra kell törekednünk, hogy minél kevesebb oszlop kiszámolásával meghatározhatóak legyenek a sajátvektorok.
+Vegyük észre, hogy $M_j$ első oszlopának $j'$-edik eleme $h_j$, az összes többi eleme $0$, így az első oszlopokat már ismerjük.
+$M_1$-et is ismerjük, hiszen annak $(k,l)$-edik eleme $\delta_{kl}$, vagyis $M_1=I_r$.
+
+Ebben a részben a sajátvektorok kiszámításához mutatunk egy gyorsabb módszert, amihez nem kell mindegyik $M_j$ mátrixot teljesen kiszámolnunk.
+Nevezzük karakteraltereknek $\mathbb{F}_p^r$ azon altereit, amelyeket néhány karakter generál, vagyis a $\langle \Theta(\chi^i) | i \in I \rangle$ alakban felírhatóakat, ahol $I \subseteq \{1,\dots,r\}$.
+A sajátvektorokat a következőképpen szeretnénk kiszámolni:
+kiindulunk egyetlen karakteraltérből (a teljes $\mathbb{F}_p^r$-ről), és minden lépésben egy legalább két dimenziós karakteralteret egy $M_j$ segítségével felbontunk több kisebb dimenziós karakteraltér direktösszegére,
+úgy hogy a karakteralternek nézzük a metszetét $M_j$ sajátaltereivel.
+Ezt addig ismételjük, amíg csak 1-dimenziós karakteraltereink maradnak, ezek a keresett közös sajátvektorok lesznek.
+\todo{jo szo kell: oszlop-redukalt bazis? (angolul: row reduced basis, row echelon basis, echelonized basis)}
+Egy alteret mindig egy oszlop-redukált bázisként tekintünk és tárolunk, ami azt jelenti, hogy a generátorvektorokat egy mátrix soraiként leírva olyat kapunk,
+amire teljesül, hogy minden sor első nemnulla eleme $1$, valamint ha az $i$-edik sorban a $j$-edik elem az első nemnulla elem, akkor $\forall i'>i$ és $\forall j'\le j$-re az $(i',j')$ helyeken 0 van.
+Egy tetszőlegesen megadott bázisból Gauss-eliminációval, majd az üres sorok törlésével oszlop-redukált bázist kaphatunk.
+
+Ahhoz, hogy eldöntsük, hogy melyik $M_j$-vel érdemes próbálkozni egy adott $V$ karakteraltér felbontásánál, a következő lemmára lesz szükségünk:
+\begin{lemma}
+\label{thm:bdsmjfix}
+Legyen $b_1,b_2,\dots,b_s$ a $V$ karakteraltér oszlop-redukált bázisa.
+Akkor és csak akkor esik $V$ a $\Theta(M_j)$ mátrix egyetlen baloldali sajátalterébe, ha minden olyan $V$-beli vektorra, aminek az első koordinátája $0$, teljesül az,
+hogy jobbról szorozva $\Theta(M_j)$-vel a kapott vektornak is $0$ az első koordinátája.
+\end{lemma}
+\begin{proof}
+$V$ karakteraltér, tehát van benne olyan vektor, aminek első koordinátája nemnulla, így $b_1$ első koordinátája $1$.
+Ha $V$ egy sajátaltérbe esik, akkor minden $V$-beli vektor sajátvektor, vagyis ha egy vektor első koordinátája $0$, akkor a szorzatnak is.
+A másik irány bizonyításához tegyük fel indirekten, hogy $V$-be belemetsz két különböző sajátértékhez ($\lambda_1, \lambda_2$) tartozó sajátaltér is.
+Mivel $V$ és egy sajátaltér metszete karakteraltér, ezért van olyan vektor a metszetben, aminek első koordinátája $1$. Legyen egy $\lambda_i$-hez tartozó ilyen vektor $v_i$.
+$b_1=v_i+w_i$ alakba írható, ahol $w_i$ első koordinátája $0$. Ezt jobbról $\Theta(M_j)$-vel szorozva azt kapjuk, hogy
+$b_1\Theta(M_j)=v_i\Theta(M_j)+w_i\Theta(M_j)=\lambda_i v_i+w_i\Theta(M_j)$. Ha csak az első koordinátákat nézzük, akkor azt kapjuk, hogy $b_1\Theta(M_j)$ első koordinátája $\lambda_i$.
+Ezt $i=1,2$-re is megkaptuk, vagyis $\lambda_1=\lambda_2$, ami ellentmondás.
+\end{proof}
+Ez azt jelenti, hogy egy $V=\langle b_1, b_2, \dots, b_s \rangle$ karakteralteret $M_j$-vel akkor tudunk felbontani, ha van olyan $V$-beli vektor,
+aminek első koordinátája $0$, de $\Theta(M_j)$-vel vett szorzatának első koordinátája nem $0$.
+Ez ekvivalens azzal, hogy $\exists 2\le i\le s$, amire $b_i \Theta(M_j)$ első koordinátája nem $0$.
+A szorzat első koordinátája $b_i$ és a mátrix első oszlopának skalárszorzata, és mivel tudjuk, hogy az első oszlopban pontosan egy nemnulla elem van, mégpedig a $j'$-edik helyen,
+ezért az kell, hogy $b_i$ $j'$-edik koordinátája ne legyen $0$.
+Összefoglalva, akkor tudjuk $V$-t felbontani $M_j$-vel, ha $\exists 2\le i\le s$, amire $b_i$ $j'$-edik koordinátája nem $0$.
+
+Ha $V=\langle b_1, \dots, b_s \rangle$ oszlop-redukált alakban van megadva, $b_i$ első nemnulla koordinátája a $c_i$-edik,
+akkor a $\Theta(M_j)$ mátrix hatását $V$-n ki tudjuk számolni csak a $c_1, \dots, c_s$-edik oszlopok ismeretével.
+Ugyanis egy $V$-beli vektort egyértelműen meghatároznak a $c_1, \dots, c_s$-edik koordinátái, vagyis ha $\forall 1\le i\le s$-re $b_i\Theta(M_j)$-nek kiszámoljuk a $c_1, \dots, c_s$-edik koordinátáit,
+akkor azok alapján a szorzatot fel tudjuk írni $b_i$-k lineáris kombinációjaként, vagyis ezek alapján az oszlopok alapján fel tudunk írni egy olyan $s\times s$-es $A$ mátrixot,
+ami a $b_i$ bázisban felírt $\Theta(M_j)$-vel való szorzásnak felel meg.
+Ennek kell a sajátaltereit meghatároznunk.
+Ehhez kiszámoljuk a karakterisztikus polinomját, azt $F_p$ felett faktorizálni tudjuk például a Cantor-Zassenhaus algoritmussal \cite{CZ81}, így megkaptuk a $\lambda_i$ sajátértékeket.
+$A-\lambda_i I$ baloldali nulltere lesz az $i$-edik sajátaltér, amit az eredeti bázisba visszaírva megkapjuk $V$ és $\Theta(M_j)$ $i$-edik baloldali sajátalterének metszetét.
 
 \subsubsection{További módosítások}
 \label{subsubsec:bdstovabbi}
-\todo{alalfejezet: További módosítások}
+Ha Schneider második módosítását követjük, akkor segít az algoritmusnak ha előre ki tudunk számolni pár irreducibilis karaktert.
+A triviális (csupa $1$) karaktert például mindig fel tudjuk használni.
+Általában megéri, hogy a lineáris karaktereket, illetve azok $\Theta$-általi képeit előre kiszámoljuk.
+Először nézzk meg, hogyan tudjuk kiszámolni ezeket Abel-csoportokra.
+(Valójában Abel-csoportoknál csak ezeket kell kiszámolni, hiszen minden irreducibilis karakter lineáris.)
+Ilyenkor minden elem egy önálló konjugáltosztályt alkot.
+Ha $G$ egy ciklikus csoport ($G\simeq Z_n$), akkor minden irreducibilis karakter úgy néz ki, hogy a generátorelemhez hozzárendel egy $n$-edik komplex egységgyököt, a hatványaihoz pedig az egységgyök megfelelő hatványait.
+Ha $G$ Abel-csoport, akkor a véges Abel-csoportok alaptétele szerint felírható prímhatványrendű ciklikusok direktszorzataként, így ezt a felbontást megkeresve a tényezők irreducibilis karaktereit ki tudjuk számolni,
+majd ezek direktszorzataként megkapjuk $G$ irreducibilis karaktereit.
+Abban az esetben ha $G$ nem kommutatív, $G$ abelizálását kell tekintenünk, vagyis a $G^{\ab}=\quotgroup{G}{G'}=\quotgroup{G}{[G,G]}$ Abel-csoportnak kell meghatároznunk a karaktertábláját,
+majd ezen karaktereket $G$-re visszaemelve megkaphatjuk $G$ lineáris irreducibilis karaktereit.
+\todo{bds egyéb módosítások}
