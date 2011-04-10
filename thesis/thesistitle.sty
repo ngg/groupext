@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{thesistitle}
-\RequirePackage{tikz}
 \RequirePackage{ifthen}
+\RequirePackage{graphicx}
 
 \newcommand{\newtitleinfo}[1]{
 	\expandafter\providecommand\csname @#1\endcsname{}
@@ -18,16 +18,20 @@
 \newtitleinfo{department}
 
 \renewcommand\maketitle{
-	\begin{center}
-		\vspace*{3cm}
-		\textsc{\@title}\\[1cm]
-		\@author (\@EHA.ELTE)\\
-		\@supervisor\\
-		\@supervisorrank\\
-		\@department
-		\vfill
-		\includegraphics[width=5cm]{elte_cimer_ff}
-	\end{center}
+	\centering
+	\textsc{Eötvös Loránd Tudományegyetem}\\
+	\textsc{Természettudományi Kar}
+	\vspace{1cm}
+	\hrule
+	\vspace{2cm}
+	{\Large\textsc{\@title}}\\[1cm]
+	\@author~(\@EHA.ELTE)\\
+	\@supervisor\\
+	\@supervisorrank\\
+	\@department
+	\vfill
+	\includegraphics[width=5cm]{elte_cimer_ff}\\
+	Budapest, 2011.
 	\thispagestyle{empty}
 	\clearpage
 }
