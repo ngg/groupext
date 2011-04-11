@@ -10,10 +10,21 @@
 
 \newargument{isfinal}
 \isfinal{false}
-\DeclareOption{final}{\isfinal{true}}
+\DeclareOption{final}{
+	\isfinal{true}
+	\PassOptionsToPackage{disable}{todonotes}
+}
+
+\DeclareOption{dvips}{
+	\PassOptionsToClass{dvips}{article}
+	\PassOptionsToPackage{dvips}{geometry}
+	\PassOptionsToPackage{dvips}{graphicx}
+	\PassOptionsToPackage{dvips}{hyperref}
+}
+
 \ProcessOptions\relax
 
-\LoadClass[dvips,a4paper,twoside,12pt]{article}
+\LoadClass[a4paper,twoside,12pt]{article}
 
 \def\magyarOptions{defaults=hu-min}
 \RequirePackage[magyar]{babel}
@@ -21,10 +32,10 @@
 \special{papersize=210mm,297mm}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
-\RequirePackage[dvips]{graphicx}
+\RequirePackage{graphicx}
 \RequirePackage{ae}
 \RequirePackage{aecompl}
-\RequirePackage[a4paper,dvips,twoside,top=2.5cm,bottom=2.5cm,inner=3.5cm,outer=2.5cm]{geometry}
+\RequirePackage[a4paper,twoside,top=2.5cm,bottom=2.5cm,inner=3.5cm,outer=2.5cm]{geometry}
 \RequirePackage[onehalfspacing]{setspace}
 \RequirePackage{cite}
 \RequirePackage{ifthen}
@@ -32,12 +43,8 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 \RequirePackage{dsfont}
-\ifthenelse{\equal{\@isfinal}{true}}{
-	\RequirePackage[color=green,disable]{todonotes}
-}{
-	\RequirePackage[color=green]{todonotes}
-}
-\RequirePackage[ps2pdf,unicode,pdfpagelayout=TwoPageRight,bookmarksopen]{hyperref}
+\RequirePackage[color=green]{todonotes}
+\RequirePackage[unicode,pdfpagelayout=TwoPageRight,bookmarksopen]{hyperref}
 
 \setcounter{secnumdepth}{3}
 \renewcommand\thesection{\arabic{section}}
@@ -98,10 +105,15 @@
 }
 
 \newargument{bibfile}
+\newargument{bibstyle}
+\bibstyle{amsalpha}
 
 \AtEndDocument{
-	\nocite{*}
-	\bibliographystyle{amsalpha}
+	\clearpage
+	\ifthenelse{\equal{\@isfinal}{false}}{
+		\nocite{*}
+	}{}
+	\bibliographystyle{\@bibstyle}
 	\addcontentsline{toc}{section}{\refname}
 	\bibliography{\@bibfile}
 	\clearpage

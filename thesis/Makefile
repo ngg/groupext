@@ -1,19 +1,13 @@
 NAME=szakdoli
 
 .PHONY: all
-all: dvi ps pdf
+all: $(NAME).pdf
 
-.PHONY: dvi ps pdf
-dvi: $(NAME).dvi
-ps: $(NAME).ps
-pdf: $(NAME).pdf
-
-
-$(NAME).dvi: $(wildcard *.tex *.eps *.sty *.cls) ref.bib
-	latex $(NAME).tex
+$(NAME).pdf: $(wildcard *.tex *.eps *.sty *.cls) ref.bib
+	pdflatex $(NAME).tex
 	bibtex $(NAME).aux
-	latex $(NAME).tex
-	latex $(NAME).tex
+	pdflatex $(NAME).tex
+	pdflatex $(NAME).tex
 	rm -f $(NAME).aux
 	rm -f $(NAME).log
 	rm -f $(NAME).out
@@ -21,16 +15,6 @@ $(NAME).dvi: $(wildcard *.tex *.eps *.sty *.cls) ref.bib
 	rm -f $(NAME).blg
 	rm -f $(NAME).toc
 	rm -f $(NAME).tdo
-
-$(NAME).ps: $(NAME).dvi
-	dvips -t a4 -Ppdf -G0 $(NAME).dvi
-
-$(NAME).pdf: $(NAME).ps
-ifeq ($(windir),)
-	ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 $(NAME).ps
-else
-	ps2pdf $(NAME).ps
-endif
 
 .PHONY: clean
 clean:
@@ -41,6 +25,4 @@ clean:
 	rm -f $(NAME).blg
 	rm -f $(NAME).toc
 	rm -f $(NAME).tdo
-	rm -f $(NAME).dvi
-	rm -f $(NAME).ps
 	rm -f $(NAME).pdf
