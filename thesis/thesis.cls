@@ -10,21 +10,34 @@
 
 \newargument{isfinal}
 \isfinal{false}
-\DeclareOption{final}{
-	\isfinal{true}
-	\PassOptionsToPackage{disable}{todonotes}
-}
+\DeclareOption{final}{\isfinal{true}}
 
-\DeclareOption{dvips}{
-	\PassOptionsToClass{dvips}{article}
-	\PassOptionsToPackage{dvips}{geometry}
-	\PassOptionsToPackage{dvips}{graphicx}
-	\PassOptionsToPackage{dvips}{hyperref}
-}
+\newargument{isdvips}
+\isdvips{false}
+\DeclareOption{dvips}{\isdvips{true}}
 
 \ProcessOptions\relax
 
 \LoadClass[a4paper,twoside,12pt]{article}
+\RequirePackage{ifthen}
+
+\ifthenelse{\equal{\@isfinal}{true}}{
+
+}{
+	\PassOptionsToPackage{disable}{todonotes}
+}
+
+\ifthenelse{\equal{\@isdvips}{true}}{
+	\PassOptionsToClass{dvips}{article}
+	\PassOptionsToPackage{dvips}{geometry}
+	\PassOptionsToPackage{dvips}{graphicx}
+	\PassOptionsToPackage{dvips}{hyperref}
+}{
+	\PassOptionsToClass{pdftex}{article}
+	\PassOptionsToPackage{pdftex}{geometry}
+	\PassOptionsToPackage{pdftex}{hyperref}
+	\PassOptionsToPackage{pdftex}{graphicx}
+}
 
 \def\magyarOptions{defaults=hu-min}
 \RequirePackage[magyar]{babel}
@@ -33,12 +46,14 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{graphicx}
+\ifthenelse{\equal{\@isdvips}{false}}{
+	\RequirePackage{epstopdf}
+}{}
 \RequirePackage{ae}
 \RequirePackage{aecompl}
 \RequirePackage[a4paper,twoside,top=2.5cm,bottom=2.5cm,inner=3.5cm,outer=2.5cm]{geometry}
 \RequirePackage[onehalfspacing]{setspace}
 \RequirePackage{cite}
-\RequirePackage{ifthen}
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}

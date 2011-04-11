@@ -15,6 +15,7 @@ $(NAME).pdf: $(wildcard *.tex *.eps *.sty *.cls) ref.bib
 	rm -f $(NAME).blg
 	rm -f $(NAME).toc
 	rm -f $(NAME).tdo
+	rm -f *-eps-converted-to.pdf
 
 .PHONY: clean
 clean:
