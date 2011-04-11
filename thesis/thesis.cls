@@ -99,6 +99,7 @@
 		Author={\@author}
 	}}
 	\maketitle
+	\renewcommand{\contentsname}{Tartalomjegyzék}
 	\tableofcontents
 	\addcontentsline{toc}{section}{\contentsname}
 	\clearpage
@@ -113,6 +114,7 @@
 	\ifthenelse{\equal{\@isfinal}{false}}{
 		\nocite{*}
 	}{}
+	\renewcommand{\refname}{Hivatkozások}
 	\bibliographystyle{\@bibstyle}
 	\addcontentsline{toc}{section}{\refname}
 	\bibliography{\@bibfile}
