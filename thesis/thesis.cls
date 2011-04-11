@@ -84,7 +84,9 @@
 \newargument{faculty}
 \newargument{university}
 \newargument{calltoarms}
+\calltoarms{}
 \newargument{placeanddate}
+
 
 \renewcommand\maketitle{
 	\begin{center}
@@ -98,7 +100,9 @@
 	Témavezető: \@supervisor, \@supervisorrank\\
 	\@department
 	\vfill
-	\includegraphics[width=5cm]{\@calltoarms}\\
+	\ifthenelse{\equal{\@calltoarms}{}}{}{
+		\includegraphics[width=5cm]{\@calltoarms}\\
+	}
 	\@placeanddate
 	\end{center}
 	\thispagestyle{empty}
