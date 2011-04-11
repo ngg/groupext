@@ -22,9 +22,9 @@
 \RequirePackage{ifthen}
 
 \ifthenelse{\equal{\@isfinal}{true}}{
-
-}{
 	\PassOptionsToPackage{disable}{todonotes}
+}{
+
 }
 
 \ifthenelse{\equal{\@isdvips}{true}}{
@@ -121,21 +121,25 @@
 }
 
 \newargument{bibfile}
+\bibfile{}
 \newargument{bibstyle}
 \bibstyle{amsalpha}
 
 \AtEndDocument{
 	\clearpage
-	\ifthenelse{\equal{\@isfinal}{false}}{
-		\nocite{*}
-	}{}
-	\renewcommand{\refname}{Hivatkozások}
-	\bibliographystyle{\@bibstyle}
-	\addcontentsline{toc}{section}{\refname}
-	\bibliography{\@bibfile}
-	\clearpage
+	\ifthenelse{\equal{\@bibfile}{}}{}{
+		\ifthenelse{\equal{\@isfinal}{false}}{
+			\nocite{*}
+		}{}
+		\renewcommand{\refname}{Hivatkozások}
+		\bibliographystyle{\@bibstyle}
+		\addcontentsline{toc}{section}{\refname}
+		\bibliography{\@bibfile}
+		\clearpage
+	}
 	\ifthenelse{\equal{\@isfinal}{false}}{
 		\todototoc
 		\listoftodos
+		\clearpage
 	}{}
 }
