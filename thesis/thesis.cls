@@ -20,27 +20,24 @@
 \isfinal{false}
 \DeclareOption{final}{\isfinal{true}}
 
-\newargument{isdvips}
-\isdvips{false}
-\DeclareOption{dvips}{\isdvips{true}}
-
 \ProcessOptions\relax
 
 \ifargtrue{isfinal}{
 	\PassOptionsToPackage{disable}{todonotes}
 }
 
-\ifargtrueelse{isdvips}{
-	\PassOptionsToClass{dvips}{article}
-	\PassOptionsToPackage{dvips}{geometry}
-	\PassOptionsToPackage{dvips}{graphicx}
-	\PassOptionsToPackage{dvips}{hyperref}
-}{
+\RequirePackage{ifpdf}
+\ifpdf
 	\PassOptionsToClass{pdftex}{article}
 	\PassOptionsToPackage{pdftex}{geometry}
 	\PassOptionsToPackage{pdftex}{hyperref}
 	\PassOptionsToPackage{pdftex}{graphicx}
-}
+\else
+	\PassOptionsToClass{dvips}{article}
+	\PassOptionsToPackage{dvips}{geometry}
+	\PassOptionsToPackage{dvips}{graphicx}
+	\PassOptionsToPackage{dvips}{hyperref}
+\fi
 
 \LoadClass[a4paper,twoside,12pt]{article}
 
@@ -51,9 +48,9 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{graphicx}
-\ifargfalse{isdvips}{
+\ifpdf
 	\RequirePackage{epstopdf}
-}
+\fi
 \RequirePackage{ae}
 \RequirePackage{aecompl}
 \RequirePackage[a4paper,twoside,top=2.5cm,bottom=2.5cm,inner=3.5cm,outer=2.5cm]{geometry}
