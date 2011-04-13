@@ -8,6 +8,7 @@
 	\expandafter\renewcommand\csname #1\endcsname[1]{\expandafter\renewcommand\csname @#1\endcsname{##1}}
 }
 
+\RequirePackage{ifthen}
 \newcommand{\ifargelse}[4]{\ifthenelse{\equal{\csname @#1\endcsname}{#2}}{#3}{#4}}
 \newcommand{\ifarg}[3]{\ifargelse{#1}{#2}{#3}{}}
 \newcommand{\ifargnot}[3]{\ifargelse{#1}{#2}{}{#3}}
@@ -25,9 +26,6 @@
 
 \ProcessOptions\relax
 
-\LoadClass[a4paper,twoside,12pt]{article}
-\RequirePackage{ifthen}
-
 \ifargtrue{isfinal}{
 	\PassOptionsToPackage{disable}{todonotes}
 }
@@ -43,6 +41,8 @@
 	\PassOptionsToPackage{pdftex}{hyperref}
 	\PassOptionsToPackage{pdftex}{graphicx}
 }
+
+\LoadClass[a4paper,twoside,12pt]{article}
 
 \def\magyarOptions{defaults=hu-min}
 \RequirePackage[magyar]{babel}
