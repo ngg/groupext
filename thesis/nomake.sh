@@ -1,17 +1,15 @@
 #!/bin/sh
 
-latex szakdoli.tex
-bibtex szakdoli.aux
-latex szakdoli.tex
-latex szakdoli.tex
-rm -f szakdoli.aux
-rm -f szakdoli.log
-rm -f szakdoli.out
-rm -f szakdoli.bbl
-rm -f szakdoli.blg
-rm -f szakdoli.toc
-rm -f szakdoli.tdo
+cp szakdoli.tex latex.tex
+latex latex.tex
+bibtex latex.aux
+latex latex.tex
+latex latex.tex
+dvips -t a4 -Ppdf -G0 latex.dvi
+ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 latex.ps
 
-dvips -t a4 -Ppdf -G0 szakdoli.dvi
-
-ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 szakdoli.ps
+cp szakdoli.tex pdflatex.tex
+pdflatex pdflatex.tex
+bibtex pdflatex.aux
+pdflatex pdflatex.tex
+pdflatex pdflatex.tex
