@@ -17,10 +17,10 @@ rm -f latex.tdo
 rm -f latex.tex
 
 cp szakdoli.tex pdflatex.tex
-pdflatex pdflatex.tex
+pdflatex --shell-escape pdflatex.tex
 bibtex pdflatex.aux
-pdflatex pdflatex.tex
-pdflatex pdflatex.tex
+pdflatex --shell-escape pdflatex.tex
+pdflatex --shell-escape pdflatex.tex
 rm -f pdflatex.aux
 rm -f pdflatex.log
 rm -f pdflatex.out

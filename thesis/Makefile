@@ -12,10 +12,10 @@ both: latex.pdf pdflatex.pdf
 
 pdflatex.pdf: $(wildcard *.tex *.eps *.sty *.cls *.bib)
 	cp $(NAME).tex pdflatex.tex
-	pdflatex pdflatex.tex
+	pdflatex --shell-escape pdflatex.tex
 	bibtex pdflatex.aux
-	pdflatex pdflatex.tex
-	pdflatex pdflatex.tex
+	pdflatex --shell-escape pdflatex.tex
+	pdflatex --shell-escape pdflatex.tex
 	rm -f pdflatex.aux
 	rm -f pdflatex.log
 	rm -f pdflatex.out
