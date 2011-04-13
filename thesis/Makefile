@@ -23,7 +23,7 @@ pdflatex.pdf: $(wildcard *.tex *.eps *.sty *.cls *.bib)
 	rm -f pdflatex.blg
 	rm -f pdflatex.toc
 	rm -f pdflatex.tdo
-	rm pdflatex.tex
+	rm -f pdflatex.tex
 
 latex.dvi: $(wildcard *.tex *.eps *.sty *.cls *.bib)
 	cp $(NAME).tex latex.tex
@@ -38,7 +38,7 @@ latex.dvi: $(wildcard *.tex *.eps *.sty *.cls *.bib)
 	rm -f latex.blg
 	rm -f latex.toc
 	rm -f latex.tdo
-	rm latex.tex
+	rm -f latex.tex
 
 latex.ps: latex.dvi
 	dvips -t a4 -Ppdf -G0 $<
