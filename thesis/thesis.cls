@@ -115,10 +115,7 @@
 }
 
 \AtBeginDocument{
-	\hypersetup{pdfinfo={
-		Title={\@title},
-		Author={\@author}
-	}}
+	\hypersetup{pdftitle={\@title},pdfauthor={\@author}}
 	\maketitle
 	\renewcommand{\contentsname}{Tartalomjegyzék}
 	\tableofcontents
