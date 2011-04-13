@@ -8,6 +8,13 @@
 	\expandafter\renewcommand\csname #1\endcsname[1]{\expandafter\renewcommand\csname @#1\endcsname{##1}}
 }
 
+\newcommand{\ifargelse}[4]{\ifthenelse{\equal{\csname @#1\endcsname}{#2}}{#3}{#4}}
+\newcommand{\ifarg}[3]{\ifargelse{#1}{#2}{#3}{}}
+\newcommand{\ifargnot}[3]{\ifargelse{#1}{#2}{}{#3}}
+\newcommand{\ifargtrue}[2]{\ifarg{#1}{true}{#2}}
+\newcommand{\ifargfalse}[2]{\ifarg{#1}{false}{#2}}
+\newcommand{\ifargtrueelse}[3]{\ifargelse{#1}{true}{#2}{#3}}
+
 \newargument{isfinal}
 \isfinal{false}
 \DeclareOption{final}{\isfinal{true}}
@@ -21,13 +28,11 @@
 \LoadClass[a4paper,twoside,12pt]{article}
 \RequirePackage{ifthen}
 
-\ifthenelse{\equal{\@isfinal}{true}}{
+\ifargtrue{isfinal}{
 	\PassOptionsToPackage{disable}{todonotes}
-}{
-
 }
 
-\ifthenelse{\equal{\@isdvips}{true}}{
+\ifargtrueelse{isdvips}{
 	\PassOptionsToClass{dvips}{article}
 	\PassOptionsToPackage{dvips}{geometry}
 	\PassOptionsToPackage{dvips}{graphicx}
@@ -46,9 +51,9 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{graphicx}
-\ifthenelse{\equal{\@isdvips}{false}}{
+\ifargfalse{isdvips}{
 	\RequirePackage{epstopdf}
-}{}
+}
 \RequirePackage{ae}
 \RequirePackage{aecompl}
 \RequirePackage[a4paper,twoside,top=2.5cm,bottom=2.5cm,inner=3.5cm,outer=2.5cm]{geometry}
@@ -100,7 +105,7 @@
 	Témavezető: \@supervisor, \@supervisorrank\\
 	\@department
 	\vfill
-	\ifthenelse{\equal{\@calltoarms}{}}{}{
+	\ifargnot{calltoarms}{}{
 		\includegraphics[width=5cm]{\@calltoarms}\\
 	}
 	\@placeanddate
@@ -131,19 +136,19 @@
 
 \AtEndDocument{
 	\clearpage
-	\ifthenelse{\equal{\@bibfile}{}}{}{
-		\ifthenelse{\equal{\@isfinal}{false}}{
+	\ifargnot{bibfile}{}{
+		\ifargfalse{isfinal}{
 			\nocite{*}
-		}{}
+		}
 		\renewcommand{\refname}{Hivatkozások}
 		\bibliographystyle{\@bibstyle}
 		\addcontentsline{toc}{section}{\refname}
 		\bibliography{\@bibfile}
 		\clearpage
 	}
-	\ifthenelse{\equal{\@isfinal}{false}}{
+	\ifargfalse{isfinal}{
 		\todototoc
 		\listoftodos
 		\clearpage
-	}{}
+	}
 }
