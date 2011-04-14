@@ -60,7 +60,6 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 \RequirePackage{dsfont}
-\RequirePackage{faktor}
 \RequirePackage[color=green]{todonotes}
 \RequirePackage[unicode,pdfpagelayout=TwoPageRight,bookmarksopen]{hyperref}
 
