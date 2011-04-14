@@ -12,9 +12,9 @@
 \newcommand{\ifargelse}[4]{\ifthenelse{\equal{\csname @#1\endcsname}{#2}}{#3}{#4}}
 \newcommand{\ifarg}[3]{\ifargelse{#1}{#2}{#3}{}}
 \newcommand{\ifargnot}[3]{\ifargelse{#1}{#2}{}{#3}}
-\newcommand{\ifargtrue}[2]{\ifarg{#1}{true}{#2}}
-\newcommand{\ifargfalse}[2]{\ifarg{#1}{false}{#2}}
 \newcommand{\ifargtrueelse}[3]{\ifargelse{#1}{true}{#2}{#3}}
+\newcommand{\ifargtrue}[2]{\ifargtrueelse{#1}{#2}{}}
+\newcommand{\ifargfalse}[2]{\ifargtrueelse{#1}{}{#2}}
 
 \newargument{isfinal}
 \isfinal{false}
@@ -60,6 +60,7 @@
 \RequirePackage{amssymb}
 \RequirePackage{amsthm}
 \RequirePackage{dsfont}
+\RequirePackage{faktor}
 \RequirePackage[color=green]{todonotes}
 \RequirePackage[unicode,pdfpagelayout=TwoPageRight,bookmarksopen]{hyperref}
 
