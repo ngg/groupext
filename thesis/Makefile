@@ -45,7 +45,7 @@ latex.ps: latex.dvi
 
 latex.pdf: latex.ps
 ifeq ($(windir),)
- 	ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 $<
+	ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 $<
 else
 	ps2pdf $<
 endif
