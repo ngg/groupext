@@ -14,6 +14,9 @@ Hasznalat:
 Features:
 	Papirmeretet, margokat, betumeretet, sorkozt, ... beallitja
 		ehhez nem kell semmi beallitas
+	Magyarra beallit mindenfelet
+		1.5-os magyar babelscriptet hasznal, ami nem akad ossze rengeteg mas cuccal mint az 1.4-es ami benne van alapbol minden tex csomagban
+		(ezert kell a magyar.ldf)
 	Cimlapot csinal
 		ehhez \begin{document} ELOTT kellenek a kovetkezok:
 			\author{Szerzo neve}
@@ -42,7 +45,36 @@ Features:
 		\newtheorem{}-ekkel beallitja a kovetkezo teteltipusokat: theorem, definition, notation, statement, lemma, corollary, remark
 		persze remek magyar nevekkel stb, es beallitja a szamozasukat olyanra hogy subsectiononkent van
 
-Pelda tex fajl:
+Forditas:
+	ugyanugy mint akarmilyen tex-eket (most tegyuk fel hogy szakdoli.tex a neve)
+	egyik modszer (pdflatex)
+		linuxon:
+			pdflatex --shell-escape szakdoli
+			bibtex szakdoli
+			pdflatex --shell-escape szakdoli
+			pdflatex --shell-escape szakdoli
+		windowson:
+			pdflatex szakdoli
+			bibtex szakdoli
+			pdflatex szakdoli
+			pdflatex szakdoli
+	masik modszer (latex) (nekem ez jon be jobban, szebb pdfet csinal, kisebb lesz a fajl a vegen stb)
+		linuxon:
+			latex szakdoli
+			bibtex szakdoli
+			latex szakdoli
+			latex szakdoli
+			dvips -t a4 -G0 szakdoli
+			ps2pdf -dPDFSETTINGS=/printer -dUseCIEColor=true -sPAPERSIZE=a4 szakdoli
+		windowson:
+			latex szakdoli
+			bibtex szakdoli
+			latex szakdoli
+			latex szakdoli
+			dvips -t a4 -G0 szakdoli
+			ps2pdf szakdoli
+
+Pelda szakdoli.tex fajl:
 
 	\documentclass{thesis}
 	\usepackage{lipsum}
