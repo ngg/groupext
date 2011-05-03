@@ -10,6 +10,7 @@ Opcionalis fajlok:
 Hasznalat: 
 	\documentclass{thesis}
 	vegleges verzional majd: \documentclass[final]{thesis}, featuresnel le lesz irva hogy ez miken valtoztat
+	Tex fajlokat, classt meg mindent UTF8-ban kell lementeni, ugy lesznek jok az ekezetek stb
 
 Features:
 	Papirmeretet, margokat, betumeretet, sorkozt, ... beallitja
