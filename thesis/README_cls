@@ -1,0 +1,81 @@
+Szukseges fajlok:
+	thesis.cls
+	magyar.ldf
+	todonotes.sty
+
+Opcionalis fajlok:
+	elte_cimer_ff.eps (csak ha kell a cimer, persze mas kepre is kicserelheto)
+	egy .bib fajl irodalomjegyzeknek (pelda: ref.bib nalam)
+
+Hasznalat: 
+	\documentclass{thesis}
+	vegleges verzional majd: \documentclass[final]{thesis}, featuresnel le lesz irva hogy ez miken valtoztat
+
+Features:
+	Papirmeretet, margokat, betumeretet, sorkozt, ... beallitja
+		ehhez nem kell semmi beallitas
+	Cimlapot csinal
+		ehhez \begin{document} ELOTT kellenek a kovetkezok:
+			\author{Szerzo neve}
+			\title{Szakdolgozat cime}
+			\university{Egyetem neve}
+			\faculty{Kar neve}
+			\department{Tanszek neve}
+			\supervisor{Temavezeto neve}
+			\supervisorrank{Temavezeto beosztasa}
+			\calltoarms{Cimer kepenek cime} -- ha nem adod meg, nem lesz cimer
+			\placeanddate{Varos, ev}
+	Tartalomjegyzeket csinal
+		ehhez sem kell semmi beallitas, \section{}, \subsection{}, \subsubsection{}-okbol csinalja
+	Irodalomjegyzeket csinal (opcionalis)
+		ehhez \begin{document} ELOTT kell:
+			\bibfile{fajlnev .bib nelkul}
+		alapbol minden a bib-fajlban felsorolt konyvre, cikkre, stb hivatkozik, azokra is, amire nincs kulon \cite{}
+		ezen a \documentclass[final]{thesis} valtoztat, akkor mar csak azok lesznek felsorolva, amikre van \cite{} (mert hivatalosan mindenre hivatkozni kell)
+		stilusa:
+			en alapbol amsalpha stilust hasznalom, az jon be, de ahhoz olyan konvencio szerint kell nevezni hivatkozasokat, ahogy nekem van .bib fajlban (pl Bur11 az Burnside 1911-ben kiadott konyve)
+			ha mas stilus kell, akkor \bibstyle{stilus neve} kell a \begin{document} ELOTT.
+	TodoNotes:
+		ez a szakdolgozat irasa kozben nagyon hasznos, szovegbe akarhova \todo{itt meg ezt meg azt kell csinalnom} parancs beirasaval, ott megjelenik zold keretben hogy jol latszon, ezenkivul a pdf legvegere kerul egy lista az osszesrol hogy miket kell meg csinalni
+		\documentclass[final]{thesis} letiltja ezt a funkciot, vagyis onnantol kezdve a \todo{xyz} az nem fog csinalni semmit, es nem lesz lista a pdf vegen
+	newtheorem:
+		\newtheorem{}-ekkel beallitja a kovetkezo teteltipusokat: theorem, definition, notation, statement, lemma, corollary, remark
+		persze remek magyar nevekkel stb, es beallitja a szamozasukat olyanra hogy subsectiononkent van
+
+Pelda tex fajl:
+
+	\documentclass{thesis}
+	\usepackage{lipsum}
+
+	\author{Nagy Gergely Gábor}
+	\title{Csoportelméleti Algoritmusok Vizsgálata és Implementálása}
+	\university{Eötvös Loránd Tudományegyetem}
+	\faculty{Természettudományi Kar}
+	\department{Algebra és Számelmélet Tanszék}
+	\supervisor{Pelikán József}
+	\supervisorrank{egyetemi adjunktus}
+	\calltoarms{elte_cimer_ff.eps}
+	\placeanddate{Budapest, 2011.}
+
+	\bibfile{ref} % ehhez kell ref.bib fajl
+
+	\begin{document}
+
+	\addcontentsline{toc}{section}{Bevezetés} % ez azert kell, mert \section*-gal csinalom bevezetest, hogy ne legyen szama
+	\section*{Bevezetés}
+	\todo{bevezetest kell irni}
+	\section{Első fejezet}
+	\lipsum
+	\subsection{Egy alfejezet}
+	\lipsum
+	\subsection{Masik alfejezet}
+	\lipsum
+	\subsubsection{Alalfejezet}
+	\lipsum
+	\subsection{Harmadik alfejezet}
+	\lipsum
+	\section{Második fejezet}
+	\lipsum
+	\todo{itt kell meg valamit csinalni}
+
+	\end{document}
