@@ -70,6 +70,9 @@
 \numberwithin{equation}{subsection}
 \renewcommand\theequation{\thesubsection.\arabic{equation}}
 
+\let\@oldcite\cite
+\renewcommand\cite[1]{\ifthenelse{\equal{#1}{need}}{\todo{Hivatkozás hiányzik}}{\@oldcite{#1}}}
+
 \newtheorem{theorem}{Tétel}[subsection]
 \newtheorem{definition}[theorem]{Definíció}
 \newtheorem{notation}[theorem]{Jelölés}
