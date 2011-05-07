@@ -45,6 +45,8 @@ Features:
 	newtheorem:
 		\newtheorem{}-ekkel beallitja a kovetkezo teteltipusokat: theorem, definition, notation, statement, lemma, corollary, remark
 		persze remek magyar nevekkel stb, es beallitja a szamozasukat olyanra hogy subsectiononkent van
+		szamozas alapbol subsectiononkent megy (2.3.5 az a 2. section 3. subsectionjenek 5. akarmije), ez atallithato a numbersection, numbersubsection, numbersubsubsection parameterrel (pl \documentclass[numbersection]{thesis})
+		ha valakinel nincsenek subsectionok akkor allitsa at sectionosre
 
 Forditas:
 	ugyanugy mint akarmilyen tex-eket (most tegyuk fel hogy szakdoli.tex a neve)
