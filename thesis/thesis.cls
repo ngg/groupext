@@ -20,6 +20,14 @@
 \isfinal{false}
 \DeclareOption{final}{\isfinal{true}}
 
+\newargument{numberingin}
+\numberingin{subsection}
+\newargument{thenumberingin}
+\thenumberingin{\thesubsection}
+\DeclareOption{numbersection}{\numberingin{section}\thenumberingin{\thesection}}
+\DeclareOption{numbersubsection}{\numberingin{subsection}\thenumberingin{\thesubsection}}
+\DeclareOption{numbersubsubsection}{\numberingin{subsubsection}\thenumberingin{\thesubsubsection}}
+
 \ProcessOptions\relax
 
 \ifargtrue{isfinal}{
@@ -67,10 +75,10 @@
 \renewcommand\thesection{\arabic{section}}
 \renewcommand\thesubsection{\thesection.\arabic{subsection}}
 \renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
-\numberwithin{equation}{subsection}
-\renewcommand\theequation{\thesubsection.\arabic{equation}}
+\numberwithin{equation}{\@numberingin}
+\renewcommand\theequation{\@thenumberingin.\arabic{equation}}
 
-\newtheorem{theorem}{Tétel}[subsection]
+\newtheorem{theorem}{Tétel}[\@numberingin]
 \newtheorem{definition}[theorem]{Definíció}
 \newtheorem{notation}[theorem]{Jelölés}
 \newtheorem{statement}[theorem]{Állítás}
