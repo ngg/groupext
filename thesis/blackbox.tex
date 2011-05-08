@@ -6,13 +6,14 @@ Ma a legtöbb helyen inkább egy kicsit általánosabb definíciót használnak,
 egyes csoportok tényleges leírása. Az itt leírt definíciót \cite{Ser03}-ból vettem.
 
 A black-box csoport egy olyan csoport,
-aminek elemeit a véges $\Sigma$ ábécé feletti legfeljebb $N$ hosszú szavaival adjuk meg.
+aminek elemeit a véges $\Sigma$ ábécé feletti legfeljebb $N$ hosszú szavaival azonosítjuk.
 Nincs megkövetelve, hogy egy elemnek csak egy szó felelhessen meg, se az hogy minden szó hozzátartozzon
 egy elemhez.
 A csoportműveleteket egy orákulum végzi.
 Ha adott két szó, amik a $g, h\in G$ elemeket reprezentálják,
 akkor meg tudjuk állapítani, hogy $g=1$ igaz-e,
 valamint ki tudjuk számolni a $g^{-1}$-hez és a $gh$-hoz tartozó szavakat.
+Általában a csoport megadása egy generátorrendszer segítségével történik, az elemeihez tartozó szavak megadásával.
 
 Előfordulhat, hogy az orákulum egy $\overline{G} \ge G$ nagyobb csoport elemeihez tartozó szavakat fogad el,
 ilyenkor csak az tesszük fel, hogy azt tudjuk megállapítani, hogy a szó $\overline{G}$-beli-e,
@@ -30,6 +31,19 @@ erről szól az \ref{subsubsec:veletlen}. alfejezet.
 
 \subsubsection{Orbit-algoritmusok}
 \label{subsubsec:orbit}
+Gyakori eset, hogy $G$ hatását nézzük egy $\Omega$ halmazon, és ott egy $\alpha\in\Omega$ elem orbitját,
+vagyis $\alpha^G = \{ \alpha^g | g \in G \}$-t keressük. Ilyen előfordulhat, ha $G \le \mathop{Sym}(\Omega)$,
+de például az is ide tartozik, ha $g \in G$ konjugáltosztályát szeretnénk meghatározni, ugyanis választhatjuk
+$\Omega=G$-t és hatásnak a konjugálást tekinthetjük.
+
+Feltesszük, hogy adott $\beta\in\Omega$ és $g\in G$-re meg tudjuk határozni a $\beta^g$ képet, valamint $\Omega$-beli
+elemeket össze tudunk hasonlítani egymással. Lehetséges, hogy $\Omega$ nagyon nagy, így nem tesszük fel, hogy fel tudjuk sorolni az elemeit.
+
+Legyen $G=<S>$. $\alpha^G$ az a legszűkebb részhalmaza $\Omega$-nak, ami tartalmazza $\alpha$-t, valamint zárt $S$ elemeinek hatására nézve.
+Vegyük azt az irányított gráfot, aminek csúcsai $\Omega$ elemei és $\beta$-ból $\gamma$-ba akkor megy él, ha van olyan $S$-beli elem, ami $\beta$-t $\gamma$-ba viszi.
+Ebben a gráfban kell megkeresnünk az $\alpha$-t tartalmazó összefüggő komponenst.
+Mivel $G$ véges rendű, így $\beta^g=\gamma$ esetén $\exists l \gamma^{g^l}=\beta$, vagyis az összefüggő komponensek erősen osszefüggők.
+A komponenst meg tudjuk találni szélességi kereséssel $O(|S| |\alpha^G|)$ idő alatt, $O(|\alpha^G|)$ memóriával.
 
 \subsubsection{Véletlen csoportelem választása}
 \label{subsubsec:veletlen}
