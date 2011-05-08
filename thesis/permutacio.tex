@@ -1,18 +1,56 @@
 \subsection{Permutációcsoportok}
 \label{subsec:permutacio}
 Minden véges csoport felírható permutációcsoportként, így a permutációcsoportok hatékony használata kiemelten fontos.
-A ma is használt módszer Charles C. Sims-től származik 1970-ből (\cite{Sim70}), a hatékonyságán Donald E. Knuth ötlete javított sokat,
-amit 1991-ben publikált (\cite{Knu91}).
-Legyen $G \le S_n = \mathop{Sym}(\{1, 2, \dots, n\})$.
+A ma is használt módszer Charles C. Sims-től származik 1970-ből (\cite{Sim70}), a hatékonyságán Donald E. Knuth ötlete javított sokat, amit 1991-ben publikált (\cite{Knu91}).
+Az \ref{subsubsec:permdef}. alfejezet az alapvető definíciókról, és a módszer használatához szükséges algoritmusról szól.
+Az \ref{subsubsec:permbasic}. alfejezet pár egyszerű permutációcsoportokkal kapcsolatos algoritmust tárgyal,
+míg az \ref{subsubsec:permbt}. rész az itt előforduló úgynevezett backtrack algoritmusokat részletezi.
+Seress Ákos --- közel 300 oldalas könyvében (\cite{Ser03}) --- részletesebben tárgyal erről a témakörröl.
 
 \subsubsection{Bázisok és erős generátorrendszerek}
-\todo{alfejezet: bázisok és erős generátorrendszerek}
-Definíció, miért jó, elemeket hogy lehet prezentálni, Schreier-Sims
+\label{subsubsec:permdef}
+Legyen $\Omega=\{1, 2, \dots, n\}$, $G \le S_n = \mathop{Sym}(\Omega)$.
+A $B=(\beta_1,\beta_2,\dots,\beta_m)$ különböző $\Omega$-beli elemekből álló sorozatot $G$ bázisának hívjuk,
+ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként fixen tartja $B$-t.
+Egy bázis mindig definiál egy
+\begin{equation}
+\label{eq:permlanc}
+G = G^{[1]} \ge G^{[2]} \ge \dots \ge G^{[m]} \ge G^{[m+1]} = 1
+\end{equation}
+részcsoport-láncot, ahol $G^{[i]}=G_{(\beta_1,\beta_2,\dots,\beta_{i-1})}=G_{\beta_1}\cap G_{\beta_2}\cap\dots\cap G_{\beta_{i-1}}$, vagyis a $B$ első $i-1$ elemét fixen tartó csoportelemek részcsoportja.
+A bázis irredundáns, ha $\forall 1\le i \le m$-re $G^{[i]} > G^{[i+1]}$, vagyis ha a lánc $m+1$ különböző részcsoportból áll.
+Mostantól csak irredundáns bázisokkal foglalkozunk.
+$G^{[i]}$-ben $G^{[i+1]}$ mellékosztályai a $\beta_i^{G^{[i]}}$ orbit elemeinek felel meg, így $2 \le \left| G^{[i]} : G^{[i+1]} \right| \le n$.
+Ezt felhasználva
+\begin{equation}
+\label{eq:permmeret}
+2^m \le |G|=\prod_{i=1}^m \left| G^{[i]} : G^{[i+1]} \right| \le n^m
+\end{equation}
+Logaritmust véve, majd átrendezve
+\begin{equation}
+\label{eq:permmeret2}
+\frac{\log |G|}{\log n} \le m = |B| \le \log |G|
+\end{equation}
+Különböző irredundáns bázisok lehetnek különböző méretűek, de nem lehet egy bázis "túl nagy" emiatt.
+
+$S \subseteq G$ részhalmazt $G$ erős generátorrendszerének hívjuk (a $B$ bázisra nézve), ha $\forall 1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
+Ha adott egy erős generátorrendszer, akkor az \ref{subsubsec:orbit}. fejezetben leírt algoritmussal a $\beta_i^{G^{[i]}}$ orbitok könnyen kiszámolhatóak.
+Ezeket az orbitokat fundamentális orbitoknak hívjuk.
+Ha a kiszámolásuk során az orbit minden pontjához felírjuk, hogy melyik $G$-beli elem viszi oda $\beta_i$-t, akkor megkapjuk az $R_i$ transzverzálist,
+vagyis a $G^{[i+1]}$ mellékosztályainak reprezentáns elemeit.
+Feltehetjük, hogy $1 \in R_i$, vagyis hogy az egységelemet írtuk fel olyan elemnek ami $\beta_i$-t önmagába viszi. Ezeknek a transzverzálisoknak a segítségével
+$\forall g \in G$ kanonikus alakra hozható, azaz egyértelműen felírható ilyen elemek szorzataként.
+Precízebben megfogalmazva $\forall g \in G$-nek pontosan egy olyan szorzatalakja létezik, amire $g = r_m r_{m-1} \dots r_1$, ahol $r_i \in R_i$.
+Ez a szorzatalak algoritmikusan könnyen megtalálható a következőképpen: Adott $g \in G$-re először megkeressük azt az $r_1 \in R_1$-et, amire $\beta_1^g = \beta_1^{r_1}$.
+Ezután $g_2 = g r_1^{-1}$-zel folytatjuk, megkeressük azt az $r_2 \in R_2$-t, amire $\beta_2^{g_2} = \beta_2^{r_2}$. $g_3 = g_2 r_2^{-1}$, és így tovább, folytatjuk amíg végig nem érünk.
+$1 = g_{m+1} = g_{m} r_m^{-1}$ lesz az utolsó lépés, visszaszámolva $g = r_m r_{m-1} \dots r_1$-et kapjuk. Ezt az eljárást szitáló eljárásnak hívjuk.
 
 \subsubsection{Alapvető algoritmusok}
+\label{subsubsec:permbasic}
 \todo{alfejezet: alapvető algoritmusok}
 Csoport rendje, csoporttagság ellenőrzése, ...
 
 \subsubsection{Backtrack algoritmusok}
+\label{subsubsec:permbt}
 \todo{alalfejezet: backtrack algoritmusok}
 Centralizátor, normalizátor, konjugáltosztályok, ...
