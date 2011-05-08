@@ -32,18 +32,34 @@ erről szól az \ref{subsubsec:veletlen}. alfejezet.
 \subsubsection{Orbit-algoritmusok}
 \label{subsubsec:orbit}
 Gyakori eset, hogy $G$ hatását nézzük egy $\Omega$ halmazon, és ott egy $\alpha\in\Omega$ elem orbitját,
-vagyis $\alpha^G = \{ \alpha^g | g \in G \}$-t keressük. Ilyen előfordulhat, ha $G \le \mathop{Sym}(\Omega)$,
+vagyis $\alpha^G = \{ \alpha^g \mid g \in G \}$-t keressük. Ilyen előfordulhat, ha $G \le \mathop{Sym}(\Omega)$,
 de például az is ide tartozik, ha $g \in G$ konjugáltosztályát szeretnénk meghatározni, ugyanis választhatjuk
 $\Omega=G$-t és hatásnak a konjugálást tekinthetjük.
 
 Feltesszük, hogy adott $\beta\in\Omega$ és $g\in G$-re meg tudjuk határozni a $\beta^g$ képet, valamint $\Omega$-beli
 elemeket össze tudunk hasonlítani egymással. Lehetséges, hogy $\Omega$ nagyon nagy, így nem tesszük fel, hogy fel tudjuk sorolni az elemeit.
 
-Legyen $G=<S>$. $\alpha^G$ az a legszűkebb részhalmaza $\Omega$-nak, ami tartalmazza $\alpha$-t, valamint zárt $S$ elemeinek hatására nézve.
+Legyen $G=\langle S\rangle$. $\alpha^G$ az a legszűkebb részhalmaza $\Omega$-nak, ami tartalmazza $\alpha$-t, valamint zárt $S$ elemeinek hatására nézve.
 Vegyük azt az irányított gráfot, aminek csúcsai $\Omega$ elemei és $\beta$-ból $\gamma$-ba akkor megy él, ha van olyan $S$-beli elem, ami $\beta$-t $\gamma$-ba viszi.
 Ebben a gráfban kell megkeresnünk az $\alpha$-t tartalmazó összefüggő komponenst.
 Mivel $G$ véges rendű, így $\beta^g=\gamma$ esetén $\exists l \gamma^{g^l}=\beta$, vagyis az összefüggő komponensek erősen osszefüggők.
-A komponenst meg tudjuk találni szélességi kereséssel $O(|S| |\alpha^G|)$ idő alatt, $O(|\alpha^G|)$ memóriával.
+A komponenst meg tudjuk találni szélességi kereséssel $O(|S| |\alpha^G|)$ idő alatt, $O(|\alpha^G|)$ memória használatával.
+
+Most nézzünk egy általánosabb verziót.
+Legyen adott $\Omega$-n egy algebrai struktúra, és $A \subseteq \Omega$-ra szeretnénk kiszámolni $\langle A^G \rangle$-t, vagyis
+$\Omega$-nak azt a legszűkebb részhalmazát, ami tartalmazza $A$-t és zárt $G$ hatására és az $\Omega$-beli művelet(ek)re is.
+Ha az előző konjugálós példát nézzük úgy, hogy $\Omega$-n is nézzük a csoportműveletet, akkor ezzel $A$ normál lezártját szeretnénk meghatározni.
+Ha $G'=[G,G]$ kommutátor részcsoportot szeretnénk meghatározni,
+akkor azt így tudjuk megtenni, hiszen $G'=\langle[s,t] \mid s,t \in S\rangle_N$, vagyis az $S$-beli elemek kommutátorainak normál lezártja.
+Ezzel tudunk feloldhatóságot valamint nilpotenciát is ellenőrizni.
+
+Mivel a végeredmény zárt $\Omega$-beli műveletekre, így célszerű az algoritmusnak csak egy generátorrendszert előállítani.
+Feltesszük, hogy tudjuk ellenőrizni, hogy $\Omega$ egy eleme benne van-e pár $\Omega$-beli elem által generált struktúrában.
+Az algoritmus az előzőnek egy egyszerű változtatásával kapható, egyrészt az elején a szélességi bejárást $A$ minden eleméből egyszerre kell indítani,
+másrészt ha egy új csúcshoz érünk, akkor csak akkor kell felírnunk a generátorelemek listájába, ha az addigiak által generált struktúrában nincs benne.
+Érdemes itt megjegyeznünk, hogy ha $\Omega$-n legalább egy csoportstruktúra van, akkor minden új generátorelem a csoport elemszámát legalább megduplázza,
+vagyis legfeljebb $O(\log(|\langle A^G\rangle |))$ generátorelemet írunk fel. A számítási idő nagyrésze jellemzően arra a számolásra megy el, amikor egy elemről
+megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában.
 
 \subsubsection{Véletlen csoportelem választása}
 \label{subsubsec:veletlen}
