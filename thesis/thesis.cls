@@ -120,9 +120,11 @@
 	\end{center}
 	\thispagestyle{empty}
 	\clearpage
+	\phantomsection
 	\mbox{}
 	\thispagestyle{empty}
 	\clearpage
+	\phantomsection
 }
 
 \AtBeginDocument{
@@ -132,15 +134,17 @@
 	\tableofcontents
 	\addcontentsline{toc}{section}{\contentsname}
 	\clearpage
+	\phantomsection
 }
 
 \newargument{bibfile}
 \bibfile{}
 \newargument{bibstyle}
-\bibstyle{amsalpha}
+\bibstyle{alpha}
 
 \AtEndDocument{
 	\clearpage
+	\phantomsection
 	\ifargnot{bibfile}{}{
 		\ifargfalse{isfinal}{
 			\nocite{*}
@@ -150,10 +154,12 @@
 		\addcontentsline{toc}{section}{\refname}
 		\bibliography{\@bibfile}
 		\clearpage
+		\phantomsection
 	}
 	\ifargfalse{isfinal}{
 		\todototoc
 		\listoftodos
 		\clearpage
+		\phantomsection
 	}
 }
