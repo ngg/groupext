@@ -44,6 +44,7 @@ Precízebben megfogalmazva $\forall g \in G$-nek pontosan egy olyan szorzatalakj
 Ez a szorzatalak algoritmikusan könnyen megtalálható a következőképpen: Adott $g \in G$-re először megkeressük azt az $r_1 \in R_1$-et, amire $\beta_1^g = \beta_1^{r_1}$.
 Ezután $g_2 = g r_1^{-1}$-zel folytatjuk, megkeressük azt az $r_2 \in R_2$-t, amire $\beta_2^{g_2} = \beta_2^{r_2}$. $g_3 = g_2 r_2^{-1}$, és így tovább, folytatjuk amíg végig nem érünk.
 $1 = g_{m+1} = g_{m} r_m^{-1}$ lesz az utolsó lépés, visszaszámolva $g = r_m r_{m-1} \dots r_1$-et kapjuk. Ezt az eljárást szitáló eljárásnak hívjuk.
+\todo{schreier-sims algoritmus}
 
 \subsubsection{Alapvető algoritmusok}
 \label{subsubsec:permbasic}
