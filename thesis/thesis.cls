@@ -61,7 +61,7 @@
 \fi
 \RequirePackage{ae}
 \RequirePackage{aecompl}
-\RequirePackage[a4paper,twoside,top=2.5cm,bottom=2.5cm,inner=3.5cm,outer=2.5cm]{geometry}
+\RequirePackage[a4paper,twoside,top=2.5cm,bottom=4cm,inner=3.5cm,outer=2.5cm,footskip=2cm]{geometry}
 \RequirePackage[onehalfspacing]{setspace}
 \RequirePackage{cite}
 \RequirePackage{amsmath}
