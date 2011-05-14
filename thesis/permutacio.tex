@@ -59,11 +59,11 @@ $\gamma \in \Omega$-ra $V_i[\gamma]$-t akkor és csak akkor definiáljuk, ha $\g
 és ilyenkor $V_i[\gamma]$ egy $S_i$ egy elemére mutató pointert tartalmaz, ami megfelel a $\gamma$-ból kiinduló egyetlen él cimkéjének.
 Emiatt a tárolási mód miatt Sims eredetileg Schreier-vektoroknak hívta az adatszerkezetet.
 
-Erős generátorrendszerek kiszámolása a Schreier-Sims algoritmussal történik, ami a következő Schreier-től származó lemmán alapszik.
+Erős generátorrendszerek kiszámolása a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
 Ha $H \le G$ és $R$ egy jobb transzverzálisa $H$-nak $G$-ben, akkor minden $g \in G$-re jelöljük
 $Hg\cap R$ egyetlen elemét $\overline{g}$-vel.
 \begin{lemma}
-\label{thm:schreierlemma}
+\label{thm:sims1}
 Legyen $H \le G = \langle S \rangle$ és legyen $R$ jobb transzverzálisa $H$-nak $G$-ben, amire $1\in R$.
 Ilyenkor a
 \begin{equation*}
@@ -81,6 +81,22 @@ Ezekre indukció szerint $h = t_1 t_2 \dots t_i r_i s_{i+1} s_{i+2} \dots s_k$ t
 Ha végigértünk, akkor $h = t_1 t_2 \dots t_k r_k$ alakot kapunk.
 Mivel $h \in H$ és $t_1 t_2 \dots t_k \in \langle T \rangle \le H$, ezért $r_k \in H\cap R = \{1\}$.
 Így $h \in \langle T \rangle$.
+\end{proof}
+\begin{lemma}
+\label{thm:sims2}
+Legyen $\{\beta_1, \beta_2, \dots, \beta_k\} \subseteq \Omega$ és $G \le \mathop{Sym}(\Omega)$. $1 \le i \le k+1$-re legyen $S_i \subseteq G^{[i]} = G_{(\beta_1, \beta_2, \dots, \beta_{i-1})}$,
+amikre $\langle S_i \rangle \ge \langle S_{i+1} \rangle$ teljesül $1 \le i \le k$-ra.
+Ha $\langle S_1 \rangle = G$, $S_k = \emptyset$ és $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$ is teljesül $1 \le i \le k$-ra, akkor $B = (\beta_1, \beta_2, \dots, \beta_k)$
+$G$-nek bázisa, és $S = \bigcup_{i=1}^k S_i$ erős generátorrendszer $B$-re nézve.
+\end{lemma}
+\begin{proof}
+Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G' = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S' = \bigcup_{i=2}^k S_i$ erős generátorrendszere a $B' = \{\beta_2, \beta_3, \dots, \beta_k\}$ bázisra nézva.
+Ellenőriznünk kell, hogy $\forall 1\le i \le k+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
+$G^{[1]} = G$, így $i = 1$-re triviális.
+A lemma feltevéséből $G^{[2]} = G_{\beta_1} = \langle S_1 \rangle_{\beta_1} = \langle S_2 \rangle \le \langle S \cap G_{\beta_1} \rangle \le G_{\beta_1} = G^{[2]}$, vagyis $i = 2$-re is készen vagyunk.
+$i > 2$-re az indukciós feltevés miatt $G^{[i]} \ge \langle S \cap G_{(\beta_1, \dots, \beta_{i-1})} \rangle \ge \langle S' \cap G'_{(\beta_2, \dots, \beta_{i-1})} \rangle = G'_{(\beta_2, \dots, \beta_{i-1})} = G_{(\beta_1, \dots, \beta_{i-1})} = G^{[i]}$,
+tehát $i > 2$-re is készen vagyunk.
+Mivel az indukciós feltevést csak $k \ge 2$ esetén használtuk, a bizonyítással készen vagyunk.
 \end{proof}
 
 \todo{schreier-sims algoritmus}
