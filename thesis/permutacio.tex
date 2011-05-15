@@ -3,14 +3,13 @@
 Minden véges csoport felírható permutációcsoportként, így a permutációcsoportok hatékony használata kiemelten fontos.
 A ma is használt módszer Charles C. Sims-től származik 1970-ből (\cite{Sim70}), a hatékonyságán Donald E. Knuth ötlete javított sokat, amit 1991-ben publikált (\cite{Knu91}).
 Az \ref{subsubsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
-az \ref{subsubsec:permbasic}. alfejezet pár egyszerű ehhez a módszerhez kapcsolódó algoritmust tárgyal,
 az \ref{subsubsec:permss}. alfejezet arról szól, hogy hogyan tudunk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
-míg az \ref{subsubsec:permbt}. rész az itt előforduló bonyolultabb, főként backtrack-jellegű algoritmusokat részletezi.
+míg az \ref{subsubsec:permbt}. rész az itt előforduló főként backtrack-jellegű algoritmusokat részletezi.
 Ez a fejezet egy nagyon rövid kivonata lényegében Seress Ákos közel 300 oldalas könyvének (\cite{Ser03}), ami részletesebben tárgyal erről a témakörröl.
 
 \subsubsection{Bázisok és erős generátorrendszerek}
 \label{subsubsec:permdef}
-Legyen $G \le S_n = \mathop{Sym}(\Omega)$.
+Legyen $G \le S_n = \Sym(\Omega)$.
 A $B=(\beta_1,\beta_2,\dots,\beta_m)$ különböző $\Omega$-beli elemekből álló sorozatot $G$ bázisának hívjuk,
 ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként fixen tartja $B$-t, vagyis ha $G_B=\{1\}$.
 Egy bázis mindig definiál egy
@@ -37,15 +36,8 @@ Különböző irredundáns bázisok lehetnek különböző méretűek, de nem le
 $S \subseteq G$ részhalmazt $G$ erős generátorrendszerének hívjuk (a $B$ bázisra nézve), ha $\forall 1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
 Ha adott egy erős generátorrendszer, akkor az \ref{subsubsec:orbit}. fejezetben leírt algoritmussal a $\beta_i^{G^{[i]}}$ orbitok könnyen kiszámolhatóak.
 Ezeket az orbitokat fundamentális orbitoknak hívjuk.
-Ha a kiszámolásuk során az orbit minden pontjához felírjuk, hogy melyik $G$-beli elem viszi oda $\beta_i$-t, akkor megkapjuk az $R_i$ transzverzálist,
+Ha a kiszámolásuk során az orbit minden pontjához felírjuk, hogy melyik $G^{[i]}$-beli elem viszi oda $\beta_i$-t, akkor megkapjuk az $R_i$ transzverzálist,
 vagyis a $G^{[i+1]}$ mellékosztályainak reprezentáns elemeit.
-Feltehetjük, hogy $1 \in R_i$, vagyis hogy az egységelemet írtuk fel olyan elemnek ami $\beta_i$-t önmagába viszi. Ezeknek a transzverzálisoknak a segítségével
-$\forall g \in G$ kanonikus alakra hozható, azaz egyértelműen felírható ilyen elemek szorzataként.
-Precízebben megfogalmazva $\forall g \in G$-nek pontosan egy olyan szorzatalakja létezik, amire $g = r_m r_{m-1} \dots r_1$, ahol $r_i \in R_i$.
-Ez a szorzatalak algoritmikusan könnyen megtalálható a következőképpen: Adott $g \in G$-re először megkeressük azt az $r_1 \in R_1$-et, amire $\beta_1^g = \beta_1^{r_1}$.
-Ezután $g_2 = g r_1^{-1}$-zel folytatjuk, megkeressük azt az $r_2 \in R_2$-t, amire $\beta_2^{g_2} = \beta_2^{r_2}$. $g_3 = g_2 r_2^{-1}$, és így tovább, folytatjuk amíg végig nem érünk.
-$1 = g_{m+1} = g_{m} r_m^{-1}$ lesz az utolsó lépés, visszaszámolva $g = r_m r_{m-1} \dots r_1$-et kapjuk. Ezt az eljárást szitáló eljárásnak hívjuk.
-
 A transzverzálisokat, ha explicit számolnánk ki és tárolnánk, akkor $\Theta(n^2)$ idő és memória kellene hozzá.
 Ezt elkerülhetjük az úgy nevezett Schreier-fák használatával.
 A Schreier-fa adatszerkezet egy $(S_i, T_i)$ párokból álló sorozat, minden $\beta_i$ bázisponthoz tartozik egy pár.
@@ -60,20 +52,31 @@ $\gamma \in \Omega$-ra $V_i[\gamma]$-t akkor és csak akkor definiáljuk, ha $\g
 és ilyenkor $V_i[\gamma]$ egy $S_i$ egy elemére mutató pointert tartalmaz, ami megfelel a $\gamma$-ból kiinduló egyetlen él cimkéjének.
 Emiatt a tárolási mód miatt Sims eredetileg Schreier-vektoroknak hívta az adatszerkezetet.
 
-\subsubsection{Alapvető algoritmusok}
-\label{subsubsec:permbasic}
-\todo{alfejezet: alapvető algoritmusok}
-Csoport rendje, csoporttagság ellenőrzése, ...
+Feltehetjük, hogy $1 \in R_i$, vagyis hogy az egységelemet írtuk fel olyan elemnek ami $\beta_i$-t önmagába viszi.
+Ezeknek a transzverzálisoknak a segítségével $\forall g \in G$ kanonikus alakra hozható, azaz egyértelműen felírható ilyen elemek szorzataként.
+Precízebben megfogalmazva $\forall g \in G$-nek pontosan egy olyan szorzatalakja létezik, amire $g = r_m r_{m-1} \dots r_1$, ahol $r_i \in R_i$.
+Ez a szorzatalak algoritmikusan könnyen megtalálható a következőképpen: Adott $g \in G$-re először megkeressük azt az $r_1 \in R_1$-et, amire $\beta_1^g = \beta_1^{r_1}$.
+Ezután $g_2 = g r_1^{-1}$-zel folytatjuk, megkeressük azt az $r_2 \in R_2$-t, amire $\beta_2^{g_2} = \beta_2^{r_2}$. $g_3 = g_2 r_2^{-1}$, és így tovább, folytatjuk amíg végig nem érünk.
+$1 = g_{m+1} = g_{m} r_m^{-1}$ lesz az utolsó lépés, visszaszámolva $g = r_m r_{m-1} \dots r_1$-et kapjuk. Ezt az eljárást szitáló eljárásnak hívjuk.
+
+A szitálás alkalmas egyben arra is, hogy egy $h \in \Sym(\Omega)$-beli elemről eldöntsük, hogy $G$-ben van-e.
+Ha megpróbáljuk $h$-ra alkalmazni az eljárást és sikerrel járunk, akkor $h\in G$.
+Két rész van az algoritmusban ahol elakadhatunk.
+Lehet, hogy valamely $i \le m$-re $h_i = h r_1^{-1} r_2^{-1} \dots r_{i-1}^{-1}$-re nem találunk megfelelő $r_i$-t, mert $\beta_i^{h_i} \notin \beta_i^{G^{[i]}}$.
+Lehet az is, hogy a végén $g_{m+1} \neq 1$.
+Mindkét ilyen esetben nyilvánvalóan $h \notin G$.
+
+$G$ rendjét is könnyen kiszámolhatjuk egy erős generátorrendszer ismeretében, ugyanis $|G| = |\beta_1^{G^{[1]}}| |\beta_2^{G^{[2]}}| \dots |\beta_m^{G^{[m]}}| = |R_1| |R_2| \dots |R_m|$.
 
 \subsubsection{Schreier-Sims algoritmus}
 \label{subsubsec:permss}
-
-Erős generátorrendszerek kiszámolása a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
-Ha $H \le G$ és $R$ egy jobb transzverzálisa $H$-nak $G$-ben, akkor minden $g \in G$-re jelöljük
-$Hg\cap R$ egyetlen elemét $\overline{g}$-vel.
+Ha megadnak nekünk egy $G \le \Sym(\Omega)$ permutációcsoportot valahogyan (black-box csoportnak is tekinthetjük akár),
+akkor ki kell tudnunk számolni egy bázisát és egy erős generátorrendszert, ahhoz hogy hatékonyan tudjunk vele dolgozni.
+Ez a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
 \begin{lemma}
 \label{thm:sims1}
 Legyen $H \le G = \langle S \rangle$ és legyen $R$ jobb transzverzálisa $H$-nak $G$-ben, amire $1\in R$.
+Jelöljük $g \in G$-re $Hg\cap R$ egyetlen elemét $\overline{g}$-vel.
 Ilyenkor a
 \begin{equation*}
 T=\left\{ rs(\overline{rs})^{-1} \mid r\in R, s\in S \right\}
@@ -93,7 +96,7 @@ Mivel $h \in H$ és $t_1 t_2 \dots t_k \in \langle T \rangle \le H$, ezért $r_k
 \end{proof}
 \begin{lemma}
 \label{thm:sims2}
-Legyen $\{\beta_1, \beta_2, \dots, \beta_k\} \subseteq \Omega$ és $G \le \mathop{Sym}(\Omega)$. $1 \le i \le k+1$-re legyen $S_i \subseteq G^{[i]} = G_{(\beta_1, \beta_2, \dots, \beta_{i-1})}$,
+Legyen $\{\beta_1, \beta_2, \dots, \beta_k\} \subseteq \Omega$ és $G \le \Sym(\Omega)$. $1 \le i \le k+1$-re legyen $S_i \subseteq G^{[i]} = G_{(\beta_1, \beta_2, \dots, \beta_{i-1})}$,
 amikre $\langle S_i \rangle \ge \langle S_{i+1} \rangle$ teljesül $1 \le i \le k$-ra.
 Ha $\langle S_1 \rangle = G$, $S_k = \emptyset$ és $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$ is teljesül $1 \le i \le k$-ra, akkor $B = (\beta_1, \beta_2, \dots, \beta_k)$
 $G$-nek bázisa, és $S = \bigcup_{i=1}^k S_i$ erős generátorrendszer $B$-re nézve.
