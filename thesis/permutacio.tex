@@ -63,8 +63,8 @@ A szitálás alkalmas egyben arra is, hogy egy $h \in \Sym(\Omega)$-beli elemrő
 Ha megpróbáljuk $h$-ra alkalmazni az eljárást és sikerrel járunk, akkor $h\in G$.
 Két rész van az algoritmusban ahol elakadhatunk.
 Lehet, hogy valamely $i \le m$-re $h_i = h r_1^{-1} r_2^{-1} \dots r_{i-1}^{-1}$-re nem találunk megfelelő $r_i$-t, mert $\beta_i^{h_i} \notin \beta_i^{G^{[i]}}$.
-Lehet az is, hogy a végén $g_{m+1} \neq 1$.
-Mindkét ilyen esetben nyilvánvalóan $h \notin G$.
+Lehet az is, hogy a végén $h_{m+1} \neq 1$.
+Mindkét ilyen esetben nyilvánvalóan $h \notin G$, ilyenkor az utoljára kiszámolt $h_i$-t vagy $h_{m+1}$-et maradéknak hívjuk.
 
 $G$ rendjét is könnyen kiszámolhatjuk egy erős generátorrendszer ismeretében, ugyanis $|G| = |\beta_1^{G^{[1]}}| |\beta_2^{G^{[2]}}| \dots |\beta_m^{G^{[m]}}| = |R_1| |R_2| \dots |R_m|$.
 
@@ -73,7 +73,7 @@ $G$ rendjét is könnyen kiszámolhatjuk egy erős generátorrendszer ismeretéb
 Ha megadnak nekünk egy $G \le \Sym(\Omega)$ permutációcsoportot valahogyan (black-box csoportnak is tekinthetjük akár),
 akkor ki kell tudnunk számolni egy bázisát és egy erős generátorrendszert, ahhoz hogy hatékonyan tudjunk vele dolgozni.
 Ez a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
-\begin{lemma}
+\begin{lemma}[Schreier]
 \label{thm:sims1}
 Legyen $H \le G = \langle S \rangle$ és legyen $R$ jobb transzverzálisa $H$-nak $G$-ben, amire $1\in R$.
 Jelöljük $g \in G$-re $Hg\cap R$ egyetlen elemét $\overline{g}$-vel.
@@ -81,7 +81,7 @@ Ilyenkor a
 \begin{equation*}
 T=\left\{ rs(\overline{rs})^{-1} \mid r\in R, s\in S \right\}
 \end{equation*}
-halmaz $H$-t generálja, vagyis $H=\langle T \rangle$.
+halmaz $H$-t generálja, vagyis $H=\langle T \rangle$. A $T$ halmaz elemeit $H$ Schreier-generátorainak hívjuk.
 \end{lemma}
 \begin{proof}
 Definíció szerint $T \subseteq H$, így elég belátni, hogy $H \le \langle T \rangle$.
@@ -96,21 +96,50 @@ Mivel $h \in H$ és $t_1 t_2 \dots t_k \in \langle T \rangle \le H$, ezért $r_k
 \end{proof}
 \begin{lemma}
 \label{thm:sims2}
-Legyen $\{\beta_1, \beta_2, \dots, \beta_k\} \subseteq \Omega$ és $G \le \Sym(\Omega)$. $1 \le i \le k+1$-re legyen $S_i \subseteq G^{[i]} = G_{(\beta_1, \beta_2, \dots, \beta_{i-1})}$,
-amikre $\langle S_i \rangle \ge \langle S_{i+1} \rangle$ teljesül $1 \le i \le k$-ra.
-Ha $\langle S_1 \rangle = G$, $S_k = \emptyset$ és $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$ is teljesül $1 \le i \le k$-ra, akkor $B = (\beta_1, \beta_2, \dots, \beta_k)$
-$G$-nek bázisa, és $S = \bigcup_{i=1}^k S_i$ erős generátorrendszer $B$-re nézve.
+Legyen $\{\beta_1, \dots, \beta_m\} \subseteq \Omega$ és $G \le \Sym(\Omega)$.
+Legyen $S_i \subseteq G^{[i]} = G_{(\beta_1, \dots, \beta_{i-1})}$ minden $1 \le i \le m$-re.
+A rövidség kedvéért vezessük be az $S_{m+1} = \emptyset$ jelölést.
+Ha $\langle S_1 \rangle = G$ és $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$ teljesül $1 \le i \le m$-re, akkor $B = (\beta_1, \dots, \beta_m)$
+$G$-nek bázisa, és $S = \bigcup_{i=1}^m S_i$ erős generátorrendszer $B$-re nézve.
 \end{lemma}
 \begin{proof}
-Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G' = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S' = \bigcup_{i=2}^k S_i$ erős generátorrendszere a $B' = \{\beta_2, \beta_3, \dots, \beta_k\}$ bázisra nézva.
-Ellenőriznünk kell, hogy $\forall 1\le i \le k+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
+Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G' = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S' = \bigcup_{i=2}^m S_i$ erős generátorrendszere a $B' = \{\beta_2, \dots, \beta_m\}$ bázisra nézva.
+Ellenőriznünk kell, hogy minden $1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
 $G^{[1]} = G$, így $i = 1$-re triviális.
 A lemma feltevéséből $G^{[2]} = G_{\beta_1} = \langle S_1 \rangle_{\beta_1} = \langle S_2 \rangle \le \langle S \cap G_{\beta_1} \rangle \le G_{\beta_1} = G^{[2]}$, vagyis $i = 2$-re is készen vagyunk.
 $i > 2$-re az indukciós feltevés miatt $G^{[i]} \ge \langle S \cap G_{(\beta_1, \dots, \beta_{i-1})} \rangle \ge \langle S' \cap G'_{(\beta_2, \dots, \beta_{i-1})} \rangle = G'_{(\beta_2, \dots, \beta_{i-1})} = G_{(\beta_1, \dots, \beta_{i-1})} = G^{[i]}$,
 tehát $i > 2$-re is készen vagyunk.
-Mivel az indukciós feltevést csak $k \ge 2$ esetén használtuk, a bizonyítással készen vagyunk.
+Mivel az indukciós feltevést csak $m \ge 2$ esetén használtuk, a bizonyítással készen vagyunk.
 \end{proof}
-\todo{schreier-sims algoritmus}
+Ha adott $G = \langle T \rangle$, akkor annak egy erős generátorrendszerét a következőképpen kaphatjuk.
+Az algoritmus futása közben nyilvántartunk egy $B = (\beta_1, \dots, \beta_m)$ listát egy irredundáns bázis már ismert elemeiről,
+és minden $1 \le i \le m$-re egy $S_i \subseteq G_{(\beta_1, \dots, \beta_{i-1})}$ halmazt, amikre az \ref{thm:sims2}. lemmát szeretnénk majd alkalmazni.
+Az algoritmus alatt $S_i$-ket fogjuk növelni, illetve új báziselemeket fogunk $B$-hez adni (ezáltal $m$-et is növelve), így ha eleinte $\langle S_1 \rangle = G$ teljesül,
+akkor abban a helyzetben vagyunk készen, amikor minden $1 \le i \le m$-re $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$ teljesül.
+Végig fent fogjuk tartani, hogy $\langle S_i \rangle \ge \langle S_{i+1} \rangle$ is fennáll minden $i$-re.
+Kezdetben legyen $B = (\beta_1)$, ahol $\beta_1 \in \Omega$ olyan hogy $T$-nek legalább egy eleme mozgatja, és legyen $S_1 = T$, ezzel garantálva, hogy $\langle S_1 \rangle = G$ teljesüljön.
+Azt mondjuk, hogy az algoritmus az $l$. szinten tart, ha minden $l < i \le m$-re teljesül $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$.
+Kezdetben a második szintről indulunk, az algoritmus futása akkor ér véget, amikor az első szintre jutunk.
+
+Amikor az $l$. szinten vagyunk, a következő történik:
+Megnézzük, hogy $\langle S_l \rangle_{\beta_l} = \langle S_{l+1} \rangle$ teljesül-e.
+Mivel $\langle S_l \rangle \ge \langle S_{l+1} \rangle$, valamint $S_l \subseteq G_{(\beta_1, \dots, \beta_{l-1})}$, ezért elegendő a $\langle S_l \rangle_{\beta_l} \le \langle S_{l+1} \rangle$ irányú tartalmazást belátnunk.
+Az \ref{thm:sims1}. lemma alapján $\langle S_l \rangle_{\beta_l} = \langle rs(\overline{rs})^{-1} \mid r\in R_l, s\in S_l \rangle$, ahol $R_l$ az $\langle S_l \rangle_{\beta_l}$ részcsoport transzverzálisa $\langle S_l \rangle$-ban.
+Meg kell néznünk, hogy az összes Schreier-generátor benne van-e $\langle S_{l+1} \rangle$-ben.
+Ezt az előző részben leírt módon tudjuk ellenőrizni, mivel az \ref{thm:sims2}. lemma szerint $\langle S_{l+1} \rangle$-nek már ismerjük egy erős generátorrendszerét.
+Ha mind benne van, vagyis ha $\langle S_l \rangle_{\beta_l} = \langle S_{l+1} \rangle$ teljesül, akkor az $l-1$. szintre lépünk.
+Ha nincs benne mind, vagyis $\langle S_l \rangle_{\beta_l} > \langle S_{l+1} \rangle$, akkor a szitálás során, amit kaptunk maradékot arra a Schreier-generátorra, ami nincs benne $\langle S_{l+1} \rangle$-ben,
+azt vegyük hozzá az $S_{l+1}$ halmazhoz.
+Ettől a hozzávételtől $\langle S_1 \rangle \ge \langle S_2 \rangle \ge \dots \ge \langle S_{m+1} \rangle$ továbbra is fennáll, valamint $S_{l+1} \subseteq G_{(\beta_1, \dots, \beta_{l})}$ is igaz marad.
+$l = m$ esetén $B$-hez vegyünk hozzá egy olyan $\Omega$-beli elemet, amit a maradék nem hagy helyben.
+Ezután az algoritmus az $l+1$. szinten folytatódik.
+
+Az algoritmus mindenképpen véges, hiszen $\Omega$ véges, így csak véges sokszor tudtuk $B$-t növelni.
+Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(|\Omega|^2 \log^3(|G|) + |T||\Omega|^2 \log(|G|))$ a futásidő, és $O(|\Omega|^2 \log(|G|) + |T||\Omega|)$ a memóriaigény.
+Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3(|G|) + |T||\Omega|^3 \log(|G|))$ a futásidő, és $O(|\Omega| \log^2(|G|) + |T||\Omega|)$ a memóriaigény.
+Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-ban olvashatjuk az algoritmusnak rengeteg változatát részletesen elemezve, hogy mikor melyik a legalkalmasabb.
+
+\todo{bizonyitas lehet hogy kene futasidokhoz}
 
 \subsubsection{Backtrack algoritmusok}
 \label{subsubsec:permbt}
