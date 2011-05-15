@@ -2,16 +2,17 @@
 \label{subsec:permutacio}
 Minden véges csoport felírható permutációcsoportként, így a permutációcsoportok hatékony használata kiemelten fontos.
 A ma is használt módszer Charles C. Sims-től származik 1970-ből (\cite{Sim70}), a hatékonyságán Donald E. Knuth ötlete javított sokat, amit 1991-ben publikált (\cite{Knu91}).
-Az \ref{subsubsec:permdef}. alfejezet az alapvető definíciókról, és a módszer használatához szükséges algoritmusról szól.
-Az \ref{subsubsec:permbasic}. alfejezet pár egyszerű permutációcsoportokkal kapcsolatos algoritmust tárgyal,
-míg az \ref{subsubsec:permbt}. rész az itt előforduló úgynevezett backtrack algoritmusokat részletezi.
-Seress Ákos --- közel 300 oldalas könyvében (\cite{Ser03}) --- részletesebben tárgyal erről a témakörröl.
+Az \ref{subsubsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
+az \ref{subsubsec:permbasic}. alfejezet pár egyszerű ehhez a módszerhez kapcsolódó algoritmust tárgyal,
+az \ref{subsubsec:permss}. alfejezet arról szól, hogy hogyan tudunk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
+míg az \ref{subsubsec:permbt}. rész az itt előforduló bonyolultabb, főként backtrack-jellegű algoritmusokat részletezi.
+Ez a fejezet egy nagyon rövid kivonata lényegében Seress Ákos közel 300 oldalas könyvének (\cite{Ser03}), ami részletesebben tárgyal erről a témakörröl.
 
 \subsubsection{Bázisok és erős generátorrendszerek}
 \label{subsubsec:permdef}
-Legyen $\Omega=\{1, 2, \dots, n\}$, $G \le S_n = \mathop{Sym}(\Omega)$.
+Legyen $G \le S_n = \mathop{Sym}(\Omega)$.
 A $B=(\beta_1,\beta_2,\dots,\beta_m)$ különböző $\Omega$-beli elemekből álló sorozatot $G$ bázisának hívjuk,
-ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként fixen tartja $B$-t.
+ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként fixen tartja $B$-t, vagyis ha $G_B=\{1\}$.
 Egy bázis mindig definiál egy
 \begin{equation}
 \label{eq:permlanc}
@@ -59,6 +60,14 @@ $\gamma \in \Omega$-ra $V_i[\gamma]$-t akkor és csak akkor definiáljuk, ha $\g
 és ilyenkor $V_i[\gamma]$ egy $S_i$ egy elemére mutató pointert tartalmaz, ami megfelel a $\gamma$-ból kiinduló egyetlen él cimkéjének.
 Emiatt a tárolási mód miatt Sims eredetileg Schreier-vektoroknak hívta az adatszerkezetet.
 
+\subsubsection{Alapvető algoritmusok}
+\label{subsubsec:permbasic}
+\todo{alfejezet: alapvető algoritmusok}
+Csoport rendje, csoporttagság ellenőrzése, ...
+
+\subsubsection{Schreier-Sims algoritmus}
+\label{subsubsec:permss}
+
 Erős generátorrendszerek kiszámolása a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
 Ha $H \le G$ és $R$ egy jobb transzverzálisa $H$-nak $G$-ben, akkor minden $g \in G$-re jelöljük
 $Hg\cap R$ egyetlen elemét $\overline{g}$-vel.
@@ -98,13 +107,7 @@ $i > 2$-re az indukciós feltevés miatt $G^{[i]} \ge \langle S \cap G_{(\beta_1
 tehát $i > 2$-re is készen vagyunk.
 Mivel az indukciós feltevést csak $k \ge 2$ esetén használtuk, a bizonyítással készen vagyunk.
 \end{proof}
-
 \todo{schreier-sims algoritmus}
-
-\subsubsection{Alapvető algoritmusok}
-\label{subsubsec:permbasic}
-\todo{alfejezet: alapvető algoritmusok}
-Csoport rendje, csoporttagság ellenőrzése, ...
 
 \subsubsection{Backtrack algoritmusok}
 \label{subsubsec:permbt}
