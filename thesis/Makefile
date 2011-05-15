@@ -3,7 +3,7 @@ NAME=szakdoli
 .PHONY: all
 all: $(NAME).pdf
 
-$(NAME).pdf: pdflatex.pdf
+$(NAME).pdf: latex.pdf
 	cp $< $@
 
 .PHONY: both
