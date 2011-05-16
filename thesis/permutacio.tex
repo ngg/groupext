@@ -15,7 +15,7 @@ ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként 
 Egy bázis mindig definiál egy
 \begin{equation}
 \label{eq:permlanc}
-G = G^{[1]} \ge G^{[2]} \ge \dots \ge G^{[m]} \ge G^{[m+1]} = 1
+G = G^{[1]} \ge G^{[2]} \ge \dots \ge G^{[m]} \ge G^{[m+1]} = \{1\}
 \end{equation}
 részcsoport-láncot, ahol $G^{[i]}=G_{(\beta_1,\beta_2,\dots,\beta_{i-1})}=G_{\beta_1}\cap G_{\beta_2}\cap\dots\cap G_{\beta_{i-1}}$, vagyis a $B$ első $i-1$ elemét fixen tartó csoportelemek részcsoportja.
 A bázis irredundáns, ha $\forall 1\le i \le m$-re $G^{[i]} > G^{[i+1]}$, vagyis ha a lánc $m+1$ különböző részcsoportból áll.
@@ -141,7 +141,36 @@ Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-b
 
 \todo{bizonyitas lehet hogy kene futasidokhoz}
 
-\subsubsection{Backtrack algoritmusok}
+\subsubsection{Backtrack módszerek}
 \label{subsubsec:permbt}
-\todo{alalfejezet: backtrack algoritmusok}
-Centralizátor, normalizátor, konjugáltosztályok, ...
+Ebben a részben legyen adott $G$ és legyen $\mathcal{P}$ egy tulajdonság, meg kell találnunk $G(\mathcal{P})$-t, vagyis $G$ azon elemeit, amik $\mathcal{P}$ tulajdonságúak.
+Ehhez feltesszük, hogy minden $g \in G$-re el tudjuk dönteni, hogy $\mathcal{P}$ tulajdonságú-e.
+Néhány tulajdonságra nincs ismert jobb algoritmus annál, mint hogy végigmegyünk $G$ elemein, és mindegyiket ellenőrizzük.
+Gyakori eset azonban, hogy $G(\mathcal{P})$, ha nem üres, akkor $G$ egy részcsoportja, esetleg egy részcsoport mellékosztálya.
+Például, ha egy elem vagy egy részhalmaz centralizátorát szeretnénk megtalálni, akkor egy részcsoportot keresünk.
+Mellékosztályra példa, ha $a, b \in G$-re azokat a $g \in G$-ket keressük, amelyek $a$-t $b$-be konjugálják, vagyis amelyekre $a^g = b$.
+Gyakran elegendő azt eldöntenünk, hogy $G(\mathcal{P})$ üres-e, az előző példánál ez annak eldöntését jelenti, hogy $a$ és $b$ konjugáltak-e.
+Ebben a részben feltesszük, hogy $G(\mathcal{P})$ egy részcsoport, egy részcsoport mellékosztálya vagy üres.
+
+Legyen $B=(\beta_1,\dots,\beta_m)$ a $G \le \Sym(\Omega)$ csoport egy bázisa, és legyen $G = G^{[1]} \ge G^{[2]} \ge \dots \ge G^{[m]} \ge G^{[m+1]} = \{1\}$ az ehhez tartozó részcsoportlánc.
+$G$ minden elemét egyértelműen meghatározza az, hogy $B$ elemeit hova viszi, így a báziselemek képeinek sorozátaval azonosíthatjuk a csoportelemeket.
+Ha csak az első $k$ báziselem képét adjuk meg, akkor az $G^{[k+1]}$ egy mellékosztályát adja meg.
+Az összes ilyen kezdőszelet meghatároz egy keresési fát, hogy hogyan tudunk $G$-beli elemeket keresni.
+Az egyetlen $0$-hosszú kezdőszelet $G$-nek felel meg (ebből indulunk), az $m$-hosszúak felelnek meg az elemeknek.
+Jelöljük a kezdőszeletek halmazát $T$-vel, legyen $\varphi : T \to P(G)$, amire $\varphi((\alpha_1,\dots,\alpha_k)) = \left\{ g \in G \mid \beta_i^g = \alpha_i \quad \forall 1 \le i \le k \right \}$.
+Az algoritmusunk azt csinálja, hogy a kezdőszeleteken a $0$-hosszúból kiindulva mélységi bejárással végigmegyünk (mint más backtrack-algoritmusoknál is),
+és közben minél többször megpróbáljuk valami alapján $t \in T$-t eldobni, hogy ne kelljen azon belül is folytatni a bejárást.
+Ez történhet azért, mert valahogy belátjuk, hogy $\varphi(t) \cap G(\mathcal{P})$ üres, vagy már minden elemét ismerjük.
+Ilyenkor $\varphi(t)$ elemei nem érdekesek már, így nem kell a bejárást folytatnunk a $t$-vel kezdődő kezdőszeleteken.
+Vannak a $\mathcal{P}$ tulajdonságtól független és attól függő elvek, amik alapján egy $t$-t eldobhatunk. A következő lemma, az egyik legegyszerűbb $\mathcal{P}$-től független ilyen elvet mutatja be.
+\begin{lemma}
+Tegyük fel, hogy $G(\mathcal{P}) \le G$, a $K = G(\mathcal{P}) \cap G^{[l+1]}$ részcsoportot már ismerjük valamilyen $l \in \{1,\dots,m\}$-re és hogy most egy $t \in T$ $l$-hosszú kezdőszeletnél vagyunk.
+Ha találunk egyetlen $g \in \varphi(t) \cap G(\mathcal{P})$-t, akkor $\varphi(t) \cap G(\mathcal{P}) \subseteq \langle g, K \rangle \subseteq G(\mathcal{P})$, így nem kell tovább néznünk a $t$-vel kezdődő kezdőszeleteket.
+\end{lemma}
+\begin{proof}
+Minden $h \in \varphi(t) \cap G(\mathcal{P})$ a $Kg$ mellékosztályban található.
+\end{proof}
+\todo{egyéb $\mathcal{P}$-független elvek}
+\todo{centralizátor}
+\todo{$\Omega$ részhalmazának stabilizátora}
+\todo{konjugáltság}
