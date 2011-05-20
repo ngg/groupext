@@ -153,19 +153,24 @@ Gyakran elegendő azt eldöntenünk, hogy $G(\mathcal{P})$ üres-e, az előző p
 Ebben a részben feltesszük, hogy $G(\mathcal{P})$ egy részcsoport, egy részcsoport mellékosztálya vagy üres.
 
 Legyen $B=(\beta_1,\dots,\beta_m)$ a $G \le \Sym(\Omega)$ csoport egy bázisa, és legyen $G = G^{[1]} \ge G^{[2]} \ge \dots \ge G^{[m]} \ge G^{[m+1]} = \{1\}$ az ehhez tartozó részcsoportlánc.
+$\Omega$-n definiáljunk egy $\prec$-rendezést, amire $\beta_1 \prec \beta_2 \prec \dots \prec \beta_m$, valamint minden $\omega \in \Omega \setminus B$-re $\beta_m \prec \omega$.
 $G$ minden elemét egyértelműen meghatározza az, hogy $B$ elemeit hova viszi, így a báziselemek képeinek sorozátaval azonosíthatjuk a csoportelemeket.
-Ha csak az első $k$ báziselem képét adjuk meg, akkor az $G^{[k+1]}$ egy mellékosztályát adja meg.
-Az összes ilyen kezdőszelet meghatároz egy keresési fát, hogy hogyan tudunk $G$-beli elemeket keresni.
-Az egyetlen $0$-hosszú kezdőszelet $G$-nek felel meg (ebből indulunk), az $m$-hosszúak felelnek meg az elemeknek.
-Jelöljük a kezdőszeletek halmazát $T$-vel, legyen $\varphi : T \to P(G)$, amire $\varphi((\alpha_1,\dots,\alpha_k)) = \left\{ g \in G \mid \beta_i^g = \alpha_i \quad \forall 1 \le i \le k \right \}$.
-Az algoritmusunk azt csinálja, hogy a kezdőszeleteken a $0$-hosszúból kiindulva mélységi bejárással végigmegyünk (mint más backtrack-algoritmusoknál is),
-és közben minél többször megpróbáljuk valami alapján $t \in T$-t eldobni, hogy ne kelljen azon belül is folytatni a bejárást.
-Ez történhet azért, mert valahogy belátjuk, hogy $\varphi(t) \cap G(\mathcal{P})$ üres, vagy már minden elemét ismerjük.
-Ilyenkor $\varphi(t)$ elemei nem érdekesek már, így nem kell a bejárást folytatnunk a $t$-vel kezdődő kezdőszeleteken.
-Vannak a $\mathcal{P}$ tulajdonságtól független és attól függő elvek, amik alapján egy $t$-t eldobhatunk. A következő lemma, az egyik legegyszerűbb $\mathcal{P}$-től független ilyen elvet mutatja be.
+Ez az azonosítás egy rendezést is indukál $G$-n, $g, h \in G$-re $g \prec h$ akkor és csak akkor teljesül, ha létezik $i \in \{1,\dots,m\}$, amire minden $j < i$-re $\beta_j^g = \beta_j^h$, valamint $\beta_i^g \prec \beta_i^h$.
+A báziselemek képeinek meghatározásával szeretnénk csoportelemeket keresni.
+$(\beta_1,\dots,\beta_l)$ lehetséges képei $G^{[l+1]}$ mellékosztályait határozzák meg.
+Ezeknek a képeknek a halmazát jelöljük $\mathcal{T}_l$-val.
+Legyen $\mathcal{T} = \bigcup_{i=1}^m \mathcal{T}_i$, ezen tekinthetjük a tartalmazást, mint természetes részbenrendezést, amivel $\mathcal{T}$-t egy keresőfának tekinthetjük.
+$\mathcal{T}$ gyökere (a $()$ sorozat) $G$-nek felel meg, a levelei (az $m$-hosszú sorozatok) a csoportelemeknek.
+Legyen $\varphi : \mathcal{T} \to P(G)$, amire $\varphi((\alpha_1,\dots,\alpha_l)) = \left\{ g \in G \mid \beta_i^g = \alpha_i \quad \forall 1 \le i \le l \right \}$.
+Az algoritmusunk ezt a keresőfát járja be mélységi bejárással (backtrack), így keressük meg $G(\mathcal{P})$-t.
+Ez a bejárás a csoportelemeket $\prec$-lexikografikus sorrendben találja meg.
+Ha menet közben $t \in \mathcal{T}$-nél tartunk és $\varphi(t) \cap G(\mathcal{P})$-ről be tudjuk látni, hogy üres vagy, hogy már minden elemét ismerjük, akkor a mélységi bejárást attól a ponttól nem kell mélyebbre folytatnunk.
+Akkor lesz hatékony az algoritmusunk, ha minél nagyobb részfákat el tudunk így dobni.
+Vannak a $\mathcal{P}$ tulajdonságtól független és attól függő elvek, amik alapján egy részfát eldobhatunk.
+A következő lemma, az egyik legegyszerűbb $\mathcal{P}$-től független ilyen elvet mutatja be.
 \begin{lemma}
-Tegyük fel, hogy $G(\mathcal{P}) \le G$, a $K = G(\mathcal{P}) \cap G^{[l+1]}$ részcsoportot már ismerjük valamilyen $l \in \{1,\dots,m\}$-re és hogy most egy $t \in T$ $l$-hosszú kezdőszeletnél vagyunk.
-Ha találunk egyetlen $g \in \varphi(t) \cap G(\mathcal{P})$-t, akkor $\varphi(t) \cap G(\mathcal{P}) \subseteq \langle g, K \rangle \subseteq G(\mathcal{P})$, így nem kell tovább néznünk a $t$-vel kezdődő kezdőszeleteket.
+Tegyük fel, hogy $G(\mathcal{P}) \le G$, a $K = G(\mathcal{P}) \cap G^{[l+1]}$ részcsoportot már ismerjük valamilyen $l \in \{1,\dots,m\}$-re és hogy most $t \in \mathcal{T}_l$-ben vagyunk.
+Ha találunk egyetlen $g \in \varphi(t) \cap G(\mathcal{P})$-t, akkor $\varphi(t) \cap G(\mathcal{P}) \subseteq \langle g, K \rangle \subseteq G(\mathcal{P})$, így nem kell tovább néznünk a $t$-hez tartozó részfát.
 \end{lemma}
 \begin{proof}
 Minden $h \in \varphi(t) \cap G(\mathcal{P})$ a $Kg$ mellékosztályban található.
