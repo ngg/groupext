@@ -139,7 +139,8 @@ Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(
 Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3(|G|) + |T||\Omega|^3 \log(|G|))$ a futásidő, és $O(|\Omega| \log^2(|G|) + |T||\Omega|)$ a memóriaigény.
 Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-ban olvashatjuk az algoritmusnak rengeteg változatát részletesen elemezve, hogy mikor melyik a legalkalmasabb.
 
-\todo{bizonyitas lehet hogy kene futasidokhoz}
+\todo{bizonyitás lehet hogy kellene futásidőkhöz}
+\todo{bázisváltás}
 
 \subsubsection{Backtrack módszerek}
 \label{subsubsec:permbt}
@@ -158,9 +159,10 @@ $G$ minden elemét egyértelműen meghatározza az, hogy $B$ elemeit hova viszi,
 Ez az azonosítás egy rendezést is indukál $G$-n, $g, h \in G$-re $g \prec h$ akkor és csak akkor teljesül, ha létezik $i \in \{1,\dots,m\}$, amire minden $j < i$-re $\beta_j^g = \beta_j^h$, valamint $\beta_i^g \prec \beta_i^h$.
 A báziselemek képeinek meghatározásával szeretnénk csoportelemeket keresni.
 $(\beta_1,\dots,\beta_l)$ lehetséges képei $G^{[l+1]}$ mellékosztályait határozzák meg.
-Ezeknek a képeknek a halmazát jelöljük $\mathcal{T}_l$-val.
+Ezeknek a képeknek a halmazát jelöljük $\mathcal{T}_l$-lel.
 Legyen $\mathcal{T} = \bigcup_{i=1}^m \mathcal{T}_i$, ezen tekinthetjük a tartalmazást, mint természetes részbenrendezést, amivel $\mathcal{T}$-t egy keresőfának tekinthetjük.
 $\mathcal{T}$ gyökere (a $()$ sorozat) $G$-nek felel meg, a levelei (az $m$-hosszú sorozatok) a csoportelemeknek.
+Jelöljük $t \in \mathcal{T}$-re $\mathcal{T}(t)$-vel a $t$-ből induló részfát.
 Legyen $\varphi : \mathcal{T} \to P(G)$, amire $\varphi((\alpha_1,\dots,\alpha_l)) = \left\{ g \in G \mid \beta_i^g = \alpha_i \quad \forall 1 \le i \le l \right \}$.
 Az algoritmusunk ezt a keresőfát járja be mélységi bejárással (backtrack), így keressük meg $G(\mathcal{P})$-t.
 Ez a bejárás a csoportelemeket $\prec$-lexikografikus sorrendben találja meg.
@@ -169,13 +171,64 @@ Akkor lesz hatékony az algoritmusunk, ha minél nagyobb részfákat el tudunk �
 Vannak a $\mathcal{P}$ tulajdonságtól független és attól függő elvek, amik alapján egy részfát eldobhatunk.
 A következő lemma, az egyik legegyszerűbb $\mathcal{P}$-től független ilyen elvet mutatja be.
 \begin{lemma}
-Tegyük fel, hogy $G(\mathcal{P}) \le G$, a $K = G(\mathcal{P}) \cap G^{[l+1]}$ részcsoportot már ismerjük valamilyen $l \in \{1,\dots,m\}$-re és hogy most $t \in \mathcal{T}_l$-ben vagyunk.
-Ha találunk egyetlen $g \in \varphi(t) \cap G(\mathcal{P})$-t, akkor $\varphi(t) \cap G(\mathcal{P}) \subseteq \langle g, K \rangle \subseteq G(\mathcal{P})$, így nem kell tovább néznünk a $t$-hez tartozó részfát.
+\label{thm:permbtcrit1}
+Tegyük fel, hogy $G(\mathcal{P}) \le G$, a $K = G(\mathcal{P}) \cap G^{[l+1]}$ részcsoportot már ismerjük valamilyen $l \in \{1,\dots,m\}$-re és hogy most valamelyik $t \in \mathcal{T}_l$-re $\mathcal{T}(t)$ belsejében vagyunk.
+Ha találunk egyetlen $g \in \varphi(t) \cap G(\mathcal{P})$-t, akkor $\varphi(t) \cap G(\mathcal{P}) \subseteq \langle g, K \rangle \subseteq G(\mathcal{P})$, így kihagyhatjuk $\mathcal{T}(t)$ maradék részét.
 \end{lemma}
 \begin{proof}
 Minden $h \in \varphi(t) \cap G(\mathcal{P})$ a $Kg$ mellékosztályban található.
 \end{proof}
-\todo{egyéb $\mathcal{P}$-független elvek}
+A következő lemmához tegyük fel, hogy ismerünk olyan $K, L \le G$ részcsoportokat, amikre igaz, hogy minden $g \in G$-re $g \in G(\mathcal{P})$ akkor és csak akkor, ha a kettős mellékosztály $KgL \subseteq G(\mathcal{P})$.
+Ha $G(\mathcal{P})$ részcsoport, akkor tekinthetjük $K$-nak és $L$-nek $G(\mathcal{P})$ már ismert részcsoportját.
+$P$-től függően azonban lehet, hogy más $K$-t meg $L$-et is választhatunk.
+Például, ha $P$ azon elemekre teljesül, amik $a$-t $b$-be konjugálják, akkor választhatjuk $K=\langle a \rangle$-t és $L=\langle b \rangle$-t.
+Mivel minden $KgL$ kettős mellékosztálynak elég egyetlen elemét megtalálnunk, és a bejárás $\prec$-lexikografikus sorrendben találja meg az elemeket, ezért a $\mathcal{T}(t)$ részfát kihagyhatjuk, ha tudjuk, hogy
+egyik $g \in \varphi(t)$ sem lehet a saját $KgL$ kettős mellékosztályának első eleme.
+Sajnos egy kettős mellékosztály első elemét megtalálni NP-nehéz probléma (\cite{Luk93}), ezért kicsit másképp kell csinálnunk.
+\begin{lemma}
+\label{thm:permbtcrit2}
+Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
+Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_l$ a $\gamma_l^{L_{(\gamma_1,\dots,\gamma_{l-1})}}$ orbit első eleme.
+\end{lemma}
+\begin{proof}
+Indirekten tegyük fel, hogy van olyan $\gamma \in \gamma_l^{L_{(\gamma_1,\dots,\gamma_{l-1})}}$, amire $\gamma \prec \gamma_l$.
+Legyen $h$ az az $L_{(\gamma_1,\dots,\gamma_{l-1})}$-beli elem, amire $\gamma_l^h = \gamma$.
+Ilyenkor $gh \in KgL$ és $gh \prec g$, tehát ellentmondásra jutottunk.
+\end{proof}
+Eszerint a lemma szerint, amikor a $t' = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ részfát nézzük, akkor elég $L_{(\gamma_1,\dots,\gamma_{l-1})}$ orbitjainak első elemeivel folytatnunk.
+Ahhoz, hogy az orbitokat kiszámoljuk $L$-ben bázist kell váltanunk, azaz $L$-nek egy $(\gamma_1,\dots,\gamma_{l-1})$-gyel kezdődő bázishoz tartozó erős generátorrendszert kell kiszámolnunk.
+Emiatt ez a kritérium nem annyira gyorsan ellenőrizhető, sok implementációban csak kis $l$-ekre alkalmazzák.
+
+Az előző lemma egy általánosabb alakja a következő:
+\begin{lemma}
+\label{thm:permbtcrit3}
+Tegyük fel, hogy $\beta_l \in \beta_k^{K_{(\beta_1,\dots,\beta_{k-1})}}$.
+Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
+Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_k \preceq \min_{\prec}(\gamma_l^{L_{(\gamma_1,\dots,\gamma_{k-1})}})$.
+\end{lemma}
+\begin{proof}
+Legyen $h_1$ az a $K_{(\beta_1,\dots,\beta_{k-1})}$-beli elem, amire $\beta_k^{h_1} = \beta_l$.
+Indirekten tegyük fel, hogy van olyan $\gamma \in \gamma_l^{L_{(\gamma_1,\dots,\gamma_{k-1})}}$, amire $\gamma \prec \gamma_k$.
+Legyen $h_2$ az az $L_{(\gamma_1,\dots,\gamma_{k-1})}$-beli elem, amire $\gamma_l^{h_2} = \gamma$.
+$h_1gh_2 \in KgL$ és $h_1gh_2 \prec g$, mivel $i < k$-ra $\beta_i^{h_1gh_2} = \beta_i^{gh_2} = \gamma_i^{h_2} = \gamma_i = \beta_i^g$,
+valamint $\beta_k^{h_1gh_2} = \beta_l^{gh_2} = \gamma_l^{h_2} = \gamma \prec \gamma_k = \beta_k^g$.
+Ellentmondásra jutottunk.
+\end{proof}
+Ez $k=l$ esetén az ezelőtti lemmát adja vissza, $k < l$-re pedig azt jelenti, hogy $\beta_l \in \beta_k^{K_{(\beta_1,\dots,\beta_{k-1})}}$ esetén csak azok a $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}_l$-ek
+érdekesek, amikre $\gamma_l \succ \gamma_k$.
+\begin{lemma}
+\label{thm:permbtcrit4}
+Legyen $s = \left| \beta_l^{K_{(\beta_1,\dots,\beta_{l-1})}} \right|$, azaz $K$ $l$-edik fundamentális orbitjának mérete.
+Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
+Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_l$ nem lehet a $\gamma_l^{G_{(\gamma_1,\dots,\gamma_{l-1})}}$ orbit utolsó $s-1$ eleme közt.
+\end{lemma}
+\begin{proof}
+A $\Gamma = \{ \beta_l^{hg} \mid h \in K_{(\beta_1,\dots,\beta_{l-1})} \}$ halmaz $s$ elemű és $\gamma_l = \beta_l^g \in \Gamma$.
+Minden $\gamma = \beta^{hg} \in \Gamma$ $G_{(\gamma_1,\dots,\gamma_{l-1})}$-nek ugyanahhoz az orbitjához tartozik, mivel $\gamma^{g^{-1}h^{-1}g} = \gamma_l$, ahol $g^{-1}h^{-1}g \in G_{(\gamma_1,\dots,\gamma_{l-1})}$.
+$hg \in KgL$ és $g$ minimalitása miatt $\gamma_l = \min_{\prec} \Gamma$, ezért legalább $s-1$ elem jön késöbb $KgL$-ben.
+\end{proof}
+Emiatt amikor a $t' = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ részfát nézzük, akkor $G_{(\gamma_1,\dots,\gamma_{l-1})}$ minden orbitjának utolsó $s-1$ elemét kihagyhatjuk.
+
 \todo{centralizátor}
 \todo{$\Omega$ részhalmazának stabilizátora}
 \todo{konjugáltság}
