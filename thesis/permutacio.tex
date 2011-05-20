@@ -138,7 +138,6 @@ Az algoritmus mindenképpen véges, hiszen $\Omega$ véges, így csak véges sok
 Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(|\Omega|^2 \log^3(|G|) + |T||\Omega|^2 \log(|G|))$ a futásidő, és $O(|\Omega|^2 \log(|G|) + |T||\Omega|)$ a memóriaigény.
 Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3(|G|) + |T||\Omega|^3 \log(|G|))$ a futásidő, és $O(|\Omega| \log^2(|G|) + |T||\Omega|)$ a memóriaigény.
 Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-ban olvashatjuk az algoritmusnak rengeteg változatát részletesen elemezve, hogy mikor melyik a legalkalmasabb.
-\todo{bizonyitás lehet hogy kellene futásidőkhöz}
 
 Sokszor elő fog fordulni, hogy az erős generátorrendszert nem akármilyen bázishoz szeretnénk megkapni.
 Ilyenkor kétféle lehetőségünk van.
@@ -148,7 +147,22 @@ Másik lehetőség az úgynevezett bázisváltás, hogy ha már végigszámoltuk
 A módszer azon alapszik, hogy ha $(\beta_1, \dots, \beta_m)$ bázisra nézve már ismert az erős generátorrendszer, akkor valamilyen $i$-re ki tudjuk számolni a $(\beta_1, \dots, \beta_{i-1}, \beta_{i+1}, \beta_i, \beta_{i+2}, \dots, \beta_m)$
 bázishoz tartozót, vagyis két egymásutáni báziselemet fel tudunk cserélni.
 Ezzel a művelettel akármilyen más bázisba is eljuthatunk, hiszen új báziselemet is fel tudunk venni a listába olyan helyen, hogy az redundáns legyen.
-\todo{bázisváltás}
+Ez a módszer méghatásosabb, ha nem az egész bázist adták meg, hanem csak az első pár báziselemet.
+Erre példa, ha egy $G_{\omega}$ stabilizátort szeretnénk kiszámolni, ilyenkor csak az első báziselem fontos.
+Nézzük meg hogyan cserélhetünk ki két báziselemet.
+
+Legyen $B = (\beta_1, \dots, \beta_m)$, $S$ az ehhez tartozó erős generátorrendszer, $R_j$-k pedig a transzverzálisak.
+$\overline{B} = (\beta_1, \dots, \beta_{i-1}, \beta_{i+1}, \beta_i, \beta_{i+2}, \dots, \beta_m)$-ra ki szeretnénk számolni a hozzátartozó $\overline{S}$ erős generátorrendszert, valamint az új $\overline{R}_j$ transzverzálisokat.
+Minden $1 \le j < i$-re, valamint $i+1 < j \le m$-re $\overline{R}_j = R_j$, tehát azokkal készen vagyunk.
+Mivel $\overline{G}^{[i]} = G^{[i]}$, az új $i$-edik fundamentális orbit $\beta_{i+1}^{\langle S \cap G^{[i]} \rangle}$, ezért az $\overline{R}_i$ transzverzálist könnyen kiszámolhatjuk.
+A számolás neheze $\overline{R}_{i+1}$-nél jön.
+Legyen $\overline{S} = S$ eleinte, és kezdetben tekintsük az új $i+1$-edik fundamentális orbitot $\overline{\Delta}_{i+1} = \{\beta_i\}$-nek.
+Ezekután tekinthetjük $\overline{R}_i$ és $S\cap G^{[i]}$ által alkotott Schreier-generátorokat.
+Ha ezek közül valamelyik $\beta_i$-t kiviszi $\overline{\Delta}_{i+1}$-ből, akkor azt az elemet $\overline{S}$-hez adjuk hozzá és a fundamentális orbitot számoljuk újra:
+$\overline{\Delta}_{i+1} = \beta_i^{\langle \overline{S} \cap G_{(\beta_1,\dots,\beta_{i-1},\beta{i+1})} \rangle}$.
+Mivel $|\overline{\Delta}_{i+1}| = |\overline{R}_{i+1}| = |R_i| |R_{i+1}| / |\overline{R}_i|$ előre ismert, ezért nem kell minden Schreier-generátort megnéznünk.
+Legfeljebb $\log \overline{R}_{i+1}$ elemet adtunk hozzá $\overline{S}$-hez, mivel minden elem hozzáadása az orbitot legalább megduplázta, így nem lesz túl nagy az új erős generátorrendszerünk.
+$\overline{R}_{i+1}$ Schreier-fa ábrázolása $\overline{S}$ segítségével kiszámolható.
 
 \subsubsection{Backtrack módszerek}
 \label{subsubsec:permbt}
@@ -233,7 +247,7 @@ Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
 Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_l$ nem lehet a $\gamma_l^{G_{(\gamma_1,\dots,\gamma_{l-1})}}$ orbit utolsó $s-1$ eleme közt.
 \end{lemma}
 \begin{proof}
-A $\Gamma = \{ \beta_l^{hg} \mid h \in K_{(\beta_1,\dots,\beta_{l-1})} \}$ halmaz $s$ elemű és $\gamma_l = \beta_l^g \in \Gamma$.
+A $\Gamma = \left\{ \beta_l^{hg} \mid h \in K_{(\beta_1,\dots,\beta_{l-1})} \right\}$ halmaz $s$ elemű és $\gamma_l = \beta_l^g \in \Gamma$.
 Minden $\gamma = \beta^{hg} \in \Gamma$ $G_{(\gamma_1,\dots,\gamma_{l-1})}$-nek ugyanahhoz az orbitjához tartozik, mivel $\gamma^{g^{-1}h^{-1}g} = \gamma_l$, ahol $g^{-1}h^{-1}g \in G_{(\gamma_1,\dots,\gamma_{l-1})}$.
 $hg \in KgL$ és $g$ minimalitása miatt $\gamma_l = \min_{\prec} \Gamma$, ezért legalább $s-1$ elem jön késöbb $KgL$-ben.
 \end{proof}
