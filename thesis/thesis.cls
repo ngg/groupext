@@ -129,6 +129,7 @@
 
 \AtBeginDocument{
 	\hypersetup{pdftitle={\@title},pdfauthor={\@author}}
+	\addcontentsline{toc}{section}{Címlap}
 	\maketitle
 	\renewcommand{\contentsname}{Tartalomjegyzék}
 	\tableofcontents
