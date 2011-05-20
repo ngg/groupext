@@ -138,8 +138,16 @@ Az algoritmus mindenképpen véges, hiszen $\Omega$ véges, így csak véges sok
 Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(|\Omega|^2 \log^3(|G|) + |T||\Omega|^2 \log(|G|))$ a futásidő, és $O(|\Omega|^2 \log(|G|) + |T||\Omega|)$ a memóriaigény.
 Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3(|G|) + |T||\Omega|^3 \log(|G|))$ a futásidő, és $O(|\Omega| \log^2(|G|) + |T||\Omega|)$ a memóriaigény.
 Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-ban olvashatjuk az algoritmusnak rengeteg változatát részletesen elemezve, hogy mikor melyik a legalkalmasabb.
-
 \todo{bizonyitás lehet hogy kellene futásidőkhöz}
+
+Sokszor elő fog fordulni, hogy az erős generátorrendszert nem akármilyen bázishoz szeretnénk megkapni.
+Ilyenkor kétféle lehetőségünk van.
+Ha megadnak nekünk egy $(\Omega, \prec)$ rendezést, amilyen sorrendben szeretnék a báziselemeket megkapni, akkor amikor az algoritmus új báziselemet választ, akkor mindig a lehető legelsőt választjuk,
+illetve megnézzük a többi Schreier-generátort is, hogy azoknak a maradékával be tudunk-e venni előbbi báziselemet.
+Másik lehetőség az úgynevezett bázisváltás, hogy ha már végigszámoltuk az algoritmust egy másik bázisban, akkor annak az eredményét felhasználva gyorsabban is ki lehet számolni az új erős generátorrendszert.
+A módszer azon alapszik, hogy ha $(\beta_1, \dots, \beta_m)$ bázisra nézve már ismert az erős generátorrendszer, akkor valamilyen $i$-re ki tudjuk számolni a $(\beta_1, \dots, \beta_{i-1}, \beta_{i+1}, \beta_i, \beta_{i+2}, \dots, \beta_m)$
+bázishoz tartozót, vagyis két egymásutáni báziselemet fel tudunk cserélni.
+Ezzel a művelettel akármilyen más bázisba is eljuthatunk, hiszen új báziselemet is fel tudunk venni a listába olyan helyen, hogy az redundáns legyen.
 \todo{bázisváltás}
 
 \subsubsection{Backtrack módszerek}
@@ -184,7 +192,8 @@ $P$-től függően azonban lehet, hogy más $K$-t meg $L$-et is választhatunk.
 Például, ha $P$ azon elemekre teljesül, amik $a$-t $b$-be konjugálják, akkor választhatjuk $K=\langle a \rangle$-t és $L=\langle b \rangle$-t.
 Mivel minden $KgL$ kettős mellékosztálynak elég egyetlen elemét megtalálnunk, és a bejárás $\prec$-lexikografikus sorrendben találja meg az elemeket, ezért a $\mathcal{T}(t)$ részfát kihagyhatjuk, ha tudjuk, hogy
 egyik $g \in \varphi(t)$ sem lehet a saját $KgL$ kettős mellékosztályának első eleme.
-Sajnos egy kettős mellékosztály első elemét megtalálni NP-nehéz probléma (\cite{Luk93}), ezért kicsit másképp kell csinálnunk.
+Sajnos egy kettős mellékosztály első elemét megtalálni NP-nehéz probléma (\cite{Luk93}), ezért kicsit másképp kell csinálnunk, erre való a következő 3 lemma.
+
 \begin{lemma}
 \label{thm:permbtcrit2}
 Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
@@ -216,6 +225,7 @@ Ellentmondásra jutottunk.
 \end{proof}
 Ez $k=l$ esetén az ezelőtti lemmát adja vissza, $k < l$-re pedig azt jelenti, hogy $\beta_l \in \beta_k^{K_{(\beta_1,\dots,\beta_{k-1})}}$ esetén csak azok a $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}_l$-ek
 érdekesek, amikre $\gamma_l \succ \gamma_k$.
+
 \begin{lemma}
 \label{thm:permbtcrit4}
 Legyen $s = \left| \beta_l^{K_{(\beta_1,\dots,\beta_{l-1})}} \right|$, azaz $K$ $l$-edik fundamentális orbitjának mérete.
@@ -229,6 +239,21 @@ $hg \in KgL$ és $g$ minimalitása miatt $\gamma_l = \min_{\prec} \Gamma$, ezér
 \end{proof}
 Emiatt amikor a $t' = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ részfát nézzük, akkor $G_{(\gamma_1,\dots,\gamma_{l-1})}$ minden orbitjának utolsó $s-1$ elemét kihagyhatjuk.
 
-\todo{centralizátor}
-\todo{$\Omega$ részhalmazának stabilizátora}
-\todo{konjugáltság}
+Most nézzünk $\mathcal{P}$-specifikus kritériumokat.
+Nézzük először a centralizátor problémát, legyen adott $c \in G$, $C_G(c) = G(\mathcal{P})$-t kell megtalálnunk.
+Mivel $C_G(c) = C_G(\langle c \rangle)$, ezért minden $\omega \in \Omega, g \in C_G(c), k \in \mathbb{Z}$-re igaz, hogy $(\omega^{c^k})^g = (\omega^g)^{c^k}$.
+Ez két dolgot jelent, egyrészt hogy ha $\omega$ képét meghatároztuk már, akkor az a $\omega^{c^k}$ alakú elemek képeit is meghatározza,
+másrészt pedig hogy ha $\omega$ egy $l$-hosszú ciklus része $c$-ben, akkor $\omega^g$ is csak egy $l$-hosszú ciklus része lehet $c$-ben.
+Ezeket a feltételeket akkor tudjuk hatékonyan kihasználni, hogyha olyan bázisban írjuk fel az erős generátorrendszert, amiben $c$ egyes ciklusainak az elemei egymást követik.
+Így tudunk $\omega, \omega^c, \omega^{c^2}, \dots$ közül minél többől báziselemet csinálni, tehát így lesz minél több $\mathcal{T}(t)$ eldobható.
+
+Második példának vegyünk $\Delta \subseteq \Omega$-t és legyen $G(\mathcal{P}) = G_{\Delta}$, vagyis a $\Delta$ halmaz stabilizátorát keressük.
+Ehhez először az $\Omega$ elemeinek egy olyan rendezése szerint csináljuk meg a bázist és az erős generátorrendszert, amiben a $\Delta$-beli elemek vannak elől.
+Legyen $\beta_k$ az első $\Omega \setminus \Delta$-beli báziselem, ilyenkor tudjuk, hogy $G^{[k]} = G_{(\Delta)} \le G(\mathcal{P})$.
+A \ref{thm:permbtcrit1}. lemma szerint $\varphi(t) \cap G(\mathcal{P}) = \emptyset$ vagy $\varphi(t) \subseteq G(\mathcal{P})$, minden $t \in \mathcal{T}_{k-1}$-re.
+Így elég csak az első $k-1$ báziselem képét vizsgálnunk.
+
+Harmadik példának nézzük a konjugáltság-ellenőrzés esetét, adott $a, b \in G$, $G(\mathcal{P}) = \{g \in G \mid a^g = b \}$.
+Ebben a problémában $G(\mathcal{P})$ vagy üres, vagy $C_G(a)$ egy jobboldali mellékosztálya, ezért hasonlít ez az eset a centralizátor-problémára, ahol hasonló feltételek jöttek ki.
+$g$-nek $a$ ciklusait $b$ ugyanolyan hosszú ciklusaihoz kell rendelnie, így ha $a$ egy ciklusának egy elemének a képét meghatározzuk, az az egész ciklus képét is megmondja.
+Itt is speciális bázisban érdemes felírni az erős generátorrendszert, mégpedig olyanban amiben $a$ ciklusainak elemei egymást követik.
