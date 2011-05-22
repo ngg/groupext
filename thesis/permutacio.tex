@@ -1,14 +1,14 @@
-\subsection{Permutációcsoportok}
-\label{subsec:permutacio}
+\section{Algoritmusok permutációcsoportokhoz}
+\label{sec:permutacio}
 Minden véges csoport felírható permutációcsoportként, így a permutációcsoportok hatékony használata kiemelten fontos.
 A ma is használt módszer Charles C. Sims-től származik 1970-ből (\cite{Sim70}), a hatékonyságán Donald E. Knuth ötlete javított sokat, amit 1991-ben publikált (\cite{Knu91}).
-Az \ref{subsubsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
-az \ref{subsubsec:permss}. alfejezet arról szól, hogy hogyan tudunk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
-míg az \ref{subsubsec:permbt}. rész az itt előforduló főként backtrack-jellegű algoritmusokat részletezi.
+Az \ref{subsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
+az \ref{subsec:permss}. alfejezet arról szól, hogy hogyan tudunk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
+míg az \ref{subsec:permbt}. rész az itt előforduló főként backtrack-jellegű algoritmusokat részletezi.
 Ez a fejezet egy nagyon rövid kivonata lényegében Seress Ákos közel 300 oldalas könyvének (\cite{Ser03}), ami részletesebben tárgyal erről a témakörröl.
 
-\subsubsection{Bázisok és erős generátorrendszerek}
-\label{subsubsec:permdef}
+\subsection{Bázisok és erős generátorrendszerek}
+\label{subsec:permdef}
 Legyen $G \le S_n = \Sym(\Omega)$.
 A $B=(\beta_1,\beta_2,\dots,\beta_m)$ különböző $\Omega$-beli elemekből álló sorozatot $G$ bázisának hívjuk,
 ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként fixen tartja $B$-t, vagyis ha $G_B=\{1\}$.
@@ -34,7 +34,7 @@ Logaritmust véve, majd átrendezve
 Különböző irredundáns bázisok lehetnek különböző méretűek, de nem lehet egy bázis "túl nagy" emiatt.
 
 $S \subseteq G$ részhalmazt $G$ erős generátorrendszerének hívjuk (a $B$ bázisra nézve), ha $\forall 1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
-Ha adott egy erős generátorrendszer, akkor az \ref{subsubsec:orbit}. fejezetben leírt algoritmussal a $\beta_i^{G^{[i]}}$ orbitok könnyen kiszámolhatóak.
+Ha adott egy erős generátorrendszer, akkor az \ref{subsec:orbit}. fejezetben leírt algoritmussal a $\beta_i^{G^{[i]}}$ orbitok könnyen kiszámolhatóak.
 Ezeket az orbitokat fundamentális orbitoknak hívjuk.
 Ha a kiszámolásuk során az orbit minden pontjához felírjuk, hogy melyik $G^{[i]}$-beli elem viszi oda $\beta_i$-t, akkor megkapjuk az $R_i$ transzverzálist,
 vagyis a $G^{[i+1]}$ mellékosztályainak reprezentáns elemeit.
@@ -68,8 +68,8 @@ Mindkét ilyen esetben nyilvánvalóan $h \notin G$, ilyenkor az utoljára kisz�
 
 $G$ rendjét is könnyen kiszámolhatjuk egy erős generátorrendszer ismeretében, ugyanis $|G| = |\beta_1^{G^{[1]}}| |\beta_2^{G^{[2]}}| \dots |\beta_m^{G^{[m]}}| = |R_1| |R_2| \dots |R_m|$.
 
-\subsubsection{Schreier-Sims algoritmus}
-\label{subsubsec:permss}
+\subsection{Schreier-Sims algoritmus}
+\label{subsec:permss}
 Ha megadnak nekünk egy $G \le \Sym(\Omega)$ permutációcsoportot valahogyan (black-box csoportnak is tekinthetjük akár),
 akkor ki kell tudnunk számolni egy bázisát és egy erős generátorrendszert, ahhoz hogy hatékonyan tudjunk vele dolgozni.
 Ez a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
@@ -164,8 +164,8 @@ Mivel $|\overline{\Delta}_{i+1}| = |\overline{R}_{i+1}| = |R_i| |R_{i+1}| / |\ov
 Legfeljebb $\log \overline{R}_{i+1}$ elemet adtunk hozzá $\overline{S}$-hez, mivel minden elem hozzáadása az orbitot legalább megduplázta, így nem lesz túl nagy az új erős generátorrendszerünk.
 $\overline{R}_{i+1}$ Schreier-fa ábrázolása $\overline{S}$ segítségével kiszámolható.
 
-\subsubsection{Backtrack módszerek}
-\label{subsubsec:permbt}
+\subsection{Backtrack módszerek}
+\label{subsec:permbt}
 Ebben a részben legyen adott $G$ és legyen $\mathcal{P}$ egy tulajdonság, meg kell találnunk $G(\mathcal{P})$-t, vagyis $G$ azon elemeit, amik $\mathcal{P}$ tulajdonságúak.
 Ehhez feltesszük, hogy minden $g \in G$-re el tudjuk dönteni, hogy $\mathcal{P}$ tulajdonságú-e.
 Néhány tulajdonságra nincs ismert jobb algoritmus annál, mint hogy végigmegyünk $G$ elemein, és mindegyiket ellenőrizzük.

@@ -1,12 +1,26 @@
-\subsection{Burnside-Dixon-Schneider algoritmus}
-\label{subsec:bds}
+\section{Karaktertáblázatok számítása}
+\label{sec:karakter}
+\todo{innen}
+Ebben a fejezetben véges csoportok karaktertáblázatának algoritmikus kiszámításáról lesz szó.
+Megpróbáljuk a csoport megadásának módját most figyelmen kívül hagyni, általánosan alkalmazható
+módszerekről beszélünk.
+
+A \ref{subsec:bds}. alfejezetben egy Burnside által kitalált, teljesen általános algoritmusról
+és annak továbbfejlesztett változatairól lesz szó, ami egy lineáris algebrai megközelítést alkalmaz.
+
+\todo{bekezdés: Conlon}
+
+Végül a \ref{subsec:unger}. alfejezetben arról beszélünk, hogy az előző algoritmus hogyan alkalmazható
+akármilyen rendű csoportok karaktertáblázatainak kiszámításához.
+\todo{idaig}
+
 Az első algoritmust karaktertáblázatok számítására Burnside írta le \cite{Bur11}-ben. Azóta is az ő módszere, és annak átalakított változatai
 az egyetlen minden csoportra alkalmazható ismert algoritmus.
 Ebben az alfejezetben ismertetjük az eredeti algoritmus ötleteit, illetve pár változtatást.
 \todo{bekezdés: Mathematica kód}
 
-\subsubsection{Burnside eredeti algoritmusa}
-\label{subsubsec:bdseredeti}
+\subsection{Burnside eredeti algoritmusa}
+\label{subsec:bdseredeti}
 Legyen $G$ tetszőleges véges csoport, amit multiplikatívnak tekintünk, egységelemét szokásosan $1$-gyel jelöljük.
 Jelöljuk $G$ konjugáltosztályainak számát $r$-rel, az osztályokat $C_1, C_2, \dots, C_r$-rel, ezeknek egy-egy reprezentáns elemét $g_1, g_2, \dots, g_r$-rel.
 Legyen $i=1, 2, \dots, r$-re $h_i=|C_i|=|G:C_G(C_i)|$, a konjugáltosztályok elemszáma.
@@ -60,11 +74,11 @@ Ezalapján $d_i$ kifejezhető, tehát sikerült $\chi^i_j$-ket kiszámolnunk.
 \item Kiszámoljuk $d_i$-ket, és végül ebből $\chi^i_j$-ket
 \end{enumerate}
 
-\subsubsection{Schneider első módosítása}
-\label{subsubsec:bdssch1}
+\subsection{Schneider első módosítása}
+\label{subsec:bdssch1}
 Ezt a módosítást Schneider írta le \cite{Sch90}-ben.
 Nem annyira a sebességén javít az algoritmusnak, hanem inkább egyszerűbbé teszi azt, ezért ezt vesszük előre,
-annak ellenére is, hogy a \ref{subsubsec:bdsdixon}. részben leírt módosítást Dixon már jóval előtte kitalálta.
+annak ellenére is, hogy a \ref{subsec:bdsdixon}. részben leírt módosítást Dixon már jóval előtte kitalálta.
 
 Jelöljük $1\le j \le r$-re $j'$-vel azt a szintén $[1, r]$-beli számot, amire $g_j^{-1}$ és $g_{j'}$ konjugáltak,
 vagyis amire $C_{j'}=C_j^{-1}$. Mivel $|C_l|=h_l$, így azon $(x, y, z)\in C_j \times C_k \times C_l$ hármasok száma,
@@ -87,8 +101,8 @@ A keresett szorzó $d_i/w^i_1$, mert az első elemnek $d_i$-nek kell lennie.
 Ezalapján $d_i$-ket megállapíthatjuk, amiből meg $\chi^i_j$-ket megkapjuk.
 
 
-\subsubsection{Dixon módosítása}
-\label{subsubsec:bdsdixon}
+\subsection{Dixon módosítása}
+\label{subsec:bdsdixon}
 Jelöljük $G$ exponensét, vagyis az elemrendek legkisebb közös többszörösét $e$-vel.
 Ismert, hogy $\chi^i_j$-k algebrai egészek, sőt éppen $d_i$ darab komplex $e$-edik egységgyök összege,
 vagyis az algoritmustól elvárható kell, hogy legyen, hogy a karaktertáblázat elemeit ne csak közelítő értékekkel, hanem pontos értékekkel kapjuk meg.
@@ -164,8 +178,8 @@ m_{ijk} = \Theta(m_{ijk}) = \Theta(e)^{-1} \sum_{l=0}^{e-1} \Theta(\chi^i_{j(l)}
 Ezzel $\Theta(\chi^i_j)$-kből ki tudtuk fejezni $\chi^i_j$-ket, vagyis készen vagyunk.
 \todo{rendes példa: Dixonra}
 
-\subsubsection{Schneider második módosítása}
-\label{subsubsec:bdssch2}
+\subsection{Schneider második módosítása}
+\label{subsec:bdssch2}
 Nem esett szó eddig arról, hogy hogyan lehet az $M_j$ mátrixokat kiszámolni.
 Egyszerre $M_j$ egy oszlopát (legyen most a $l$-edik) tudjuk megadni, mégpedig úgy hogy $\forall x \in C_j$-re kiszámoljuk
 $y=x^{-1}g_l$-t és azt, hogy $y$ melyik konjugáltosztályba esik.
@@ -217,8 +231,8 @@ Ennek kell a sajátaltereit meghatároznunk.
 Ehhez kiszámoljuk a karakterisztikus polinomját, azt $F_p$ felett faktorizálni tudjuk például a Cantor-Zassenhaus algoritmussal \cite{CZ81}, így megkaptuk a $\lambda_i$ sajátértékeket.
 $A-\lambda_i I$ baloldali nulltere lesz az $i$-edik sajátaltér, amit az eredeti bázisba visszaírva megkapjuk $V$ és $\Theta(M_j)$ $i$-edik baloldali sajátalterének metszetét.
 
-\subsubsection{További módosítások}
-\label{subsubsec:bdstovabbi}
+\subsection{További módosítások}
+\label{subsec:bdstovabbi}
 Ha Schneider második módosítását követjük, akkor segít az algoritmusnak ha előre ki tudunk számolni pár irreducibilis karaktert.
 A triviális (csupa $1$) karaktert például mindig fel tudjuk használni.
 Általában megéri, hogy a lineáris karaktereket, illetve azok $\Theta$-általi képeit előre kiszámoljuk.

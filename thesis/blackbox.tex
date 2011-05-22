@@ -1,5 +1,32 @@
-\subsection{Black-box csoportok}
-\label{subsec:blackbox}
+\section{Algoritmusok általános csoportokhoz}
+\label{sec:blackbox}
+\todo{innen at kell irni}
+Az algoritmikus csoportelméletben az egyik legelsőként felmerülő kérdés, hogy hogyan is adjuk meg
+a csoportot a számítógépnek.
+Mi csak véges csoportokkal foglalkozunk, így az elsőre legkézenfekvőbbnek tűnő megoldás az, ha a
+csoportot a Cayley-táblázatával definiáljuk.
+Ehhez beszámozzuk a csoportelemeket $1$-től $n$-ig ($n$-nel jelöljük mostantól a csoport rendjét),
+és egy $n\times n$-es mátrixban megadjuk minden két elem szorzatának indexét.
+Ennek a módszernek a nyílvánvaló hátránya a nagyon nagy memóriaigény,
+hiszen például egy $100000$-rendű csoport megadásához így $10$ milliárd indexet kell felírnunk,
+azaz (32-bites számítógéppel számolva) 40 GB memóriára lenne szükségünk.
+
+Két nagy típusa van a valójában használt módszereknek.
+Az első típus az úgynevezett black-box csoportok, itt a csoportokat mint egy fekete dobozt képzelünk el,
+amiről nem tudjuk, hogy hogyan működik belül, nem teszünk fel semmit a szerkezetéről.
+A black-box csoportokra vonatkozó algoritmusoknak megvan az a nagy előnye, hogy minden véges csoportra
+alkalmazhatóak, de ez egyben a hátrányuk is, hiszen nem tudják kihasználni a csoportok speciális szerkezetét.
+Részletesebben foglalkozunk ilyenekkel a \ref{subsec:blackbox}. alfejezetben.
+
+A másik nagy típus az, amikor a csoportnak egy bizonyos szerkezetét kihasználva adjuk meg.
+A három leggyakrabban használt ilyen módszer a csoportot, mint véges halmazon ható permutációcsoportként,
+test feletti mátrixcsoportként, illetve végesen prezentált csoportként adja meg.
+Permutációcsoportok megadásával foglalkozunk az \ref{subsec:permutacio}. alfejezetben.
+Mátrixcsoportokkal nem foglalkozunk, az egy különálló szakdolgozat témáját képezhetné.
+Végesen prezentált csoportok egy speciális típusáról, a policiklikus csoportokról lesz szó
+az \ref{subsec:policiklikus}. alfejezetben.
+\todo{idaig}
+
 A black-box csoportok eredeti ötlete és eredeti definíciója magyaroktól származik,
 Babai László és Szemerédi Endre publikálta \cite{BS84}-ben.
 Ma a legtöbb helyen inkább egy kicsit általánosabb definíciót használnak, amivel kevésbé körülményes az
@@ -25,12 +52,12 @@ valamint $\overline{G}$ az összes invertálható $F$ feletti $n\times n$-es má
 Természetesen a permutációcsoportok, illetve a policiklikus csoportok is könnyen leírhatók black-box csoportokként.
 
 A black-box csoportokra vonatkozó algoritmusoknak az egyik leggyakoribb csoportja az általunk később is sokat használt
-orbit-számoló algoritmusok, amiket az \ref{subsubsec:orbit}. alfejezetben részletezünk.
+orbit-számoló algoritmusok, amiket az \ref{subsec:orbit}. alfejezetben részletezünk.
 Randomizált algoritmusok esetében nagyon fontos, hogy tudjunk jó közelítéssel uniform véletlen csoportelemet választani,
-erről szól az \ref{subsubsec:veletlen}. alfejezet.
+erről szól az \ref{subsec:veletlen}. alfejezet.
 
-\subsubsection{Orbit-algoritmusok}
-\label{subsubsec:orbit}
+\subsection{Orbit-algoritmusok}
+\label{subsec:orbit}
 Gyakori eset, hogy $G$ hatását nézzük egy $\Omega$ halmazon, és ott egy $\alpha\in\Omega$ elem orbitját,
 vagyis $\alpha^G = \{ \alpha^g \mid g \in G \}$-t keressük. Ilyen előfordulhat, ha $G \le \Sym(\Omega)$,
 de például az is ide tartozik, ha $g \in G$ konjugáltosztályát szeretnénk meghatározni, ugyanis választhatjuk
@@ -62,6 +89,10 @@ vagyis legfeljebb $O(\log(|\langle A^G\rangle |))$ generátorelemet írunk fel. 
 megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában. Vannak olyan randomizált algoritmusok is, amikhez nem szükséges feltennünk,
 hogy ezt el tudjuk dönteni, ezekről \cite{Ser03}-ban olvashatunk.
 
-\subsubsection{Véletlen csoportelem választása}
-\label{subsubsec:veletlen}
-\todo{alalfejezet: Véletlen csoportelem választása}
+\subsection{Véletlen csoportelem választása}
+\label{subsec:veletlen}
+\todo{alfejezet: Véletlen csoportelem választása, ha kell???}
+
+\subsection{Konjugáltosztályok megtalálása}
+\label{subsec:konj}
+\todo{alfejezet: konjugáltosztályok}
