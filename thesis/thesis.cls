@@ -91,6 +91,7 @@
 
 \newargument{title}
 \newargument{author}
+\newargument{degree}
 \newargument{supervisor}
 \newargument{supervisorrank}
 \newargument{department}
@@ -109,7 +110,8 @@
 	\vspace{3cm}
 	{\large\@author}\\[1cm]
 	{\Large\textsc{\@title}}\\[2cm]
-	Szakdolgozat\\[4cm]
+	Szakdolgozat\\
+	\@degree\\[4cm]
 	Témavezető: \@supervisor, \@supervisorrank\\
 	\@department
 	\vfill
