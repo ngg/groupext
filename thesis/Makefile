@@ -7,7 +7,7 @@ $(NAME).pdf: latex.pdf
 	cp $< $@
 
 .PHONY: both
-both: latex.pdf pdflatex.pdf
+both: $(NAME).pdf latex.pdf pdflatex.pdf
 
 
 pdflatex.pdf: $(wildcard *.tex *.eps *.sty *.cls *.bib)
