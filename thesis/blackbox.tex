@@ -62,10 +62,41 @@ vagyis legfeljebb $O(\log(|\langle A^G\rangle |))$ generátorelemet írunk fel. 
 megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában. Vannak olyan randomizált algoritmusok is, amikhez nem szükséges feltennünk,
 hogy ezt el tudjuk dönteni, ezekről \cite{Ser03}-ban olvashatunk.
 
-\subsection{Véletlen csoportelem választása}
-\label{subsec:veletlen}
-\todo{alfejezet: Véletlen csoportelem választása, ha kell???}
-
 \subsection{Konjugáltosztályok megtalálása}
 \label{subsec:konj}
-\todo{alfejezet: konjugáltosztályok}
+Tegyük fel, hogy a $g, h \in G$ csoportelemekről valahogy el tudjuk dönteni, hogy konjugáltak-e, meg tudjuk határozni $C_G(g)$-t, vagyis a $g$ elem centralizátorát, valamint,
+hogy tudunk részcsoportokban (közel) egyenletes eloszlású véletlen elemet kiválasztani.
+Ezeket permutációcsoportoknál meg fogjuk mutatni, hogyan tudjuk megcsinálni.
+Feladatunk, hogy megtaláljuk a konjugáltosztályokat a csoportban, vagyis az osztályoknak megtaláljuk egy-egy reprezentáns elemét.
+Bár sok mindent felhasználunk, amit csak speciális csoportoknál tudunk megtenni, mégis az osztályok megtalálása minden csoport esetén ugyanazzal az algoritmussal történhet,
+azért írom a black-box csoportok fejezetében.
+
+A legegyszerűbb algoritmus annyiból áll csak, hogy sorban választunk véletlenszerű elemeket a csoportból, megnézzük, hogy konjugáltak-e az eddig megtalált reprezentáns elemekkel,
+és ha egyikkel sem az, akkor az új elemet is bevesszük a listába.
+Minden megtalált reprezentáns elemnek kiszámolhatjuk a konjugáltosztályának a méretét, ugyanis az a centralizátorának indexével egyenlő.
+Akkor fejezzük be az algoritmust, amikor az osztályok méretének összege eléri a csoport rendjét.
+Ennek az algoritmusnak a nagy hátránya, hogy ha egy nagy csoportban van egy kis elemszámú konjugáltosztály, akkor azt csak nagyon nehezen tudjuk megtalálni.
+
+Másik véletlenszerű elemválasztáson alapuló algoritmust talált ki Mark Jerrum 1995-ben (\cite{Jer95}).
+Konstruáljunk egy $M$ Markov-láncot a következőképpen.
+Az állapotok halmaza legyen $G$, a $P$ átmeneti valószínűségek mátrixának $g, h \in G$-hoz tartozó eleme pedig
+\begin{equation*}
+p_{g,h} =
+\begin{cases}
+1/|C_G(g)| & \text{ha $h \in C_G(g)$}\\
+0 & \text{különben}
+\end{cases}
+\end{equation*}
+$G$ elemein nézzünk egy véletlen sétát $M$ szerint. Először választunk egy $x_0 \in G$ kezdőállapotot, majd miután $(x_0, \dots, x_k)$ már definiált, legyen
+$x_{k+1}$ véletlen elem $C_G(x_k)$-ból.
+Mivel minden $g,h \in G$-re $1 \in C_G(g)$ és $h \in C_G(1)$, ezért akárhonnan akárhova legfeljebb két lépéssel eljuthatunk, tehát $M$ irreducibilis.
+Minden $g$-re $p_{g,g} = 1/|C_G(g)| > 0$, tehát minden állapot aperiodikus.
+Így alkalmazhatjuk a Markov-láncok alaptételét, miszerint létezik (és csak egy létezik) stacionárius eloszlás ($v = (v_g \mid g \in G)$) és $\delta \in (0,1)$, amire
+minden $k \ge 0$-ra és $g \in G$-re $|\Prob(x_k = g) - v_g| \le \delta^k$.
+Jelöljük $r$-rel a konjugált osztályok számát, és legyen $v_g = \frac{C_G(g)}{r|G|}$.
+Könnyen látható, hogy $\sum_{g\in G} v_g = 1$, valamint hogy $v = vP$, tehát ez a $v$ a stacionárius eloszlás.
+Ha akármelyik konjugáltosztályra összeadjuk az abba tartozó $g$-kre $v_g$-ket, akkor $1/r$-et kapunk, tehát elég nagy $m$-re $x_m$ közel egyenlő valószínűséggel lehet az egyes konjugáltosztályokban.
+Tehát az előző algoritmusunkat változtassuk annyival, hogy ne teljesen véletlenszerű csoportelemeket vegyünk mindig, hanem mindig az előző centralizátorából válasszunk csak, és így gyorsabban megtalálhatjuk
+minden osztály reprezentáns elemét.
+
+Vannak teljesen más elven működő további algoritmusok is erre a célra, de azokat nem részletezzük.
