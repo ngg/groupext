@@ -1,4 +1,4 @@
-NAME=szakdoli
+NAME = szakdoli
 
 .PHONY: all
 all: $(NAME).pdf
@@ -9,8 +9,9 @@ $(NAME).pdf: latex.pdf
 .PHONY: both
 both: $(NAME).pdf latex.pdf pdflatex.pdf
 
+DEPENDSON = szakdoli.tex bevezetes.tex blackbox.tex permutacio.tex burnside.tex mathematica.tex elte_cimer_ff.eps ref.bib thesis.cls ../GroupExt/GroupExt/GroupExt.m
 
-pdflatex.pdf: $(wildcard *.tex *.eps *.sty *.cls *.bib)
+pdflatex.pdf: $(DEPENDSON)
 	cp $(NAME).tex pdflatex.tex
 	pdflatex --shell-escape pdflatex.tex
 	bibtex pdflatex.aux
@@ -25,7 +26,7 @@ pdflatex.pdf: $(wildcard *.tex *.eps *.sty *.cls *.bib)
 	rm -f pdflatex.tdo
 	rm -f pdflatex.tex
 
-latex.dvi: $(wildcard *.tex *.eps *.sty *.cls *.bib)
+latex.dvi: $(DEPENDSON)
 	cp $(NAME).tex latex.tex
 	latex latex.tex
 	bibtex latex.aux
