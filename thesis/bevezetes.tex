@@ -1,34 +1,45 @@
 \addcontentsline{toc}{section}{Bevezetés}
 \section*{Bevezetés}
 \label{sec:bevezetes}
-\todo{innen at kell irni}
-Az algoritmikus csoportelméletben az egyik legelsőként felmerülő kérdés, hogy hogyan is adjuk meg
-a csoportot a számítógépnek.
-Mi csak véges csoportokkal foglalkozunk, így az elsőre legkézenfekvőbbnek tűnő megoldás az, ha a
-csoportot a Cayley-táblázatával definiáljuk.
-Ehhez beszámozzuk a csoportelemeket $1$-től $n$-ig ($n$-nel jelöljük mostantól a csoport rendjét),
-és egy $n\times n$-es mátrixban megadjuk minden két elem szorzatának indexét.
-Ennek a módszernek a nyílvánvaló hátránya a nagyon nagy memóriaigény,
-hiszen például egy $100000$-rendű csoport megadásához így $10$ milliárd indexet kell felírnunk,
-azaz (32-bites számítógéppel számolva) 40 GB memóriára lenne szükségünk.
+Az algoritmikus csoportelmélet a matematikának egy olyan ága, amivel a XX. század eleje óta foglalkoznak,
+de csak a '60-'70-es években kezdett el nagyon fejlődni.
+A szakdolgozat célja nem általánosan az összes algoritmus áttekintése, hanem
+az hogy véges csoportoknak számítógéppel tudjuk kiszámolni a karaktertáblázatát.
+Ez egy elég összetett feladat ahhoz, hogy rengeteg más csoportelméleti algoritmust is magával húzzon,
+ezekről fogunk beszélni.
 
-Két nagy típusa van a valójában használt módszereknek.
-Az első típus az úgynevezett black-box csoportok, itt a csoportokat mint egy fekete dobozt képzelünk el,
-amiről nem tudjuk, hogy hogyan működik belül, nem teszünk fel semmit a szerkezetéről.
-A black-box csoportokra vonatkozó algoritmusoknak megvan az a nagy előnye, hogy minden véges csoportra
-alkalmazhatóak, de ez egyben a hátrányuk is, hiszen nem tudják kihasználni a csoportok speciális szerkezetét.
-Részletesebben foglalkozunk ilyenekkel a \ref{subsec:blackbox}. alfejezetben.
+A legtöbb csoportelméleti algoritmus a csoport számítógépes megadásától függ, ugyanis
+a csoportot megadhatjuk permutációcsoportként vagy mátrixcsoportként; policiklikus reprezentációval vagy
+véges generátorrendszerrel és relációkkal is.
+Vannak azonban olyan algoritmusok is, amelyek nem függnek a megadás módszerétől,
+itt a csoportra, mint egy fekete dobozra tekintünk, nem ismerjük a szerkezetét.
+Innen jön az ilyen csoportokra a black-box elnevezés.
+Ezekre vonatkozó algoritmusokról szól az \ref{sec:blackbox}. fejezet.
 
-A másik nagy típus az, amikor a csoportnak egy bizonyos szerkezetét kihasználva adjuk meg.
-A három leggyakrabban használt ilyen módszer a csoportot, mint véges halmazon ható permutációcsoportként,
-test feletti mátrixcsoportként, illetve végesen prezentált csoportként adja meg.
-Permutációcsoportok megadásával foglalkozunk az \ref{subsec:permutacio}. alfejezetben.
-Mátrixcsoportokkal nem foglalkozunk, az egy különálló szakdolgozat témáját képezhetné.
-Végesen prezentált csoportok egy speciális típusáról, a policiklikus csoportokról lesz szó
-az \ref{subsec:policiklikus}. alfejezetben.
-\todo{idaig}
+A megadási módszerek közül a permutációcsoportokat választottam ki, az ismertetett algoritmusok nagyrésze ilyenekhez kapcsolódik.
+Ezek hatékony használatáról szól a \ref{sec:permutacio}. fejezet.
 
-\cite{HEO05}
-Téma, motiváció, felépítés, köszönetnyilvánítás
-Mindig 2-es alapú logaritmust nézünk
-\todo{fejezet: Bevezetés}
+Karaktertáblázatok kiszámolására jelenleg kettő, egymástól teljesen eltérő ötletre alapuló algoritmus ismert.
+Ezek közül amiről mi beszélünk, az a Burnside-Dixon-Schneider algoritmus, ami egy lineáris algebrai megközelítést alkalmaz.
+Erről szól a \ref{sec:burnside}. fejezet.
+A másik algoritmusról nem fogunk részletesen beszélni, itt szeretnék pár mondatot írni róla.
+1986-ban Slattery (\cite{Sla86}) publikált egy algoritmust, ami $p$-csoportokra meg tudja mondani, hogy hányadrendű irreducibilis reprezentációból hány van.
+Conlon 1990-ben (\cite{Con90}) ezt továbbfejlesztette, és $p$-csoportokra ki tudta számolni a karaktertáblázatot Slattery ötlete alapján.
+A minden csoportra alkalmazható algoritmus Unger-nek köszönhető 2006-ból (\cite{Ung06}), az ötlet Brauer tételén alapszik, miszerint az általánosított karakterek gyűrűjét generálják
+az úgynevezett elemi részcsoportok irreducibilis karaktereiből indukált karakterek.
+Elemi részcsoportok azok a részcsoportok, amelyek előállnak egy $p$-csoport és egy ciklikus csoport direktszorzataként, tehát Conlon algoritmusának segítségével kiszámolhatóak az irreducibilis karaktereik.
+Miután az algoritmus kiszámolta a gyűrű egy generátorrendszerét, LLL-redukció (\cite{LLL82}) segítségével megkeresi az 1-normájú karaktereket, ezek lesznek az irreducibilis karakterek.
+
+A szakdolgozat függelékében megtalálható az algoritmusok nagyrészének implementációja Mathematica 8 környezetben.
+Azért a Mathematica-ra esett a választásom, mivel az az egyik legnagyobb, legjobban megírt általános célú matematikai programcsomag, de az algebrai alkalmazások terén azonban nagyon elmaradott.
+A 2010-ben kiadott 8-as verzió volt az első, amibe már valamennyi csoportelméleti funkciót beleraktak, azonban csak permutációcsoportokat tud kezelni, és azokra is csak nagyon kevés algoritmus van benne.
+Az én implementációm a meglevő függvényeket azonban már felhasználja, így régebbi verziókkal nem kompatibilis.
+Mivel publikussá szeretném tenni a programomat, ezért annak a dokumentációja, valamint a forráskódbeli megjegyzések angol nyelvűek.
+A szakdolgozatban részletezett algoritmusokra példák az implementáció dokumentációjában találhatóak.
+
+A szakdolgozat előismeretnek tekinti a Matematika BSc négy félévnyi Algebra képzésének anyagát, valamint általában algoritmusokkal kapcsolatos jártasságot.
+Akinek a téma felkeltette az érdeklődését az algoritmikus csoportelmélet iránt, az részletesebben olvashat a témáról \cite{HEO05}-ben,
+valamint kifejezetten permutációcsoport-algoritmusokról \cite{Ser03}-ban.
+
+Ezúton szeretnék köszönetet mondani témavezetőmnek, Pelikán Józsefnek, aki a négy félév Algebra előadásaival és gyakorlataival felkeltette érdeklődésemet a téma iránt,
+valamint szakirodalom ajánlásával és értékes észrevételeivel nagyban segítette a szakdolgozat elkészítését.
