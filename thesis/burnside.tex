@@ -17,7 +17,6 @@ akármilyen rendű csoportok karaktertáblázatainak kiszámításához.
 Az első algoritmust karaktertáblázatok számítására Burnside írta le \cite{Bur11}-ben. Azóta is az ő módszere, és annak átalakított változatai
 az egyetlen minden csoportra alkalmazható ismert algoritmus.
 Ebben az alfejezetben ismertetjük az eredeti algoritmus ötleteit, illetve pár változtatást.
-\todo{bekezdés: Mathematica kód}
 
 \subsection{Burnside eredeti algoritmusa}
 \label{subsec:bdseredeti}
@@ -243,4 +242,9 @@ Ha $G$ Abel-csoport, akkor a véges Abel-csoportok alaptétele szerint felírhat
 majd ezek direktszorzataként megkapjuk $G$ irreducibilis karaktereit.
 Abban az esetben ha $G$ nem kommutatív, $G$ abelizálását kell tekintenünk, vagyis a $G^{\ab}=\faktor{G}{G'}=\faktor{G}{[G,G]}$ Abel-csoportnak kell meghatároznunk a karaktertábláját,
 majd ezen karaktereket $G$-re visszaemelve megkaphatjuk $G$ lineáris irreducibilis karaktereit.
-\todo{bds egyéb módosítások}
+
+Lehet bizonyos esetekben gyorsabb módszert találni $\chi^i_j$-k kiszámolására is $\Theta(\chi^i_j)$-kből.
+Miután $d_i$-t már kiszámoltuk és látjuk, hogy $d_i$ elég kicsi, akkor a leírt módszernél gyorsabb lehet minden lehetséges $d_i$ darab $\zeta$-hatvány összegére ellenőrizni,
+hogy melyikekre alkalmazva $\Theta$-t kapjuk a már kiszámolt $\Theta(\chi^i_j)$-t.
+Ha csak egy lehetséges összeg van, akkor megkaptuk $\chi^i_j$-t.
+Ez $e^{d_i}$ féle összeg ellenőrzését jelenti, míg a leírt módszer az összes $\chi^i_j$-t $O(e^4)$ időben kiszámolja, ezért tényleg csak kis $d_i$-kre érheti meg ez.
