@@ -176,7 +176,6 @@ $\Theta$-t ráalkalmazzuk az egyenletre:
 m_{ijk} = \Theta(m_{ijk}) = \Theta(e)^{-1} \sum_{l=0}^{e-1} \Theta(\chi^i_{j(l)}) \omega^{-kl}
 \end{equation}
 Ezzel $\Theta(\chi^i_j)$-kből ki tudtuk fejezni $\chi^i_j$-ket, vagyis készen vagyunk.
-\todo{rendes példa: Dixonra}
 
 \subsection{Schneider második módosítása}
 \label{subsec:bdssch2}
@@ -194,15 +193,15 @@ A sajátvektorokat a következőképpen szeretnénk kiszámolni:
 kiindulunk egyetlen karakteraltérből (a teljes $\mathbb{F}_p^r$-ről), és minden lépésben egy legalább két dimenziós karakteralteret egy $M_j$ segítségével felbontunk több kisebb dimenziós karakteraltér direktösszegére,
 úgy hogy a karakteralternek nézzük a metszetét $M_j$ sajátaltereivel.
 Ezt addig ismételjük, amíg csak 1-dimenziós karakteraltereink maradnak, ezek a keresett közös sajátvektorok lesznek.
-\todo{jo szo kell: oszlop-redukalt bazis? (angolul: row reduced basis, row echelon basis, echelonized basis)}
-Egy alteret mindig egy oszlop-redukált bázisként tekintünk és tárolunk, ami azt jelenti, hogy a generátorvektorokat egy mátrix soraiként leírva olyat kapunk,
+\todo{jo szo kell: sor-redukalt bazis? (angolul: row reduced basis, row echelon basis, echelonized basis)}
+Egy alteret mindig egy sor-redukált bázisként tekintünk és tárolunk, ami azt jelenti, hogy a generátorvektorokat egy mátrix soraiként leírva olyat kapunk,
 amire teljesül, hogy minden sor első nemnulla eleme $1$, valamint ha az $i$-edik sorban a $j$-edik elem az első nemnulla elem, akkor $\forall i'>i$ és $\forall j'\le j$-re az $(i',j')$ helyeken 0 van.
-Egy tetszőlegesen megadott bázisból Gauss-eliminációval, majd az üres sorok törlésével oszlop-redukált bázist kaphatunk.
+Egy tetszőlegesen megadott bázisból Gauss-eliminációval, majd az üres sorok törlésével sor-redukált bázist kaphatunk.
 
 Ahhoz, hogy eldöntsük, hogy melyik $M_j$-vel érdemes próbálkozni egy adott $V$ karakteraltér felbontásánál, a következő lemmára lesz szükségünk:
 \begin{lemma}
 \label{thm:bdsmjfix}
-Legyen $b_1,b_2,\dots,b_s$ a $V$ karakteraltér oszlop-redukált bázisa.
+Legyen $b_1,b_2,\dots,b_s$ a $V$ karakteraltér sor-redukált bázisa.
 Akkor és csak akkor esik $V$ a $\Theta(M_j)$ mátrix egyetlen baloldali sajátalterébe, ha minden olyan $V$-beli vektorra, aminek az első koordinátája $0$, teljesül az,
 hogy jobbról szorozva $\Theta(M_j)$-vel a kapott vektornak is $0$ az első koordinátája.
 \end{lemma}
@@ -222,7 +221,7 @@ A szorzat első koordinátája $b_i$ és a mátrix első oszlopának skalárszor
 ezért az kell, hogy $b_i$ $j'$-edik koordinátája ne legyen $0$.
 Összefoglalva, akkor tudjuk $V$-t felbontani $M_j$-vel, ha $\exists 2\le i\le s$, amire $b_i$ $j'$-edik koordinátája nem $0$.
 
-Ha $V=\langle b_1, \dots, b_s \rangle$ oszlop-redukált alakban van megadva, $b_i$ első nemnulla koordinátája a $c_i$-edik,
+Ha $V=\langle b_1, \dots, b_s \rangle$ sor-redukált alakban van megadva, $b_i$ első nemnulla koordinátája a $c_i$-edik,
 akkor a $\Theta(M_j)$ mátrix hatását $V$-n ki tudjuk számolni csak a $c_1, \dots, c_s$-edik oszlopok ismeretével.
 Ugyanis egy $V$-beli vektort egyértelműen meghatároznak a $c_1, \dots, c_s$-edik koordinátái, vagyis ha $\forall 1\le i\le s$-re $b_i\Theta(M_j)$-nek kiszámoljuk a $c_1, \dots, c_s$-edik koordinátáit,
 akkor azok alapján a szorzatot fel tudjuk írni $b_i$-k lineáris kombinációjaként, vagyis ezek alapján az oszlopok alapján fel tudunk írni egy olyan $s\times s$-es $A$ mátrixot,
