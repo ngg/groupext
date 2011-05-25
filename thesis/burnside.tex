@@ -10,30 +10,30 @@ Az első alfejezetben ismertetjük az eredeti algoritmust, a többi alfejezet en
 \subsection{Burnside eredeti algoritmusa}
 \label{subsec:bdseredeti}
 Legyen $G$ tetszőleges véges csoport, jelöljuk a konjugáltosztályainak számát $r$-rel, az osztályokat $C_1, \dots, C_r$-rel, ezeknek egy-egy reprezentáns elemét $g_1, \dots, g_r$-rel.
-Legyen $i \in \{1, \dots, r\}$-re $h_i=|C_i|=|G:C_G(C_i)|$, a konjugáltosztályok elemszáma.
+Legyen $i \in \{1, \dots, r\}$-re $h_i=|C_i|=|G:C_G(g_i)|$, a konjugáltosztályok elemszáma.
 Természetesen választhatjuk $g_1$-et $1$-nek, így $h_1=1$.
 
 Feltételezzük, hogy a \ref{sec:permutacio}. fejezetben leírtak szerint $g_i$-k, $h_i$-k már ki vannak számolva.
 Azt is fel kell tennünk, hogy minden $g\in G$-re gyorsan meg tudjuk állapítani, hogy melyik konjugáltosztályba tartozik.
 Kisebb csoportok esetében, ha van elég memória, érdemes minden $g$-re előre kiszámolnunk ezt.
 
-Jelöljük $G$ irreducibilis karaktereit $\chi^1, \chi^2, \dots, \chi^r$-rel, és a rövidség kedvéért legyen $\chi^i_j=\chi^i(g_j)$.
+Jelöljük $G$ irreducibilis karaktereit $\chi^1, \dots, \chi^r$-rel, és a rövidség kedvéért legyen $\chi^i_j=\chi^i(g_j)$.
 Legyen $d_i=\chi^i_1$, azaz $\chi^i$ foka.
 
 $1 \le j, k, l \le r$-re legyen $c_{jkl}$ azon elempárok száma, ahol az egyik elem $C_j$-beli, a másik elem $C_k$-beli és a szorzatuk $g_l$.
-Ismert, hogy $c_{jkl}$ független $g_l$ megválasztásától, valamint hogy teljesül a következő egyenlőség $\forall 1 \le i, j, k \le r$-re:
+Ismert, hogy $c_{jkl}$ független $g_i$-k megválasztásától, valamint hogy teljesül a következő egyenlőség minden $1 \le i, j, k \le r$-re:
 \begin{equation}
 \label{eq:bdscjkl1}
 \frac{h_j\chi^i_j}{d_i}\frac{h_k\chi^i_k}{d_i}=\sum_{l=1}^r c_{jkl}\frac{h_l\chi^i_l}{d_i}
 \end{equation}
 Legyen $M_j$ az az $r\times r$-es mátrix, aminek $(k,l)$-edik eleme $c_{jkl}$, ezeket könnyen ki tudjuk számolni.
-Legyen $v^i=[h_1\chi^i_1/d_i, h_2\chi^i_2/d_i, \dots, h_r\chi^i_r/d_i]^T$.
+Legyen $v^i=[h_1\chi^i_1/d_i, \dots, h_r\chi^i_r/d_i]^T$.
 Ha $i, j$-t lerögzítjük, akkor ezekkel a jelölésekkel a (\ref{eq:bdscjkl1}) egyenlet átírható a következő alakba:
 \begin{equation}
 \label{eq:bdscjkl2}
 \frac{h_j\chi^i_j}{d_i}v^i=M_j v^i
 \end{equation}
-Vagyis $v^i$ jobboldali sajátvektora $M_j$-nek $\forall i, j$-re.
+Vagyis $v^i$ jobboldali sajátvektora $M_j$-nek minden $i, j$-re.
 Van tehát $r$ darab közös sajátvektorunk minden $M_j$-hez, amik közül semelyik kettőhöz sem tartozhat minden $M_j$ esetén ugyanazok a sajátértékek,
 így ezeket a sajátvektorokat $M_j$-kből konstansszorzó erejéig egyértelműen meghatározhatjuk lineáris algebrai ismereteink alapján.
 A helyes konstansszorzókat könnyen megkaphatjuk, hiszen $v^i_1=h_1\chi^i_1/d_i=1 d_i/d_i=1$, így $M_j$-kből meg tudjuk állapítani $v^i_j$-ket.
@@ -67,7 +67,7 @@ Ezt a módosítást Schneider írta le \cite{Sch90}-ben.
 Nem annyira a sebességén javít az algoritmusnak, hanem inkább egyszerűbbé teszi azt, ezért ezt vesszük előre,
 annak ellenére is, hogy a \ref{subsec:bdsdixon}. részben leírt módosítást Dixon már jóval előtte kitalálta.
 
-Jelöljük $1\le j \le r$-re $j'$-vel azt a szintén $[1, r]$-beli számot, amire $g_j^{-1}$ és $g_{j'}$ konjugáltak,
+Jelöljük $1\le j \le r$-re $j'$-vel $g_j^{-1}$ konjugáltosztályának a számát,
 vagyis amire $C_{j'}=C_j^{-1}$. Mivel $|C_l|=h_l$, így azon $(x, y, z)\in C_j \times C_k \times C_l$ hármasok száma,
 amire $xy=z$ egyenlő $h_l c_{jkl}$, de szintén egyenlő azon hármasok számával, amikre $x^{-1}z=y$, vagyis $h_l c_{jkl}=h_k c_{j'lk}$.
 Ezt a (\ref{eq:bdscjkl1}) egyenlet jobb oldalába beírva, majd $j$-t és $j'$-t felcserélve kapjuk, hogy
@@ -75,7 +75,7 @@ Ezt a (\ref{eq:bdscjkl1}) egyenlet jobb oldalába beírva, majd $j$-t és $j'$-t
 \label{eq:bdssch1}
 \frac{h_{j'}\chi^i_{j'}}{d_i}\chi^i_k=\sum_{l=1}^r c_{jlk}\chi^i_l
 \end{equation}
-Vagyis a $[\chi^i_1, \chi^i_2, \dots, \chi^i_r]$ sorvektor baloldali sajátvektora $M_j$-nek.
+Vagyis a $[\chi^i_1, \dots, \chi^i_r]$ sorvektor baloldali sajátvektora $M_j$-nek.
 
 Konstansszorzók erejéig most is egyértelműen meghatározhatjuk $M_j$-kből ezeket a vektorokat, most viszont a konstansszorzó megállapításához
 kell használnunk a karakterek ortonormáltságát. Tegyük fel, hogy találtunk $r$ darab közös sajátvektort, jelöljük ezeket $w^i$-vel.
@@ -107,7 +107,7 @@ egy ilyet $\omega$-val. Így adódik egy $\Theta : \mathbb{Z}[\zeta] \to \mathbb
 \sum_{i=0}^{e-1} a_i \zeta^i \mapsto \sum_{i=0}^{e-1} a_i \omega^i
 \end{equation*}
 $\Theta$-t alkalmazva az (\ref{eq:bdssch1}) egyenletre $\mathbb{F}_p$ feletti egyenletrendszert kapunk,
-tehát a $[\Theta(\chi^i_1), \Theta(\chi^i_2), \dots, \Theta(\chi^i_r)]$ sorvektorok $\mathbb{F}_p$ felett baloldali sajátvektorai $\Theta(M_j)$-knek.
+tehát a $[\Theta(\chi^i_1), \dots, \Theta(\chi^i_r)]$ sorvektorok $\mathbb{F}_p$ felett baloldali sajátvektorai $\Theta(M_j)$-knek.
 Be kell látnunk, hogy ezek a sorvektorok lineárisan függetlenek $\mathbb{F}_p$ felett.
 Legyen $X$ az a mátrix, aminek $(i, j)$-edik eleme $\chi^i_j$, vagyis $X$ maga a karaktertáblázat.
 Legyen $Y$ az a mátrix, aminek $(j, i)$-edik eleme $h_j\chi^i_j$.
@@ -135,7 +135,7 @@ $|G|$-vel szorozva, majd $\Theta$-t ráalkalmazva
 Ebből $d_i^2$ $p$-s maradékát megkapjuk, amiből $d_i$ egyértelmű, mert $0<d_i<p/2$ lehet csak.
 
 $\Theta(\chi^i_j)$-ket már tudjuk, az algoritmus utolsó lépése, hogy visszakapjuk $\chi^i_j$-ket, vagyis a komplex értékeket.
-Mivel $\chi^i_j$ $d_i$ darab $\zeta$-hatvány összege, ezért léteznek olyan $0\le m_{ijk}\le d_i < p$ számok, amikre:
+Mivel $\chi^i_j$ $d_i$ darab $\zeta$-hatvány összege, ezért léteznek olyan $0\le m_{ijk}\le d_i < p$ egészek, amikre:
 \begin{equation}
 \label{eq:bdsmijk1}
 \chi^i_j = \sum_{k=0}^{e-1} m_{ijk}\zeta^k
@@ -166,7 +166,7 @@ Ezzel $\Theta(\chi^i_j)$-kből ki tudtuk fejezni $\chi^i_j$-ket, vagyis készen 
 \subsection{Schneider második módosítása}
 \label{subsec:bdssch2}
 Nem esett szó eddig arról, hogy hogyan lehet az $M_j$ mátrixokat kiszámolni.
-Egyszerre $M_j$ egy oszlopát (legyen most a $l$-edik) tudjuk megadni, mégpedig úgy hogy $\forall x \in C_j$-re kiszámoljuk
+Egyszerre $M_j$ egy oszlopát (legyen most az $l$-edik) tudjuk megadni, mégpedig úgy hogy minden $x \in C_j$-re kiszámoljuk
 $y=x^{-1}g_l$-t és azt, hogy $y$ melyik konjugáltosztályba esik.
 $M_j$ $(k,l)$-edik eleme azon $x$-ek száma, amikre $y\in C_k$.
 Általában az algoritmus futásának legnagyobb részét ez a számolás teszi ki, ezért arra kell törekednünk, hogy minél kevesebb oszlop kiszámolásával meghatározhatóak legyenek a sajátvektorok.
@@ -177,17 +177,17 @@ Ebben a részben a sajátvektorok kiszámításához mutatunk egy gyorsabb móds
 Nevezzük karakteraltereknek $\mathbb{F}_p^r$ azon altereit, amelyeket néhány karakter generál, vagyis a $\langle \Theta(\chi^i) | i \in I \rangle$ alakban felírhatóakat, ahol $I \subseteq \{1,\dots,r\}$.
 A sajátvektorokat a következőképpen szeretnénk kiszámolni:
 kiindulunk egyetlen karakteraltérből (a teljes $\mathbb{F}_p^r$-ről), és minden lépésben egy legalább két dimenziós karakteralteret egy $M_j$ segítségével felbontunk több kisebb dimenziós karakteraltér direktösszegére,
-úgy hogy a karakteralternek nézzük a metszetét $M_j$ sajátaltereivel.
+úgy hogy a karakteraltérnek nézzük a metszetét $M_j$ sajátaltereivel.
 Ezt addig ismételjük, amíg csak 1-dimenziós karakteraltereink maradnak, ezek a keresett közös sajátvektorok lesznek.
 \todo{jo szo kell: sor-redukalt bazis? (angolul: row reduced basis, row echelon basis, echelonized basis)}
 Egy alteret mindig egy sor-redukált bázisként tekintünk és tárolunk, ami azt jelenti, hogy a generátorvektorokat egy mátrix soraiként leírva olyat kapunk,
-amire teljesül, hogy minden sor első nemnulla eleme $1$, valamint ha az $i$-edik sorban a $j$-edik elem az első nemnulla elem, akkor $\forall i'>i$ és $\forall j'\le j$-re az $(i',j')$ helyeken 0 van.
-Egy tetszőlegesen megadott bázisból Gauss-eliminációval, majd az üres sorok törlésével sor-redukált bázist kaphatunk.
+amire teljesül, hogy minden sor első nemnulla eleme $1$, valamint ha az $i$-edik sorban a $j$-edik elem az első nemnulla elem, akkor minden $i' > i, j'\le j$-re az $(i',j')$ helyeken 0 van.
+Egy tetszőlegesen megadott generátorrendszerből Gauss-eliminációval, majd az üres sorok törlésével sor-redukált bázist kaphatunk.
 
 Ahhoz, hogy eldöntsük, hogy melyik $M_j$-vel érdemes próbálkozni egy adott $V$ karakteraltér felbontásánál, a következő lemmára lesz szükségünk:
 \begin{lemma}
 \label{thm:bdsmjfix}
-Legyen $b_1,b_2,\dots,b_s$ a $V$ karakteraltér sor-redukált bázisa.
+Legyen $b_1,\dots,b_s$ a $V$ karakteraltér sor-redukált bázisa.
 Akkor és csak akkor esik $V$ a $\Theta(M_j)$ mátrix egyetlen baloldali sajátalterébe, ha minden olyan $V$-beli vektorra, aminek az első koordinátája $0$, teljesül az,
 hogy jobbról szorozva $\Theta(M_j)$-vel a kapott vektornak is $0$ az első koordinátája.
 \end{lemma}
@@ -200,20 +200,20 @@ $b_1=v_i+w_i$ alakba írható, ahol $w_i$ első koordinátája $0$. Ezt jobbról
 $b_1\Theta(M_j)=v_i\Theta(M_j)+w_i\Theta(M_j)=\lambda_i v_i+w_i\Theta(M_j)$. Ha csak az első koordinátákat nézzük, akkor azt kapjuk, hogy $b_1\Theta(M_j)$ első koordinátája $\lambda_i$.
 Ezt $i=1,2$-re is megkaptuk, vagyis $\lambda_1=\lambda_2$, ami ellentmondás.
 \end{proof}
-Ez azt jelenti, hogy egy $V=\langle b_1, b_2, \dots, b_s \rangle$ karakteralteret $M_j$-vel akkor tudunk felbontani, ha van olyan $V$-beli vektor,
+Ez azt jelenti, hogy egy $V=\langle b_1, \dots, b_s \rangle$ karakteralteret $M_j$-vel akkor tudunk felbontani, ha van olyan $V$-beli vektor,
 aminek első koordinátája $0$, de $\Theta(M_j)$-vel vett szorzatának első koordinátája nem $0$.
-Ez ekvivalens azzal, hogy $\exists 2\le i\le s$, amire $b_i \Theta(M_j)$ első koordinátája nem $0$.
+Ez ekvivalens azzal, hogy létezik $2\le i\le s$, amire $b_i \Theta(M_j)$ első koordinátája nem $0$.
 A szorzat első koordinátája $b_i$ és a mátrix első oszlopának skalárszorzata, és mivel tudjuk, hogy az első oszlopban pontosan egy nemnulla elem van, mégpedig a $j'$-edik helyen,
 ezért az kell, hogy $b_i$ $j'$-edik koordinátája ne legyen $0$.
-Összefoglalva, akkor tudjuk $V$-t felbontani $M_j$-vel, ha $\exists 2\le i\le s$, amire $b_i$ $j'$-edik koordinátája nem $0$.
+Összefoglalva, akkor tudjuk $V$-t felbontani $M_j$-vel, ha létezik $2\le i\le s$, amire $b_i$ $j'$-edik koordinátája nem $0$.
 
 Ha $V=\langle b_1, \dots, b_s \rangle$ sor-redukált alakban van megadva, $b_i$ első nemnulla koordinátája a $c_i$-edik,
 akkor a $\Theta(M_j)$ mátrix hatását $V$-n ki tudjuk számolni csak a $c_1, \dots, c_s$-edik oszlopok ismeretével.
-Ugyanis egy $V$-beli vektort egyértelműen meghatároznak a $c_1, \dots, c_s$-edik koordinátái, vagyis ha $\forall 1\le i\le s$-re $b_i\Theta(M_j)$-nek kiszámoljuk a $c_1, \dots, c_s$-edik koordinátáit,
+Ugyanis egy $V$-beli vektort egyértelműen meghatároznak a $c_1, \dots, c_s$-edik koordinátái, vagyis ha minden $1\le i\le s$-re $b_i\Theta(M_j)$-nek kiszámoljuk a $c_1, \dots, c_s$-edik koordinátáit,
 akkor azok alapján a szorzatot fel tudjuk írni $b_i$-k lineáris kombinációjaként, vagyis ezek alapján az oszlopok alapján fel tudunk írni egy olyan $s\times s$-es $A$ mátrixot,
 ami a $b_i$ bázisban felírt $\Theta(M_j)$-vel való szorzásnak felel meg.
 Ennek kell a sajátaltereit meghatároznunk.
-Ehhez kiszámoljuk a karakterisztikus polinomját, azt $F_p$ felett faktorizálni tudjuk például a Cantor-Zassenhaus algoritmussal \cite{CZ81}, így megkaptuk a $\lambda_i$ sajátértékeket.
+Ehhez kiszámoljuk a karakterisztikus polinomját, azt $\mathbb{F}_p$ felett faktorizálni tudjuk például a Cantor-Zassenhaus algoritmussal \cite{CZ81}, így megkaptuk a $\lambda_i$ sajátértékeket.
 $A-\lambda_i I$ baloldali nulltere lesz az $i$-edik sajátaltér, amit az eredeti bázisba visszaírva megkapjuk $V$ és $\Theta(M_j)$ $i$-edik baloldali sajátalterének metszetét.
 
 \subsection{További módosítások}
@@ -221,7 +221,7 @@ $A-\lambda_i I$ baloldali nulltere lesz az $i$-edik sajátaltér, amit az eredet
 Ha Schneider második módosítását követjük, akkor segít az algoritmusnak ha előre ki tudunk számolni pár irreducibilis karaktert.
 A triviális (csupa $1$) karaktert például mindig fel tudjuk használni.
 Általában megéri, hogy a lineáris karaktereket, illetve azok $\Theta$-általi képeit előre kiszámoljuk.
-Először nézzk meg, hogyan tudjuk kiszámolni ezeket Abel-csoportokra.
+Először nézzük meg, hogyan tudjuk kiszámolni ezeket Abel-csoportokra.
 (Valójában Abel-csoportoknál csak ezeket kell kiszámolni, hiszen minden irreducibilis karakter lineáris.)
 Ilyenkor minden elem egy önálló konjugáltosztályt alkot.
 Ha $G$ egy ciklikus csoport ($G\simeq Z_n$), akkor minden irreducibilis karakter úgy néz ki, hogy a generátorelemhez hozzárendel egy $n$-edik komplex egységgyököt, a hatványaihoz pedig az egységgyök megfelelő hatványait.
