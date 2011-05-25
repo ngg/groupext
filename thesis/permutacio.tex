@@ -1,60 +1,60 @@
 \section{Permutációcsoportok}
 \label{sec:permutacio}
 Minden véges csoport felírható permutációcsoportként, így a permutációcsoportok hatékony használata kiemelten fontos.
-A ma is használt módszer Charles C. Sims-től származik 1970-ből (\cite{Sim70}), a hatékonyságán Donald E. Knuth ötlete javított sokat, amit 1991-ben publikált (\cite{Knu91}).
+A ma is használt módszer Charles C. Sims-től származik 1970-ből \cite{Sim70}.
 Az \ref{subsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
-az \ref{subsec:permss}. alfejezet arról szól, hogy hogyan tudunk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
+az \ref{subsec:permss}. alfejezet arról szól, hogy hogyan tudjuk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
 míg az \ref{subsec:permbt}. rész az itt előforduló főként backtrack-jellegű algoritmusokat részletezi.
-Ez a fejezet egy nagyon rövid kivonata lényegében Seress Ákos közel 300 oldalas könyvének (\cite{Ser03}), ami részletesebben tárgyal erről a témakörröl.
+Ez a fejezet egy nagyon rövid kivonata lényegében Seress Ákos közel 300 oldalas könyvének \cite{Ser03}, ami részletesebben tárgyal erről a témakörröl.
 
 \subsection{Bázisok és erős generátorrendszerek}
 \label{subsec:permdef}
-Legyen $G \le S_n = \Sym(\Omega)$.
-A $B=(\beta_1,\beta_2,\dots,\beta_m)$ különböző $\Omega$-beli elemekből álló sorozatot $G$ bázisának hívjuk,
+Legyen $G \le \Sym(\Omega)$.
+A $B=(\beta_1,\dots,\beta_m)$ különböző $\Omega$-beli elemekből álló sorozatot $G$ bázisának hívjuk,
 ha $G$-nek egyetlen olyan eleme van (mégpedig az egységelem), ami pontonként fixen tartja $B$-t, vagyis ha $G_B=\{1\}$.
 Egy bázis mindig definiál egy
 \begin{equation}
 \label{eq:permlanc}
 G = G^{[1]} \ge G^{[2]} \ge \dots \ge G^{[m]} \ge G^{[m+1]} = \{1\}
 \end{equation}
-részcsoport-láncot, ahol $G^{[i]}=G_{(\beta_1,\beta_2,\dots,\beta_{i-1})}=G_{\beta_1}\cap G_{\beta_2}\cap\dots\cap G_{\beta_{i-1}}$, vagyis a $B$ első $i-1$ elemét fixen tartó csoportelemek részcsoportja.
-A bázis irredundáns, ha $\forall 1\le i \le m$-re $G^{[i]} > G^{[i+1]}$, vagyis ha a lánc $m+1$ különböző részcsoportból áll.
+részcsoport-láncot, ahol $G^{[i]}=G_{(\beta_1,\dots,\beta_{i-1})}=G_{\beta_1}\cap\dots\cap G_{\beta_{i-1}}$, vagyis a $B$ első $i-1$ elemét fixen tartó csoportelemek részcsoportja.
+A bázis irredundáns, ha minden $1\le i \le m$-re $G^{[i]} > G^{[i+1]}$, vagyis ha a lánc $m+1$ különböző részcsoportból áll.
 Mostantól csak irredundáns bázisokkal foglalkozunk.
-$G^{[i]}$-ben $G^{[i+1]}$ mellékosztályai a $\beta_i^{G^{[i]}}$ orbit elemeinek felel meg, így $2 \le \left| G^{[i]} : G^{[i+1]} \right| \le n$.
+$G^{[i]}$-ben $G^{[i+1]}$ mellékosztályai a $\beta_i^{G^{[i]}}$ orbit elemeinek felel meg, így $2 \le \left| G^{[i]} : G^{[i+1]} \right| \le |\Omega|$.
 Ezt felhasználva
 \begin{equation}
 \label{eq:permmeret}
-2^m \le |G|=\prod_{i=1}^m \left| G^{[i]} : G^{[i+1]} \right| \le n^m
+2^m \le |G|=\prod_{i=1}^m \left| G^{[i]} : G^{[i+1]} \right| \le |\Omega|^m
 \end{equation}
 Logaritmust véve (mint más algoritmusokkal kapcsolatos leírások esetén is, mi is mindig $2$-es alapú logaritmust használunk), majd átrendezve
 \begin{equation}
 \label{eq:permmeret2}
-\frac{\log |G|}{\log n} \le m = |B| \le \log |G|
+\frac{\log |G|}{\log |\Omega|} \le m = |B| \le \log |G|
 \end{equation}
 Különböző irredundáns bázisok lehetnek különböző méretűek, de nem lehet egy bázis "túl nagy" emiatt.
 
-$S \subseteq G$ részhalmazt $G$ erős generátorrendszerének hívjuk (a $B$ bázisra nézve), ha $\forall 1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
+Az $S \subseteq G$ részhalmazt $G$ erős generátorrendszerének hívjuk (a $B$ bázisra nézve), ha minden $1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
 Ha adott egy erős generátorrendszer, akkor az \ref{subsec:orbit}. fejezetben leírt algoritmussal a $\beta_i^{G^{[i]}}$ orbitok könnyen kiszámolhatóak.
 Ezeket az orbitokat fundamentális orbitoknak hívjuk.
 Ha a kiszámolásuk során az orbit minden pontjához felírjuk, hogy melyik $G^{[i]}$-beli elem viszi oda $\beta_i$-t, akkor megkapjuk az $R_i$ transzverzálist,
-vagyis a $G^{[i+1]}$ mellékosztályainak reprezentáns elemeit.
-A transzverzálisokat, ha explicit számolnánk ki és tárolnánk, akkor $\Theta(n^2)$ idő és memória kellene hozzá.
+vagyis $G^{[i+1]}$ mellékosztályainak reprezentáns elemeit.
+Ha az $R_i$ transzverzálist explicit számolnánk ki és tárolnánk, akkor $\Theta(|\Omega|^2)$ idő és memória kellene hozzá.
 Ezt elkerülhetjük az úgy nevezett Schreier-fák használatával.
-A Schreier-fa adatszerkezet egy $(S_i, T_i)$ párokból álló sorozat, minden $\beta_i$ bázisponthoz tartozik egy pár.
+A Schreier-fa adatszerkezet egy $T_i$ sorozat, minden $\beta_i$ bázisponthoz tartozik egy.
 $T_i$ egy irányított cimkézett fa, aminek pontjai a $\beta_i^{G^{[i]}}$ fundamentális orbit elemeinek felelnek meg.
-Minden él a $\beta_i$ gyökér fele mutat és meg van cimkézve $S_i \subseteq G^{[i]}$ egy elemével.
+Minden él a $\beta_i$ gyökér fele mutat és meg van cimkézve $S$ egy elemével.
 Ha $\gamma_1$-ből $\gamma_2$-be megy egy él $h$ cimkével, az azt jelenti, hogy $\gamma_1^h=\gamma_2$.
 Így ha akármelyik $\gamma$-ból végigmegyünk éleken $\beta_i$-ig és a cimkéket összeszorozzuk, akkor megkapjuk hogy melyik
-permutáció viszi $\gamma$-t $\beta_i$-be. Így az $(S_i, T_i)$ pár meghatározza a $G^{[i+1]}$ részcsoport mellékosztályainak 
-reprezentáns elemeinek az inverzét $G^{[i]}$-ben. Azért az inverzekkel csináltuk, mert a szitáláshoz az inverzekre van szükségünk.
-A gyakorlatban $S_i$ felírása után (ehhez $O(|S_i|n)$ memória szükséges) $T_i$-t el tudjuk tárolni egy $n$-hosszú $V_i$ tömbben.
+permutáció viszi $\gamma$-t $\beta_i$-be. Így $T_i$ meghatározza a $G^{[i+1]}$ részcsoport mellékosztályainak 
+reprezentáns elemeinek az inverzét $G^{[i]}$-ben. Azért az inverzekkel csináltuk, mert a lentebb leírt, úgynevezett szitáló eljáráshoz az inverzekre lesz szükségünk.
+A gyakorlatban $S$ felírása után (ehhez $O(|S||\Omega|)$ memória szükséges) $T_i$-t el tudjuk tárolni egy $|\Omega|$-hosszú $V_i$ tömbben.
 $\gamma \in \Omega$-ra $V_i[\gamma]$-t akkor és csak akkor definiáljuk, ha $\gamma \in \beta_i^{G^{[i]}}$,
-és ilyenkor $V_i[\gamma]$ egy $S_i$ egy elemére mutató pointert tartalmaz, ami megfelel a $\gamma$-ból kiinduló egyetlen él cimkéjének.
-Emiatt a tárolási mód miatt Sims eredetileg Schreier-vektoroknak hívta az adatszerkezetet.
+és ilyenkor $V_i[\gamma]$ azt tartalmazza, hogy $S$ hányadik eleme van a $\gamma$-ból kiinduló egyetlen él cimkéjén.
+Emiatt a tárolási mód miatt Sims eredetileg Schreier-vektoroknak hívta az adatszerkezetet, és ennek használatával $S$ és az összes transzverzális összesen $\Theta((|S|+m)|\Omega|)$ memóriában eltárolható.
 
 Feltehetjük, hogy $1 \in R_i$, vagyis hogy az egységelemet írtuk fel olyan elemnek ami $\beta_i$-t önmagába viszi.
-Ezeknek a transzverzálisoknak a segítségével $\forall g \in G$ kanonikus alakra hozható, azaz egyértelműen felírható ilyen elemek szorzataként.
-Precízebben megfogalmazva $\forall g \in G$-nek pontosan egy olyan szorzatalakja létezik, amire $g = r_m r_{m-1} \dots r_1$, ahol $r_i \in R_i$.
+Ezeknek a transzverzálisoknak a segítségével minden $g \in G$ kanonikus alakra hozható, azaz egyértelműen felírható ilyen elemek szorzataként.
+Precízebben megfogalmazva minden $g \in G$-nek pontosan egy olyan szorzatalakja létezik, amire $g = r_m r_{m-1} \dots r_1$, ahol $r_i \in R_i$.
 Ez a szorzatalak algoritmikusan könnyen megtalálható a következőképpen: Adott $g \in G$-re először megkeressük azt az $r_1 \in R_1$-et, amire $\beta_1^g = \beta_1^{r_1}$.
 Ezután $g_2 = g r_1^{-1}$-zel folytatjuk, megkeressük azt az $r_2 \in R_2$-t, amire $\beta_2^{g_2} = \beta_2^{r_2}$. $g_3 = g_2 r_2^{-1}$, és így tovább, folytatjuk amíg végig nem érünk.
 $1 = g_{m+1} = g_{m} r_m^{-1}$ lesz az utolsó lépés, visszaszámolva $g = r_m r_{m-1} \dots r_1$-et kapjuk. Ezt az eljárást szitáló eljárásnak hívjuk.
@@ -86,7 +86,7 @@ halmaz $H$-t generálja, vagyis $H=\langle T \rangle$. A $T$ halmaz elemeit $H$ 
 \begin{proof}
 Definíció szerint $T \subseteq H$, így elég belátni, hogy $H \le \langle T \rangle$.
 Legyen $h \in H$ tetszőleges, felírhatjuk $h = s_1 s_2 \dots s_k$ alakban, ahol $s_i \in S$.
-Sorba definiáljuk $1 \le i \le k$-ra $r_i$-t és $t_i$-t, úgy hogy $h = t_1 t_2 \dots t_i r_i s_{i+1} s_{i+2} \dots s_k$ igaz legyen $\forall i$-re.
+Sorban definiáljuk $1 \le i \le k$-ra $r_i$-t és $t_i$-t, úgy hogy $h = t_1 t_2 \dots t_i r_i s_{i+1} s_{i+2} \dots s_k$ igaz legyen $\forall i$-re.
 Kezdőértéknek vegyük $r_0=1$-et, ezzel $h = r_0 s_1 s_2 \dots s_k$.
 Ha $r_{i-1}$ már definiált, akkor legyen $t_i=r_{i-1} s_i (\overline{r_{i-1} s_i})^{-1} \in T$ és $r_i = \overline{r_{i-1} s_i} \in R$.
 Ezekre indukció szerint $h = t_1 t_2 \dots t_i r_i s_{i+1} s_{i+2} \dots s_k$ teljesül.
@@ -103,30 +103,30 @@ Ha $\langle S_1 \rangle = G$ és $\langle S_i \rangle_{\beta_i} = \langle S_{i+1
 $G$-nek bázisa, és $S = \bigcup_{i=1}^m S_i$ erős generátorrendszer $B$-re nézve.
 \end{lemma}
 \begin{proof}
-Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G' = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S' = \bigcup_{i=2}^m S_i$ erős generátorrendszere a $B' = \{\beta_2, \dots, \beta_m\}$ bázisra nézva.
+Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G^{*} = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S^{*} = \bigcup_{i=2}^m S_i$ erős generátorrendszere a $B^{*} = (\beta_2, \dots, \beta_m)$ bázisra nézva.
 Ellenőriznünk kell, hogy minden $1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
 $G^{[1]} = G$, így $i = 1$-re triviális.
-A lemma feltevéséből $G^{[2]} = G_{\beta_1} = \langle S_1 \rangle_{\beta_1} = \langle S_2 \rangle \le \langle S \cap G_{\beta_1} \rangle \le G_{\beta_1} = G^{[2]}$, vagyis $i = 2$-re is készen vagyunk.
-$i > 2$-re az indukciós feltevés miatt $G^{[i]} \ge \langle S \cap G_{(\beta_1, \dots, \beta_{i-1})} \rangle \ge \langle S' \cap G'_{(\beta_2, \dots, \beta_{i-1})} \rangle = G'_{(\beta_2, \dots, \beta_{i-1})} = G_{(\beta_1, \dots, \beta_{i-1})} = G^{[i]}$,
+A lemma feltevéséből $G^{[2]} = G_{\beta_1} = \langle S_1 \rangle_{\beta_1} = \langle S_2 \rangle \le \langle S \cap G^{[2]} \rangle \le G_{\beta_1} = G^{[2]}$, vagyis $i = 2$-re is készen vagyunk.
+$i > 2$-re az indukciós feltevés miatt $G^{[i]} \ge \langle S \cap G_{(\beta_1, \dots, \beta_{i-1})} \rangle \ge \langle S^{*} \cap G^{*}_{(\beta_2, \dots, \beta_{i-1})} \rangle = G^{*}_{(\beta_2, \dots, \beta_{i-1})} = G_{(\beta_1, \dots, \beta_{i-1})} = G^{[i]}$,
 tehát $i > 2$-re is készen vagyunk.
 Mivel az indukciós feltevést csak $m \ge 2$ esetén használtuk, a bizonyítással készen vagyunk.
 \end{proof}
 Ha adott $G = \langle T \rangle$, akkor annak egy erős generátorrendszerét a következőképpen kaphatjuk.
 Az algoritmus futása közben nyilvántartunk egy $B = (\beta_1, \dots, \beta_m)$ listát egy irredundáns bázis már ismert elemeiről,
-és minden $1 \le i \le m$-re egy $S_i \subseteq G_{(\beta_1, \dots, \beta_{i-1})}$ halmazt, amikre az \ref{thm:sims2}. lemmát szeretnénk majd alkalmazni.
+és minden $1 \le i \le m$-re egy $S_i \subseteq G_{(\beta_1, \dots, \beta_{i-1})}$ halmazt, amikre a \ref{thm:sims2}. lemmát szeretnénk majd alkalmazni.
 Az algoritmus alatt $S_i$-ket fogjuk növelni, illetve új báziselemeket fogunk $B$-hez adni (ezáltal $m$-et is növelve), így ha eleinte $\langle S_1 \rangle = G$ teljesül,
 akkor abban a helyzetben vagyunk készen, amikor minden $1 \le i \le m$-re $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$ teljesül.
 Végig fent fogjuk tartani, hogy $\langle S_i \rangle \ge \langle S_{i+1} \rangle$ is fennáll minden $i$-re.
 Kezdetben legyen $B = (\beta_1)$, ahol $\beta_1 \in \Omega$ olyan hogy $T$-nek legalább egy eleme mozgatja, és legyen $S_1 = T$, ezzel garantálva, hogy $\langle S_1 \rangle = G$ teljesüljön.
 Azt mondjuk, hogy az algoritmus az $l$. szinten tart, ha minden $l < i \le m$-re teljesül $\langle S_i \rangle_{\beta_i} = \langle S_{i+1} \rangle$.
-Kezdetben a második szintről indulunk, az algoritmus futása akkor ér véget, amikor az első szintre jutunk.
+Kezdetben az első szintről indulunk, az algoritmus futása akkor ér véget, amikor a nulladik szintre jutunk.
 
 Amikor az $l$. szinten vagyunk, a következő történik:
 Megnézzük, hogy $\langle S_l \rangle_{\beta_l} = \langle S_{l+1} \rangle$ teljesül-e.
-Mivel $\langle S_l \rangle \ge \langle S_{l+1} \rangle$, valamint $S_l \subseteq G_{(\beta_1, \dots, \beta_{l-1})}$, ezért elegendő a $\langle S_l \rangle_{\beta_l} \le \langle S_{l+1} \rangle$ irányú tartalmazást belátnunk.
-Az \ref{thm:sims1}. lemma alapján $\langle S_l \rangle_{\beta_l} = \langle rs(\overline{rs})^{-1} \mid r\in R_l, s\in S_l \rangle$, ahol $R_l$ az $\langle S_l \rangle_{\beta_l}$ részcsoport transzverzálisa $\langle S_l \rangle$-ban.
+Mivel $\langle S_l \rangle \ge \langle S_{l+1} \rangle$, valamint $S_l \subseteq G_{(\beta_1, \dots, \beta_{l-1})}$, ezért elegendő a $\langle S_l \rangle_{\beta_l} \le \langle S_{l+1} \rangle$ irányú tartalmazást ellenőrizni.
+A \ref{thm:sims1}. lemma alapján $\langle S_l \rangle_{\beta_l} = \langle rs(\overline{rs})^{-1} \mid r\in R_l, s\in S_l \rangle$, ahol $R_l$ az $\langle S_l \rangle_{\beta_l}$ részcsoport transzverzálisa $\langle S_l \rangle$-ban.
 Meg kell néznünk, hogy az összes Schreier-generátor benne van-e $\langle S_{l+1} \rangle$-ben.
-Ezt az előző részben leírt módon tudjuk ellenőrizni, mivel az \ref{thm:sims2}. lemma szerint $\langle S_{l+1} \rangle$-nek már ismerjük egy erős generátorrendszerét.
+Ezt az előző részben leírt szitálással tudjuk ellenőrizni, mivel a \ref{thm:sims2}. lemma szerint $\langle S_{l+1} \rangle$-nek már ismerjük egy erős generátorrendszerét.
 Ha mind benne van, vagyis ha $\langle S_l \rangle_{\beta_l} = \langle S_{l+1} \rangle$ teljesül, akkor az $l-1$. szintre lépünk.
 Ha nincs benne mind, vagyis $\langle S_l \rangle_{\beta_l} > \langle S_{l+1} \rangle$, akkor a szitálás során, amit kaptunk maradékot arra a Schreier-generátorra, ami nincs benne $\langle S_{l+1} \rangle$-ben,
 azt vegyük hozzá az $S_{l+1}$ halmazhoz.
@@ -135,17 +135,17 @@ $l = m$ esetén $B$-hez vegyünk hozzá egy olyan $\Omega$-beli elemet, amit a m
 Ezután az algoritmus az $l+1$. szinten folytatódik.
 
 Az algoritmus mindenképpen véges, hiszen $\Omega$ véges, így csak véges sokszor tudtuk $B$-t növelni.
-Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(|\Omega|^2 \log^3(|G|) + |T||\Omega|^2 \log(|G|))$ a futásidő, és $O(|\Omega|^2 \log(|G|) + |T||\Omega|)$ a memóriaigény.
-Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3(|G|) + |T||\Omega|^3 \log(|G|))$ a futásidő, és $O(|\Omega| \log^2(|G|) + |T||\Omega|)$ a memóriaigény.
+Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(|\Omega|^2 \log^3|G| + |T||\Omega|^2 \log|G|)$ a futásidő, és $O(|\Omega|^2 \log|G| + |T||\Omega|)$ a memóriaigény.
+Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3|G| + |T||\Omega|^3 \log|G|)$ a futásidő, és $O(|\Omega| \log^2|G| + |T||\Omega|)$ a memóriaigény.
 Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-ban olvashatjuk az algoritmusnak rengeteg változatát részletesen elemezve, hogy mikor melyik a legalkalmasabb.
 
 Sokszor elő fog fordulni, hogy az erős generátorrendszert nem akármilyen bázishoz szeretnénk megkapni.
 Ilyenkor kétféle lehetőségünk van.
 Ha megadnak nekünk egy $(\Omega, \prec)$ rendezést, amilyen sorrendben szeretnék a báziselemeket megkapni, akkor amikor az algoritmus új báziselemet választ, akkor mindig a lehető legelsőt választjuk,
 illetve megnézzük a többi Schreier-generátort is, hogy azoknak a maradékával be tudunk-e venni előbbi báziselemet.
-Másik lehetőség az úgynevezett bázisváltás, hogy ha már végigszámoltuk az algoritmust egy másik bázisban, akkor annak az eredményét felhasználva gyorsabban is ki lehet számolni az új erős generátorrendszert.
-A módszer azon alapszik, hogy ha $(\beta_1, \dots, \beta_m)$ bázisra nézve már ismert az erős generátorrendszer, akkor valamilyen $i$-re ki tudjuk számolni a $(\beta_1, \dots, \beta_{i-1}, \beta_{i+1}, \beta_i, \beta_{i+2}, \dots, \beta_m)$
-bázishoz tartozót, vagyis két egymásutáni báziselemet fel tudunk cserélni.
+Másik lehetőség az úgynevezett bázisváltás, hogy ha már végigszámoltuk az algoritmust egy tetszőleges bázisban, akkor annak az eredményét felhasználva gyorsabban is ki lehet számolni az új erős generátorrendszert.
+A módszer azon alapszik, hogy ha $(\beta_1, \dots, \beta_m)$ bázisra nézve már ismert az erős generátorrendszer és az $R_j$ transzverzálisok, akkor valamilyen $i$-re ki tudjuk számolni a $(\beta_1, \dots, \beta_{i-1}, \beta_{i+1}, \beta_i, \beta_{i+2}, \dots, \beta_m)$
+bázishoz tartozót is, vagyis két egymásutáni báziselemet fel tudunk cserélni.
 Ezzel a művelettel akármilyen más bázisba is eljuthatunk, hiszen új báziselemet is fel tudunk venni a listába olyan helyen, hogy az redundáns legyen.
 Ez a módszer méghatásosabb, ha nem az egész bázist adták meg, hanem csak az első pár báziselemet.
 Erre példa, ha egy $G_{\omega}$ stabilizátort szeretnénk kiszámolni, ilyenkor csak az első báziselem fontos.
@@ -157,11 +157,11 @@ Minden $1 \le j < i$-re, valamint $i+1 < j \le m$-re $\overline{R}_j = R_j$, teh
 Mivel $\overline{G}^{[i]} = G^{[i]}$, az új $i$-edik fundamentális orbit $\beta_{i+1}^{\langle S \cap G^{[i]} \rangle}$, ezért az $\overline{R}_i$ transzverzálist könnyen kiszámolhatjuk.
 A számolás neheze $\overline{R}_{i+1}$-nél jön.
 Legyen $\overline{S} = S$ eleinte, és kezdetben tekintsük az új $i+1$-edik fundamentális orbitot $\overline{\Delta}_{i+1} = \{\beta_i\}$-nek.
-Ezekután tekinthetjük $\overline{R}_i$ és $S\cap G^{[i]}$ által alkotott Schreier-generátorokat.
-Ha ezek közül valamelyik $\beta_i$-t kiviszi $\overline{\Delta}_{i+1}$-ből, akkor azt az elemet $\overline{S}$-hez adjuk hozzá és a fundamentális orbitot számoljuk újra:
-$\overline{\Delta}_{i+1} = \beta_i^{\langle \overline{S} \cap G_{(\beta_1,\dots,\beta_{i-1},\beta{i+1})} \rangle}$.
+Ezekután tekinthetjük az $\overline{R}_i$ és $\overline{S}\cap \overline{G}^{[i]}$ által alkotott Schreier-generátorokat, amik $\overline{G}^{[i+1]} = G_{(\beta_1,\dots,\beta_{i-1},\beta_{i+1})}$ generátorrendszerét adják.
+Ha ezek közül valamelyik $\beta_i$-t kiviszi $\overline{\Delta}_{i+1}$-ből, akkor azt az elemet $\overline{S}$-hoz adjuk hozzá és a fundamentális orbitot számoljuk újra:
+$\overline{\Delta}_{i+1} = \beta_i^{\langle \overline{S} \cap \overline{G}^{[i+1]} \rangle}$.
 Mivel $|\overline{\Delta}_{i+1}| = |\overline{R}_{i+1}| = |R_i| |R_{i+1}| / |\overline{R}_i|$ előre ismert, ezért nem kell minden Schreier-generátort megnéznünk.
-Legfeljebb $\log \overline{R}_{i+1}$ elemet adtunk hozzá $\overline{S}$-hez, mivel minden elem hozzáadása az orbitot legalább megduplázta, így nem lesz túl nagy az új erős generátorrendszerünk.
+Legfeljebb $\log |\overline{G}^{[i+1]}|$ elemet adtunk hozzá $S$-hez, mivel minden elem hozzáadása $\langle \overline{S} \cap \overline{G}^{[i+1]} \rangle$ elemszámát legalább megduplázta, így nem lesz túl nagy az új erős generátorrendszerünk.
 $\overline{R}_{i+1}$ Schreier-fa ábrázolása $\overline{S}$ segítségével kiszámolható.
 
 \subsection{Backtrack módszerek}
@@ -171,7 +171,7 @@ Ehhez feltesszük, hogy minden $g \in G$-re el tudjuk dönteni, hogy $\mathcal{P
 Néhány tulajdonságra nincs ismert jobb algoritmus annál, mint hogy végigmegyünk $G$ elemein, és mindegyiket ellenőrizzük.
 Gyakori eset azonban, hogy $G(\mathcal{P})$, ha nem üres, akkor $G$ egy részcsoportja, esetleg egy részcsoport mellékosztálya.
 Például, ha egy elem vagy egy részhalmaz centralizátorát szeretnénk megtalálni, akkor egy részcsoportot keresünk.
-Mellékosztályra példa, ha $a, b \in G$-re azokat a $g \in G$-ket keressük, amelyek $a$-t $b$-be konjugálják, vagyis amelyekre $a^g = b$.
+Mellékosztályra példa, ha $a, b \in G$-re azokat a $g \in G$-ket keressük, amelyek $a$-t $b$-be konjugálják, vagyis amelyekre $a^g = g^{-1}ag = b$.
 Gyakran elegendő azt eldöntenünk, hogy $G(\mathcal{P})$ üres-e, az előző példánál ez annak eldöntését jelenti, hogy $a$ és $b$ konjugáltak-e.
 Ebben a részben feltesszük, hogy $G(\mathcal{P})$ egy részcsoport, egy részcsoport mellékosztálya vagy üres.
 
@@ -182,7 +182,7 @@ Ez az azonosítás egy rendezést is indukál $G$-n, $g, h \in G$-re $g \prec h$
 A báziselemek képeinek meghatározásával szeretnénk csoportelemeket keresni.
 $(\beta_1,\dots,\beta_l)$ lehetséges képei $G^{[l+1]}$ mellékosztályait határozzák meg.
 Ezeknek a képeknek a halmazát jelöljük $\mathcal{T}_l$-lel.
-Legyen $\mathcal{T} = \bigcup_{i=1}^m \mathcal{T}_i$, ezen tekinthetjük a tartalmazást, mint természetes részbenrendezést, amivel $\mathcal{T}$-t egy keresőfának tekinthetjük.
+Legyen $\mathcal{T} = \bigcup_{i=1}^m \mathcal{T}_i$, ezen nézzük a tartalmazást, mint természetes részbenrendezést, amivel $\mathcal{T}$-t egy keresőfának tekinthetjük.
 $\mathcal{T}$ gyökere (a $()$ sorozat) $G$-nek felel meg, a levelei (az $m$-hosszú sorozatok) a csoportelemeknek.
 Jelöljük $t \in \mathcal{T}$-re $\mathcal{T}(t)$-vel a $t$-ből induló részfát.
 Legyen $\varphi : \mathcal{T} \to P(G)$, amire $\varphi((\gamma_1,\dots,\gamma_l)) = \left\{ g \in G \mid \beta_i^g = \gamma_i \quad \forall 1 \le i \le l \right \}$.
@@ -191,8 +191,8 @@ Amikor $t = (\gamma_1,\dots,\gamma_{l-1}) \in \mathcal{T}_{l-1}$-nél tartunk a 
 hanem elég azokat, amikre $\varphi((\gamma_1,\dots,\gamma_l))$ nem üres.
 Mivel $\varphi(t)$ $G^{[l]}$-nek egy mellékosztálya, ezért ha veszünk egy tetszőleges $g \in \varphi(t)$ csoportelemet, akkor a szóbajövő $\gamma_l$-ek
 azok, amikre $\gamma_l \in (\beta_l^{G^{[l]}})^g$.
-Ez a bejárás a csoportelemeket $\prec$-lexikografikus sorrendben találja meg.
-Ha menet közben $t \in \mathcal{T}$-nél tartunk és $\varphi(t) \cap G(\mathcal{P})$-ről be tudjuk látni, hogy üres vagy, hogy már minden elemét ismerjük, akkor a mélységi bejárást attól a ponttól nem kell mélyebbre folytatnunk.
+Ez a bejárás a csoportelemeket mellesleg $\prec$-lexikografikus sorrendben találja meg.
+Ha menet közben $t \in \mathcal{T}$-nél tartunk és $\varphi(t) \cap G(\mathcal{P})$-ről be tudjuk látni, hogy vagy üres, vagy hogy már minden elemét ismerjük, akkor a mélységi bejárást attól a ponttól nem kell mélyebbre folytatnunk.
 Akkor lesz hatékony az algoritmusunk, ha minél nagyobb részfákat el tudunk így dobni.
 Vannak a $\mathcal{P}$ tulajdonságtól független és attól függő elvek, amik alapján egy részfát eldobhatunk.
 A következő lemma, az egyik legegyszerűbb $\mathcal{P}$-től független ilyen elvet mutatja be.
@@ -210,7 +210,7 @@ $P$-től függően azonban lehet, hogy más $K$-t meg $L$-et is választhatunk.
 Például, ha $P$ azon elemekre teljesül, amik $a$-t $b$-be konjugálják, akkor választhatjuk $K=\langle a \rangle$-t és $L=\langle b \rangle$-t.
 Mivel minden $KgL$ kettős mellékosztálynak elég egyetlen elemét megtalálnunk, és a bejárás $\prec$-lexikografikus sorrendben találja meg az elemeket, ezért a $\mathcal{T}(t)$ részfát kihagyhatjuk, ha tudjuk, hogy
 egyik $g \in \varphi(t)$ sem lehet a saját $KgL$ kettős mellékosztályának első eleme.
-Sajnos egy kettős mellékosztály első elemét megtalálni NP-nehéz probléma (\cite{Luk93}), ezért kicsit másképp kell csinálnunk, erre való a következő 3 lemma.
+Sajnos egy kettős mellékosztály első elemét megtalálni NP-nehéz probléma \cite{Luk93}, ezért kicsit másképp kell csinálnunk, erre való a következő 3 lemma.
 
 \begin{lemma}
 \label{thm:permbtcrit2}
@@ -223,13 +223,13 @@ Legyen $h$ az az $L_{(\gamma_1,\dots,\gamma_{l-1})}$-beli elem, amire $\gamma_l^
 Ilyenkor $gh \in KgL$ és $gh \prec g$, tehát ellentmondásra jutottunk.
 \end{proof}
 Eszerint a lemma szerint, amikor a $t' = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ részfát nézzük, akkor elég $L_{(\gamma_1,\dots,\gamma_{l-1})}$ orbitjainak első elemeivel folytatnunk.
-Ahhoz, hogy az orbitokat kiszámoljuk $L$-ben bázist kell váltanunk, azaz $L$-nek egy $(\gamma_1,\dots,\gamma_{l-1})$-gyel kezdődő bázishoz tartozó erős generátorrendszert kell kiszámolnunk.
+Ahhoz, hogy az orbitokat kiszámoljuk $L$-ben bázist kell váltanunk, azaz $L$-nek egy $(\gamma_1,\dots,\gamma_{l-1})$-gyel kezdődő bázishoz tartozó erős generátorrendszerét kell kiszámolnunk.
 Emiatt ez a kritérium nem annyira gyorsan ellenőrizhető, sok implementációban csak kis $l$-ekre alkalmazzák.
 
 Az előző lemma egy általánosabb alakja a következő:
 \begin{lemma}
 \label{thm:permbtcrit3}
-Tegyük fel, hogy $\beta_l \in \beta_k^{K_{(\beta_1,\dots,\beta_{k-1})}}$.
+Tegyük fel, hogy $\beta_l \in \beta_k^{K_{(\beta_1,\dots,\beta_{k-1})}}$ valamilyen $k \le l$-re.
 Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
 Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_k \preceq \min_{\prec}(\gamma_l^{L_{(\gamma_1,\dots,\gamma_{k-1})}})$.
 \end{lemma}
