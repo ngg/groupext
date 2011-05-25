@@ -60,7 +60,7 @@ Feltesszük, hogy tudjuk ellenőrizni, hogy $\Omega$ egy eleme benne van-e pár 
 Az algoritmus az előzőnek egy egyszerű változtatásával kapható, egyrészt az elején a szélességi bejárást $A$ minden eleméből egyszerre kell indítani,
 másrészt ha egy új csúcshoz érünk, akkor csak akkor kell felírnunk a generátorelemek listájába, ha az addigiak által generált struktúrában nincs benne.
 Érdemes itt megjegyeznünk, hogy ha $\Omega$-n legalább egy csoportstruktúra van, akkor minden új generátorelem a csoport elemszámát legalább megduplázza,
-vagyis legfeljebb $O(\log(|\langle A^G\rangle |))$ generátorelemet írunk fel. A számítási idő nagyrésze jellemzően arra a számolásra megy el, amikor egy elemről
+vagyis legfeljebb $O(\log|\langle A^G\rangle |)$ generátorelemet írunk fel. A számítási idő nagyrésze jellemzően arra a számolásra megy el, amikor egy elemről
 megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában. Vannak olyan randomizált algoritmusok is erre a célra, amikhez nem szükséges feltennünk,
 hogy ezt el tudjuk dönteni, ezekről \cite{Ser03}-ban olvashatunk.
 
@@ -79,9 +79,9 @@ Minden megtalált reprezentáns elemnek kiszámolhatjuk a konjugáltosztályána
 Akkor fejezzük be az algoritmust, amikor az osztályok méretének összege eléri a csoport rendjét.
 Ennek az algoritmusnak a nagy hátránya, hogy ha egy nagy csoportban van egy kis elemszámú konjugáltosztály, akkor azt csak nagyon nehezen tudjuk megtalálni.
 
-Másik véletlenszerű elemválasztáson alapuló algoritmust talált ki Mark Jerrum 1995-ben (\cite{Jer95}).
+Másik véletlenszerű elemválasztáson alapuló algoritmust talált ki Mark Jerrum 1995-ben \cite{Jer95}.
 Konstruáljunk egy $M$ Markov-láncot a következőképpen.
-Az állapotok halmaza legyen $G$, a $P$ átmeneti valószínűségek mátrixának $g, h \in G$-hoz tartozó eleme pedig
+Az állapotok halmaza legyen $G$, a $P$ átmeneti valószínűségek mátrixának $g, h \in G$-hez tartozó eleme pedig
 \begin{equation*}
 p_{g,h} =
 \begin{cases}
@@ -95,7 +95,7 @@ Mivel minden $g,h \in G$-re $1 \in C_G(g)$ és $h \in C_G(1)$, ezért akárhonna
 Minden $g$-re $p_{g,g} = 1/|C_G(g)| > 0$, tehát minden állapot aperiodikus.
 Így alkalmazhatjuk a Markov-láncok alaptételét, miszerint létezik (és csak egy létezik) stacionárius eloszlás ($v = (v_g \mid g \in G)$) és $\delta \in (0,1)$, amire
 minden $k \ge 0$-ra és $g \in G$-re $|\Prob(x_k = g) - v_g| \le \delta^k$.
-Jelöljük $r$-rel a konjugált osztályok számát, és legyen $v_g = \frac{C_G(g)}{r|G|}$.
+Jelöljük $r$-rel a konjugált osztályok számát, és legyen $v_g = C_G(g)/r|G|$.
 Könnyen látható, hogy $\sum_{g\in G} v_g = 1$, valamint hogy $v = vP$, tehát ez a $v$ a stacionárius eloszlás.
 Ha akármelyik konjugáltosztályra összeadjuk az abba tartozó $g$-kre $v_g$-ket, akkor $1/r$-et kapunk, tehát elég nagy $m$-re $x_m$ közel egyenlő valószínűséggel lehet az egyes konjugáltosztályokban.
 Tehát az előző algoritmusunkat változtassuk annyival, hogy ne teljesen véletlenszerű csoportelemeket vegyünk mindig, hanem mindig az előző centralizátorából válasszunk csak, és így gyorsabban megtalálhatjuk
