@@ -246,13 +246,13 @@ Ez $k=l$ esetén az ezelőtti lemmát adja vissza, $k < l$-re pedig azt jelenti,
 
 \begin{lemma}
 \label{thm:permbtcrit4}
-Legyen $s = \left| \beta_l^{K_{(\beta_1,\dots,\beta_{l-1})}} \right|$, azaz $K$ $l$-edik fundamentális orbitjának mérete.
+Legyen $s = |\beta_l^{K_{(\beta_1,\dots,\beta_{l-1})}}|$, azaz $K$ $l$-edik fundamentális orbitjának mérete.
 Legyen $t = (\gamma_1, \dots, \gamma_l) \in \mathcal{T}$.
-Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_l$ nem lehet a $\gamma_l^{G_{(\gamma_1,\dots,\gamma_{l-1})}}$ orbit utolsó $s-1$ eleme közt.
+Ha $g \in \varphi(t)$ a $KgL$ kettős mellékosztály lexikografikusan első eleme, akkor $\gamma_l$ nem lehet a $\gamma_l^{G_{(\gamma_1,\dots,\gamma_{l-1})}}$ orbit utolsó $s-1$ eleme között.
 \end{lemma}
 \begin{proof}
-A $\Gamma = \left\{ \beta_l^{hg} \mid h \in K_{(\beta_1,\dots,\beta_{l-1})} \right\}$ halmaz $s$ elemű és $\gamma_l = \beta_l^g \in \Gamma$.
-Minden $\gamma = \beta^{hg} \in \Gamma$ $G_{(\gamma_1,\dots,\gamma_{l-1})}$-nek ugyanahhoz az orbitjához tartozik, mivel $\gamma^{g^{-1}h^{-1}g} = \gamma_l$, ahol $g^{-1}h^{-1}g \in G_{(\gamma_1,\dots,\gamma_{l-1})}$.
+A $\Gamma = \{ \beta_l^{hg} \mid h \in K_{(\beta_1,\dots,\beta_{l-1})} \}$ halmaz $s$ elemű és $\gamma_l = \beta_l^g \in \Gamma$.
+Minden $\gamma = \beta_l^{hg} \in \Gamma$ $G_{(\gamma_1,\dots,\gamma_{l-1})}$-nek ugyanahhoz az orbitjához tartozik, mivel $\gamma^{g^{-1}h^{-1}g} = \gamma_l$, ahol $g^{-1}h^{-1}g \in G_{(\gamma_1,\dots,\gamma_{l-1})}$.
 $hg \in KgL$ és $g$ minimalitása miatt $\gamma_l = \min_{\prec} \Gamma$, ezért legalább $s-1$ elem jön késöbb $KgL$-ben.
 \end{proof}
 Emiatt amikor a $t' = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ részfát nézzük, akkor $G_{(\gamma_1,\dots,\gamma_{l-1})}$ minden orbitjának utolsó $s-1$ elemét kihagyhatjuk.
@@ -260,7 +260,7 @@ Emiatt amikor a $t' = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ ré
 Most nézzünk $\mathcal{P}$-specifikus kritériumokat.
 Nézzük először a centralizátor problémát, legyen adott $c \in G$, $C_G(c) = G(\mathcal{P})$-t kell megtalálnunk.
 Mivel $C_G(c) = C_G(\langle c \rangle)$, ezért minden $\omega \in \Omega, g \in C_G(c), k \in \mathbb{Z}$-re igaz, hogy $(\omega^{c^k})^g = (\omega^g)^{c^k}$.
-Ez két dolgot jelent, egyrészt hogy ha $\omega$ képét meghatároztuk már, akkor az a $\omega^{c^k}$ alakú elemek képeit is meghatározza,
+Ez két dolgot is jelent, egyrészt hogy ha $\omega$ $g$ általi képét meghatároztuk már, akkor az az $\omega^{c^k}$ alakú elemek képeit is meghatározza,
 másrészt pedig hogy ha $\omega$ egy $l$-hosszú ciklus része $c$-ben, akkor $\omega^g$ is csak egy $l$-hosszú ciklus része lehet $c$-ben.
 Ezeket a feltételeket akkor tudjuk hatékonyan kihasználni, hogyha olyan bázisban írjuk fel az erős generátorrendszert, amiben $c$ egyes ciklusainak az elemei egymást követik.
 Így tudunk $\omega, \omega^c, \omega^{c^2}, \dots$ közül minél többől báziselemet csinálni, tehát így lesz minél több $\mathcal{T}(t)$ eldobható.
@@ -273,17 +273,17 @@ A \ref{thm:permbtcrit1}. lemma szerint $\varphi(t) \cap G(\mathcal{P}) = \emptys
 
 Harmadik példának nézzük a konjugáltság-ellenőrzés esetét, adott $a, b \in G$, $G(\mathcal{P}) = \{g \in G \mid a^g = b \}$.
 Ebben a problémában $G(\mathcal{P})$ vagy üres, vagy $C_G(a)$ egy jobboldali mellékosztálya, ezért hasonlít ez az eset a centralizátor-problémára, ahol hasonló feltételek jöttek ki.
-$g$-nek $a$ ciklusait $b$ ugyanolyan hosszú ciklusaihoz kell rendelnie, így ha $a$ egy ciklusának egy elemének a képét meghatározzuk, az az egész ciklus képét is megmondja.
+$g$-nek $a$ ciklusait $b$ ugyanolyan hosszú ciklusaihoz kell rendelnie, valamint ha $a$ egy ciklusának egy elemének a képét meghatározzuk, az az egész ciklus képét is megmondja.
 Itt is speciális bázisban érdemes felírni az erős generátorrendszert, mégpedig olyanban amiben $a$ ciklusainak elemei egymást követik.
 
 Másik fontos itt említendő probléma a következő:
 Legyen adottak a $G, H \le \Sym(\Omega)$ csoportok, a $G\cap H$ csoportnak szeretnénk egy generátorrendszerét meghatározni.
 Feltehetjük, hogy $|G| \le |H|$.
-Először számoljuk ki $G$-nek egy $B = \{\beta_1, \dots, \beta_m\}$ bázisát, és definiáljuk $\mathcal{T}$-t és $\varphi$-t, mint eddig.
+Először számoljuk ki $G$-nek egy $B = (\beta_1, \dots, \beta_m)$ bázisát, és definiáljuk $\mathcal{T}$-t és $\varphi$-t, mint eddig.
 Számoljuk ki $H$-nak egy olyan bázisát, ami $B$-vel kezdődik és egy ehhez tartozó erős generátorrendszert.
-Legyen $\varphi' : \mathcal{T} \to P(H)$ $\varphi$-hez analóg módon definiálva $H$-ra.
+Legyen $\psi : \mathcal{T} \to P(H)$ $\varphi$-hez analóg módon definiálva $H$-ra.
 Ha $t = (\gamma_1, \dots, \gamma_{l-1}) \in \mathcal{T}_{l-1}$ részfáját nézzük, akkor csak azokkal a $\gamma_l$ elemekkel kell folytatnunk,
 amik nem csak $G$-ben lehetséges folytatások, hanem $H$-ban is, vagyis a $\gamma_l \in (\beta_l^{G^{[l]}})^g \cap (\beta_l^{H^{[l]}})^h$ alakúakat,
-ahol $g \in \varphi(t)$ és $h \in \varphi'(t)$.
-Így minden $\mathcal{T}_m$-beli elem amihez eljutunk egy olyan $G$-beli elemet reprezentál, ami $H$-ban is benne van,
+ahol $g \in \varphi(t)$ és $h \in \psi(t)$.
+Így minden $\mathcal{T}_m$-beli elem, amihez eljutunk, egy olyan $G$-beli elemet reprezentál, ami $H$-ban is benne van,
 vagyis a menetközben felírt generátorelemei $G(\mathcal{P})$-nek azok pont $G\cap H$-nak lesznek a generátorelemei.
