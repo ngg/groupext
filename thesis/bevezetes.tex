@@ -3,8 +3,7 @@
 \label{sec:bevezetes}
 Az algoritmikus csoportelmélet a matematikának egy olyan ága, amivel a XX. század eleje óta foglalkoznak,
 de csak a '60-'70-es években kezdett el nagyon fejlődni.
-A szakdolgozat célja nem általánosan az összes algoritmus áttekintése, hanem
-az hogy véges csoportoknak számítógéppel tudjuk kiszámolni a karaktertáblázatát.
+A szakdolgozat kitűzött célja az, hogy véges csoportoknak számítógéppel tudjuk kiszámolni a karaktertáblázatát.
 Ez egy elég összetett feladat ahhoz, hogy rengeteg más csoportelméleti algoritmust is magával húzzon,
 ezekről fogunk beszélni.
 
@@ -12,33 +11,33 @@ A legtöbb csoportelméleti algoritmus a csoport számítógépes megadásától
 a csoportot megadhatjuk permutációcsoportként vagy mátrixcsoportként; policiklikus reprezentációval vagy
 véges generátorrendszerrel és relációkkal is.
 Vannak azonban olyan algoritmusok is, amelyek nem függnek a megadás módszerétől,
-itt a csoportra, mint egy fekete dobozra tekintünk, nem ismerjük a szerkezetét.
+itt a csoportra, mint egy fekete dobozra tekintünk, aminek nem ismerjük a szerkezetét.
 Innen jön az ilyen csoportokra a black-box elnevezés.
 Ezekre vonatkozó algoritmusokról szól az \ref{sec:blackbox}. fejezet.
 
-A megadási módszerek közül a permutációcsoportokat választottam ki, az ismertetett algoritmusok nagyrésze ilyenekhez kapcsolódik.
-Ezek hatékony használatáról szól a \ref{sec:permutacio}. fejezet.
+A megadási módszerek közül a permutációcsoportokat választottam ki, hatékony használatukról és a hozzájuk kapcsolódó algoritmusokról szól a \ref{sec:permutacio}. fejezet.
 
 Karaktertáblázatok kiszámolására jelenleg kettő, egymástól teljesen eltérő ötletre alapuló algoritmus ismert.
-Ezek közül amiről mi beszélünk, az a Burnside-Dixon-Schneider algoritmus, ami egy lineáris algebrai megközelítést alkalmaz.
-Erről szól a \ref{sec:burnside}. fejezet.
+Ezek közül amiről mi beszélünk, az a Burnside-Dixon-Schneider algoritmus, ami egy lineáris algebrai megközelítést alkalmaz,
+erről szól a \ref{sec:burnside}. fejezet.
 A másik algoritmusról nem fogunk részletesen beszélni, itt szeretnék pár mondatot írni róla.
-1986-ban Slattery (\cite{Sla86}) publikált egy algoritmust, ami $p$-csoportokra meg tudja mondani, hogy hányadrendű irreducibilis reprezentációból hány van.
-Conlon 1990-ben (\cite{Con90}) ezt továbbfejlesztette, és $p$-csoportokra ki tudta számolni a karaktertáblázatot Slattery ötlete alapján.
-A minden csoportra alkalmazható algoritmus Unger-nek köszönhető 2006-ból (\cite{Ung06}), az ötlet Brauer tételén alapszik, miszerint az általánosított karakterek gyűrűjét generálják
+1986-ban Slattery \cite{Sla86} publikált egy eljárást, ami $p$-csoportokra meg tudja mondani, hogy hányadrendű irreducibilis reprezentációból hány darab van.
+Conlon 1990-ben \cite{Con90} ezt továbbfejlesztette, és $p$-csoportokra ki tudta számolni a karaktertáblázatot ugyanazon ötlet alapján.
+A minden csoportra alkalmazható algoritmus Unger-nek köszönhető 2006-ból \cite{Ung06}, az ötlet Brauer tételén alapszik, miszerint az általánosított karakterek gyűrűjét generálják
 az úgynevezett elemi részcsoportok irreducibilis karaktereiből indukált karakterek.
-Elemi részcsoportok azok a részcsoportok, amelyek előállnak egy $p$-csoport és egy ciklikus csoport direktszorzataként, tehát Conlon algoritmusának segítségével kiszámolhatóak az irreducibilis karaktereik.
-Miután az algoritmus kiszámolta a gyűrű egy generátorrendszerét, LLL-redukció (\cite{LLL82}) segítségével megkeresi az 1-normájú karaktereket, ezek lesznek az irreducibilis karakterek.
+Elemi részcsoportoknak azokat a részcsoportokat hívjuk, amelyek előállnak egy $p$-csoport és egy ciklikus csoport direktszorzataként,
+ezeknek tehát Conlon algoritmusának segítségével ki tudjuk számolni az irreducibilis karaktereit.
+Miután az algoritmus kiszámolta a gyűrű egy generátorrendszerét, LLL-redukció \cite{LLL82} segítségével megkeresi az 1-normájú karaktereket, ezek lesznek az irreducibilis karakterek.
 
 A szakdolgozat függelékében megtalálható az algoritmusok nagyrészének implementációja Mathematica 8 környezetben.
 Azért a Mathematica-ra esett a választásom, mivel az az egyik legnagyobb, legjobban megírt általános célú matematikai programcsomag, de az algebrai alkalmazások terén azonban nagyon elmaradott.
 A 2010-ben kiadott 8-as verzió volt az első, amibe már valamennyi csoportelméleti funkciót beleraktak, azonban csak permutációcsoportokat tud kezelni, és azokra is csak nagyon kevés algoritmus van benne.
-Az én implementációm a meglevő függvényeket azonban már felhasználja, így régebbi verziókkal nem kompatibilis.
+Az implementáció a meglevő függvényeket már felhasználja, így régebbi verziókkal nem kompatibilis.
 Mivel publikussá szeretném tenni a programomat, ezért annak a dokumentációja, valamint a forráskódbeli megjegyzések angol nyelvűek.
-A szakdolgozatban részletezett algoritmusokra példák az implementáció dokumentációjában találhatóak.
+A részletezett algoritmusokra példák a dokumentációban találhatóak.
 
 A szakdolgozat előismeretnek tekinti a Matematika BSc négy félévnyi Algebra képzésének anyagát, valamint általában algoritmusokkal kapcsolatos jártasságot.
-Akinek a téma felkeltette az érdeklődését az algoritmikus csoportelmélet iránt, az részletesebben olvashat a témáról \cite{HEO05}-ben,
+Akinek a téma felkeltette az érdeklődését az algoritmikus csoportelmélet iránt, az részletesebben olvashat erről \cite{HEO05}-ben,
 valamint kifejezetten permutációcsoport-algoritmusokról \cite{Ser03}-ban.
 
 Ezúton szeretnék köszönetet mondani témavezetőmnek, Pelikán Józsefnek, aki a négy félév Algebra előadásaival és gyakorlataival felkeltette érdeklődésemet a téma iránt,

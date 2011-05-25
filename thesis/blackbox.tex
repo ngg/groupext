@@ -2,7 +2,7 @@
 \label{sec:blackbox}
 A black-box csoportok eredeti ötlete és definíciója magyar matematikusoktól származik,
 Babai László és Szemerédi Endre publikálta \cite{BS84}-ben.
-Ma a legtöbb helyen inkább egy kicsit általánosabb definíciót használnak, amivel kevésbé körülményes az
+Ma a legtöbb helyen inkább kicsit általánosabb definíciókat használnak, amivel kevésbé körülményes az
 egyes csoportok tényleges leírása. Az itt leírt definíciót \cite{Ser03}-ból vettem.
 
 A black-box csoport egy olyan csoport,
@@ -16,7 +16,7 @@ valamint ki tudjuk számolni a $g^{-1}$-hez és a $gh$-hoz tartozó szavakat.
 Általában a csoport megadása egy generátorrendszer segítségével történik, az elemeihez tartozó szavak megadásával.
 
 Előfordulhat, hogy az orákulum egy $\overline{G} \ge G$ nagyobb csoport elemeihez tartozó szavakat fogad el,
-ilyenkor csak az tesszük fel, hogy azt tudjuk megállapítani, hogy a szó $\overline{G}$-beli-e,
+ilyenkor csak azt tesszük fel, hogy azt tudjuk megállapítani, hogy a szó $\overline{G}$-beli-e,
 azt nem, hogy $G$ vagy $\overline{G}\setminus G$ eleme.
 
 Erre példa egy véges $F$ test feletti $G$ $n\times n$-es mátrixcsoport.
@@ -24,10 +24,10 @@ $\Sigma=F$ adja az ábécét, a szavak $n^2$ hosszúak,
 valamint $\overline{G}$ az összes invertálható $F$ feletti $n\times n$-es mátrix csoportja.
 Természetesen a permutációcsoportok, illetve a policiklikus csoportok is könnyen leírhatók black-box csoportokként.
 
-A black-box csoportokra vonatkozó algoritmusoknak az egyik leggyakoribb csoportja az általunk később is sokat használt
-orbit-számoló algoritmusok, amiket az \ref{subsec:orbit}. alfejezetben részletezünk.
-Randomizált algoritmusok esetében nagyon fontos, hogy tudjunk jó közelítéssel uniform véletlen csoportelemet választani,
-erről szól az \ref{subsec:veletlen}. alfejezet.
+A black-box csoportokra vonatkozó algoritmusoknak  egyik leggyakoribb típusa az általunk később is sokat használt
+orbit-számoló algoritmusok, amik közül párat az \ref{subsec:orbit}. alfejezetben részletezünk.
+A másik általunk itt leírt algoritmus konjugáltosztályokra tudja bontani a csoportot, ami a reprezentációelméletben nagyon fontos,
+erről szól az \ref{subsec:konj}. alfejezet.
 
 \subsection{Orbit-algoritmusok}
 \label{subsec:orbit}
@@ -39,27 +39,29 @@ $\Omega=G$-t és hatásnak a konjugálást tekinthetjük.
 Feltesszük, hogy adott $\beta\in\Omega$ és $g\in G$-re meg tudjuk határozni a $\beta^g$ képet, valamint $\Omega$-beli
 elemeket össze tudunk hasonlítani egymással. Lehetséges, hogy $\Omega$ nagyon nagy, így nem tesszük fel, hogy fel tudjuk sorolni az elemeit.
 
-Legyen $G=\langle S\rangle$. $\alpha^G$ az a legszűkebb részhalmaza $\Omega$-nak, ami tartalmazza $\alpha$-t, valamint zárt $S$ elemeinek hatására nézve.
+Legyen $G=\langle S\rangle$. $\alpha^G$ az a legszűkebb részhalmaza $\Omega$-nak, ami tartalmazza $\alpha$-t, valamint zárt az $S$-beli csoportelemek hatására nézve.
 Vegyük azt az irányított gráfot, aminek csúcsai $\Omega$ elemei és $\beta$-ból $\gamma$-ba akkor megy él, ha van olyan $S$-beli elem, ami $\beta$-t $\gamma$-ba viszi.
 Ebben a gráfban kell megkeresnünk az $\alpha$-t tartalmazó összefüggő komponenst.
-Mivel $G$ véges rendű, így $\beta^g=\gamma$ esetén $\exists l \gamma^{g^l}=\beta$, vagyis az összefüggő komponensek erősen osszefüggők.
+Mivel $G$ véges rendű, így $\beta^g=\gamma$ esetén létezik $l$, amire $\gamma^{g^l}=\beta$, vagyis az összefüggő komponensek erősen osszefüggők.
 A komponenst meg tudjuk találni szélességi kereséssel $O(|S| |\alpha^G|)$ idő alatt, $O(|\alpha^G|)$ memória használatával.
 
 Most nézzünk egy általánosabb verziót.
-Legyen adott $\Omega$-n egy algebrai struktúra, és $A \subseteq \Omega$-ra szeretnénk kiszámolni $\langle A^G \rangle$-t, vagyis
-$\Omega$-nak azt a legszűkebb részhalmazát, ami tartalmazza $A$-t és zárt $G$ hatására és az $\Omega$-beli művelet(ek)re is.
-Ha az előző konjugálós példát nézzük úgy, hogy $\Omega$-n is nézzük a csoportműveletet, akkor ezzel $A$ normál lezártját szeretnénk meghatározni.
+Legyen adott $\Omega$-n egy algebrai struktúra, és tegyük fel, hogy $G$ hatása olyan, hogy az minden $*$ $\Omega$-beli műveletre nézve disztribuív,
+vagyis $(\alpha * \beta)^g = \alpha^g * \beta^g$.
+$A \subseteq \Omega$-ra szeretnénk kiszámolni $\langle A^G \rangle$-t, vagyis
+$\Omega$-nak azt a legszűkebb részhalmazát, ami tartalmazza $A$ minden elemét és zárt $G$ hatására és az $\Omega$-beli művelet(ek)re is.
+Ha az előző konjugálós példát nézzük úgy, hogy $\Omega$-n is nézzük a csoportműveletet, akkor ezzel $A$ normális lezártját szeretnénk meghatározni.
 Ha $G'=[G,G]$ kommutátor részcsoportot szeretnénk meghatározni,
-akkor azt így tudjuk megtenni, hiszen $G'=\langle[s,t] \mid s,t \in S\rangle_N$, vagyis az $S$-beli elemek kommutátorainak normál lezártja.
+akkor azt így tudjuk megtenni, hiszen $G'=\langle[s,t] \mid s,t \in S\rangle_N$, vagyis az $S$-beli elemek kommutátorainak normális lezártja.
 Ezzel tudunk feloldhatóságot valamint nilpotenciát is ellenőrizni.
 
-Mivel a végeredmény zárt $\Omega$-beli műveletekre, így célszerű az algoritmusnak csak egy generátorrendszert előállítani.
+Mivel a végeredmény zárt az $\Omega$-beli művelet(ek)re, így célszerű az algoritmusnak csak egy generátorrendszert előállítani.
 Feltesszük, hogy tudjuk ellenőrizni, hogy $\Omega$ egy eleme benne van-e pár $\Omega$-beli elem által generált struktúrában.
 Az algoritmus az előzőnek egy egyszerű változtatásával kapható, egyrészt az elején a szélességi bejárást $A$ minden eleméből egyszerre kell indítani,
 másrészt ha egy új csúcshoz érünk, akkor csak akkor kell felírnunk a generátorelemek listájába, ha az addigiak által generált struktúrában nincs benne.
 Érdemes itt megjegyeznünk, hogy ha $\Omega$-n legalább egy csoportstruktúra van, akkor minden új generátorelem a csoport elemszámát legalább megduplázza,
 vagyis legfeljebb $O(\log(|\langle A^G\rangle |))$ generátorelemet írunk fel. A számítási idő nagyrésze jellemzően arra a számolásra megy el, amikor egy elemről
-megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában. Vannak olyan randomizált algoritmusok is, amikhez nem szükséges feltennünk,
+megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában. Vannak olyan randomizált algoritmusok is erre a célra, amikhez nem szükséges feltennünk,
 hogy ezt el tudjuk dönteni, ezekről \cite{Ser03}-ban olvashatunk.
 
 \subsection{Konjugáltosztályok megtalálása}
