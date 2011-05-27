@@ -1,6 +1,3 @@
-szakdoli.pdf
-latex.dvi
-latex.ps
-latex.pdf
-pdflatex.pdf
-*-eps-converted-to.pdf
+*.pdf
+*.ps
+*.dvi
