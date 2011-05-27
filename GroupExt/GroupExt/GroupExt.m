@@ -3,6 +3,7 @@ BeginPackage["GroupExt`"]
 (* list of public functions with usages *)
 NullQ::usage = "NullQ[expr] gives True if expr is Null, and False otherwise."
 GroupQ::usage = "GroupQ[expr] gives True if expr is a group, and False otherwise."
+QuaternionGroup::usage = ""
 SubspaceIntersection::usage = ""
 GroupIdentity::usage = ""
 GroupElementOrder::usage = ""
@@ -44,6 +45,10 @@ GroupQ[g_] := True /; MemberQ[{
 	FischerGroupFi24Prime, TitsGroupT, ONanGroupON, HaradaNortonGroupHN,
 	ThompsonGroupTh, LyonsGroupLy, BabyMonsterGroupB, MonsterGroupM
 }, Head[g]]
+
+(* we declare the quaternion group *)
+QuaternionGroup[] := PermutationGroup[{Cycles[{{1, 3, 2, 4}, {5, 8, 6, 7}}], Cycles[{{1, 5, 2, 6}, {3, 7, 4, 8}}]}]
+GroupQ[g_QuaternionGroup] := True
 
 (* in Mathematica 8.0.0 there is a bug that crashes GroupCentralizer[] if called with the identity element (fixed in 8.0.1) *)
 Off[General::shdw]
@@ -197,7 +202,7 @@ GroupConjugatesQ[g_?GroupQ, a_Cycles, b_Cycles] :=
 	]
 
 (* We find conjugacy classes by testing random elements, each taken from the last element's centralizer *)
-GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentatives[g] = Module[{repr, n, sum, x, k, cent, centorder, step},
+GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentatives[g] = Module[{repr, n, sum, x, k, cent, centorder},
 	n = GroupOrder[g];
 	(* at the beginning we only know the identity as a group representative *)
 	(* at each step, we have a group element (x), calculate its centralizer (cent) and its order (centorder) *) 
@@ -325,7 +330,7 @@ SubspaceIntersection[a_, b_, OptionsPattern[]] := Module[{result, mod},
 	(* if result is empty we return *)
 	If[Length[result] == 0, Return[{}]];
 	(* otherwise we compute the echelonized base and return that *)
-	RowReduce[result, opts]
+	RowReduce[result, Modulus -> mod]
 ]
 
 (* TODO *)
@@ -356,41 +361,19 @@ GroupCharacterTableSplit[g_, i_, v_] := Module[{r, p, x, m, id, w, j},
 ]
 
 (* TODO *)
-GroupCharacterTableSplitFirst[g_, i_] := Module[{r, p, x, m, id},
-	r = GroupNumOfConjugacyClasses[g];
-	p = GroupCharacterTableDixonPrime[g];
-	m = GroupMTTable[g, i];
-	id = IdentityMatrix[r];
-	Map[
-		RowReduce[
-			NullSpace[
-				m - #[[1, 2]]*id
-			, Modulus -> p],
-			Modulus -> p
-		] &,
- 		Union[Solve[CharacteristicPolynomial[m, x] == 0, x, Modulus -> p]]
- 	]
-]
-
-(* TODO *)
-GroupCharacterTableNormalize[g_, a_] := Module[{p, s, d, n, x},
-	n = GroupOrder[g];
-	p = GroupCharacterTableDixonPrime[g];
-	s = GroupCharacterScalarProduct[g, a, a, Modulus -> p];
-	d = Min[Map[#[[1, 2]]&, Solve[1 == s*x^2, x, Modulus -> p]]];
-	Mod[a*d, p]
-]
-
-(* TODO *)
 GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{x, r, i, p},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	If[r == 1, Return[{{1}}]];
-	x = GroupCharacterTableSplitFirst[g, 2];
+	x = {IdentityMatrix[r]};
 	Do[
 		x = Apply[Union, Map[GroupCharacterTableSplit[g, i, #]&, x]]
-	, {i, 3, r}];
-	Sort[Map[GroupCharacterTableNormalize[g, #]&, Table[x[[i, 1]], {i, r}]]]
+	, {i, 2, r}];
+	Sort[Map[
+		(* we have to multiply each eigenvector with a constant such that their norms becomes 1 *)
+		Mod[#*PowerMod[GroupCharacterScalarProduct[g, #, #, Modulus -> p], -1/2, p], p]&,
+		Table[x[[i, 1]], {i, r}]
+	]]
 ]
 
 (* TODO *)
