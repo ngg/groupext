@@ -20,7 +20,7 @@ GroupCharacterScalarProduct::usage = ""
 GroupElementFromImage::usage = ""
 GroupElementFromImages::usage =
 
-Begin["`Private`"]
+Begin["GroupExt`Private`"]
 
 (* there is no proper way to determine if something is null *)
 NullQ[x_] := ToString[x] == "Null" && !StringQ[x]
@@ -196,30 +196,42 @@ GroupConjugatesQ[g_?GroupQ, a_Cycles, b_Cycles] :=
 		]
 	]
 
-(* TODO *)
-GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentatives[g] = Module[{ret, n, sum, x, k, cent, centorder},
-	ret = {GroupIdentity[g]};
-	sum = 1;
-	k = 1;
+(* We find conjugacy classes by testing random elements, each taken from the last element's centralizer *)
+GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentatives[g] = Module[{repr, n, sum, x, k, cent, centorder, step},
 	n = GroupOrder[g];
+	(* at the beginning we only know the identity as a group representative *)
+	(* at each step, we have a group element (x), calculate its centralizer (cent) and its order (centorder) *) 
 	x = GroupIdentity[g];
-	cent = GroupCentralizer[g, x];
-	centorder = GroupOrder[cent];
+	cent = g;
+	centorder = n;
+	(* we will store the representatives in repr *)
+	repr = {x};
+	(* k is the number of already found conjugacy classes *)
+	k = 1;
+	(* sum is the total number of elements in the known classes *)
+	sum = 1;
+	(* we are done when we find all elements, so we repeat until sum = n *)
 	While[sum < n,
-	  	x = GroupElements[cent, {RandomInteger[{1, centorder}]}][[1]];
-		cent = GroupCentralizer[g, x];
-		centorder = GroupOrder[cent];
+		(* we take 3 random elements before actually testing it *)
+		Do[
+			(* we get a random element from the last elements centralizer *)
+	  		x = First[GroupElements[cent, {RandomInteger[{1, centorder}]}]];
+			cent = GroupCentralizer[g, x];
+			centorder = GroupOrder[cent];
+		, {3}];
 		Catch[
-			Do[If[GroupConjugatesQ[g, ret[[i]], x], Throw[True]], {i, 1, k}];
+			(* we step out of the Catch[] block if x is in an already known conjugacy class *)
+			Do[If[GroupConjugatesQ[g, repr[[i]], x], Throw[True]], {i, 1, k}];
+			(* if we are here, we found a new class *)
 			k = k+1;
-			ret = Append[ret, x];
+			repr = Append[repr, x];
 			sum = sum + n/centorder
 		]
 	];
-	ret
+	repr
 ]
 
-(* we determine numbers of conjugacy classes by computing the representatives and count them, we only compute this once for every group *)
+(* we determine numbers of conjugacy classes by computing the representatives and counting them *)
 GroupNumOfConjugacyClasses[g_?GroupQ] := GroupNumOfConjugacyClasses[g] = Length[GroupConjugacyClassRepresentatives[g]]
 
 (* we compute |G : C_G(a)| for all representatives and return them in a list *)
@@ -240,19 +252,21 @@ GroupConjugacyClassSize[g_?GroupQ, a_Cycles] :=
 GroupConjugacyClassNum[g_?GroupQ, a_Cycles] := Module[{repr},
 	(* we calculate representatives *)
 	repr = GroupConjugacyClassRepresentatives[g];
-	(* we iterate over them *)
-	Do[
-		(* if a~repr[[i]] then we return i *)
-		If[GroupConjugatesQ[g, a, repr[[i]]], Return[i]]
-	, {i, Length[repr]}];
-	(* if we didn't found it then a is not in g *)
-	Message[GroupConjugacyClassNum::notelement, a, g];
+	Catch[
+		(* we iterate over them *)
+		Do[
+			(* if a~repr[[i]] then we return i *)
+			If[GroupConjugatesQ[g, a, repr[[i]]], Throw[i]]
+		, {i, Length[repr]}];
+		(* if we didn't found it then a is not in g *)
+		Message[GroupConjugacyClassNum::notelement, a, g]
+	]
 ]
 
 (* we determine number of class with previous function and return its representative element *)
 GroupConjugacyClassRepresentative[g_?GroupQ, a_Cycles] := GroupConjugacyClassRepresentatives[g][[GroupConjugacyClassNum[g, a]]]
 
-(* we compute indices of conjugacy classes for  *)
+(* we compute indices of the conjugacy classes' inverses *)
 GroupConjugacyClassInverses[g_?GroupQ] := GroupConjugacyClassInverses[g] = Map[GroupConjugacyClassNum[g, #^(-1)]&, GroupConjugacyClassRepresentatives[g]]
 
 (* exponent is the least common multiplier of orders of the class representatives *)
@@ -262,23 +276,23 @@ GroupExponent[g_?GroupQ] := GroupExponent[g] = Apply[LCM, Map[GroupElementOrder[
 GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
 	(* e is the exponent *)
 	e = GroupExponent[g];
-	(* p is the first number that e|p-1 and p > 2*sqrt(|G| *)
+	(* p is the first number that e|p-1 and p > 2*sqrt(|G|) *)
 	p = (Floor[(2*Floor[Sqrt[GroupOrder[g]]]-1)/e]+1)*e+1;
 	(* while p is not a prime, we increase it by e *)
 	While [!PrimeQ[p], p = p + e];
 	p
 ]
 
-(* TODO *)
-GroupCharacterTableMTRow[g_, i_, k_] := GroupCharacterTableMTRow[g, i, k] = Module[{classes, iclass, kelem, x, j, p, ret},
-	classes = GroupConjugacyClassRepresentatives[g];
-	ret = ConstantArray[0, GroupNumOfConjugacyClasses[g]];
+(* MT_i(k, j) = $|\{(a,b) \in G_1 \times G_2 \mid a \in C_i, b \in C_j, a*b=g_k\}|$  *)
+GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, iclass, kelem, x, j, p, ret},
+	repr = GroupConjugacyClassRepresentatives[g];
+	inv = GroupConjugacyClassInverses[g];
+	ret = ConstantArray[0, Length[repr]];
 	If[i == 1, Return[ReplacePart[ret, k -> 1]]];
 	p = GroupCharacterTableDixonPrime[g];
-	If[k == 1, Return[ReplacePart[ret, GroupConjugacyClassNum[g, classes[[i]]^(-1)] -> Mod[GroupConjugacyClassSize[g, classes[[i]]], p]]]];
-	classes = GroupConjugacyClassRepresentatives[g];
-	iclass = classes[[i]]^g;
-	kelem = classes[[k]];
+	If[k == 1, Return[ReplacePart[ret, inv[[i]] -> Mod[GroupConjugacyClassSize[g, repr[[i]]], p]]]];
+	iclass = repr[[i]]^g;
+	kelem = repr[[k]];
 	Do[
 		j = GroupConjugacyClassNum[g, iclass[[x]]^(-1)**kelem];
 		ret = ReplacePart[ret, j -> Mod[ret[[j]]+1, p]]
@@ -286,35 +300,40 @@ GroupCharacterTableMTRow[g_, i_, k_] := GroupCharacterTableMTRow[g, i, k] = Modu
 	ret
 ]
 
-(* we put all the rows together to form the MT (transpose of M) table *)
-GroupCharacterTableMT[g_, i_] := GroupCharacterTableMT[g, i] = Table[GroupCharacterTableMTRow[g, i, k], {k, 1, GroupNumOfConjugacyClasses[g]}]
+(* we put all the rows together to form the MT table *)
+GroupMTTable[g_, i_] := GroupMTTable[g, i] = Table[GroupMTTableRow[g, i, k], {k, 1, GroupNumOfConjugacyClasses[g]}]
 
-(* it is straightforward to compute the scalar product *)
-GroupCharacterScalarProduct[g_?GroupQ, a_, b_] := Module[{sizes},
+(* we calculate scalar product as 1/|G|\sum_{g \in G}a(g)b(g^-1) and not using conjugates as in the definition, because it works with finite fields as well *)
+Options[GroupCharacterScalarProduct] = {Modulus -> 0}
+GroupCharacterScalarProduct[g_?GroupQ, a_, b_, OptionsPattern[]] := Module[{sizes, inv, mod, ret},
 	sizes = GroupConjugacyClassSizes[g];
-	Sum[sizes[[i]]*a[[i]]*Conjugate[b[[i]]], {i, Length[sizes]}]/GroupOrder[g]
+	inv = GroupConjugacyClassInverses[g];
+	mod = OptionValue[Modulus];
+	ret = Sum[sizes[[i]]*a[[i]]*b[[inv[[i]]]], {i, Length[sizes]}];
+	If[mod != 0, Mod[ret*PowerMod[GroupOrder[g], -1, mod], mod], ret/GroupOrder[g]]
 ]
 
 (* there is no internal Mathematica function which can compute intersection of two subspaces of a vector space, so we make a public one *)
-SubspaceIntersection[a_, b_, opts___] := Module[{result},
+(* we define Modulus option with 0 as default *)
+Options[SubspaceIntersection] = {Modulus -> 0}
+SubspaceIntersection[a_, b_, OptionsPattern[]] := Module[{result, mod},
 	(* if one subspace is empty then the intersection is empty as well *)
 	If[Length[a] == 0 || Length[b] == 0, Return[{}]];
+	mod = OptionValue[Modulus];
 	(* otherwise the intersection is the complementer subspace of their complementer's union *)
-	result = NullSpace[Union[NullSpace[a, opts], NullSpace[b, opts]], opts];
+	result = NullSpace[Union[NullSpace[a, Modulus -> mod], NullSpace[b, Modulus -> mod]], Modulus -> mod];
 	(* if result is empty we return *)
 	If[Length[result] == 0, Return[{}]];
 	(* otherwise we compute the echelonized base and return that *)
 	RowReduce[result, opts]
 ]
-(* we define Modulus option with 0 as default *)
-Options[SubspaceIntersection] = {Modulus -> 0}
 
 (* TODO *)
 GroupCharacterTableSplit[g_, i_, v_] := Module[{r, p, x, m, id, w, j},
 	If[Length[v] == 1, Return[{v}]];
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
-	m = GroupCharacterTableMT[g, i];
+	m = GroupMTTable[g, i];
 	w = Rest[v];
 	If[Count[Table[Length[SubspaceIntersection[{m.w[[j]]}, w, Modulus -> p]], {j, Length[w]}], 0] == 0, Return[{v}]];
 	id = IdentityMatrix[r];
@@ -340,7 +359,7 @@ GroupCharacterTableSplit[g_, i_, v_] := Module[{r, p, x, m, id, w, j},
 GroupCharacterTableSplitFirst[g_, i_] := Module[{r, p, x, m, id},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
-	m = GroupCharacterTableMT[g, i];
+	m = GroupMTTable[g, i];
 	id = IdentityMatrix[r];
 	Map[
 		RowReduce[
@@ -349,22 +368,16 @@ GroupCharacterTableSplitFirst[g_, i_] := Module[{r, p, x, m, id},
 			, Modulus -> p],
 			Modulus -> p
 		] &,
- 		Union[
- 			Solve[
- 				CharacteristicPolynomial[m, x] == 0
- 			, x, Modulus -> p]
- 		]
+ 		Union[Solve[CharacteristicPolynomial[m, x] == 0, x, Modulus -> p]]
  	]
 ]
 
 (* TODO *)
-GroupCharacterTableNormalize[g_, a_] := Module[{h, p, s, inv, d, n, x},
+GroupCharacterTableNormalize[g_, a_] := Module[{p, s, d, n, x},
 	n = GroupOrder[g];
-	h = GroupConjugacyClassSizes[g];
 	p = GroupCharacterTableDixonPrime[g];
-	inv = GroupConjugacyClassInverses[g];
-	s = Sum[h[[i]]*a[[i]]*a[[inv[[i]]]], {i, Length[a]}];
-	d = Min[Map[#[[1, 2]]&, Solve[n/x^2 == s, x, Modulus -> p]]];
+	s = GroupCharacterScalarProduct[g, a, a, Modulus -> p];
+	d = Min[Map[#[[1, 2]]&, Solve[1 == s*x^2, x, Modulus -> p]]];
 	Mod[a*d, p]
 ]
 
@@ -391,15 +404,13 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	s = PowerMod[PrimitiveRoot[p], (p-1)/e, p];
 	fin = GroupCharacterTableFinite[g];
 	Table[
-		Simplify[
-			Sum[
-				Mod[
-					einv*Sum[
-						fin[[i, GroupConjugacyClassNum[g, repr[[j]]^l]]]*PowerMod[s, -k*l, p]
-					, {l, 0, e-1}]
-				, p]*t^k
-			, {k, 0, e-1}]
-		, TimeConstraint -> 1]
+		Sum[
+			Mod[
+				einv*Sum[
+					fin[[i, GroupConjugacyClassNum[g, repr[[j]]^l]]]*PowerMod[s, -k*l, p]
+				, {l, 0, e-1}]
+			, p]*t^k
+		, {k, 0, e-1}]
 	, {i, 1, r}, {j, 1, r}]
 ]
 
