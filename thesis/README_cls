@@ -25,6 +25,7 @@ Features:
 			\university{Egyetem neve}
 			\faculty{Kar neve}
 			\department{Tanszek neve}
+			\degree{Szak neve}
 			\supervisor{Temavezeto neve}
 			\supervisorrank{Temavezeto beosztasa}
 			\calltoarms{Cimer kepenek cime} -- ha nem adod meg, nem lesz cimer
@@ -86,6 +87,7 @@ Pelda szakdoli.tex fajl:
 	\title{Csoportelméleti Algoritmusok Vizsgálata és Implementálása}
 	\university{Eötvös Loránd Tudományegyetem}
 	\faculty{Természettudományi Kar}
+	\degree{Matematika BSc}
 	\department{Algebra és Számelmélet Tanszék}
 	\supervisor{Pelikán József}
 	\supervisorrank{egyetemi adjunktus}

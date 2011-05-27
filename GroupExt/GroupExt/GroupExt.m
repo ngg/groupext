@@ -289,6 +289,7 @@ GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = M
 ]
 
 (* MT_i(k, j) = $|\{(a,b) \in G_1 \times G_2 \mid a \in C_i, b \in C_j, a*b=g_k\}|$  *)
+(* TODO *)
 GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, iclass, kelem, x, j, p, ret},
 	repr = GroupConjugacyClassRepresentatives[g];
 	inv = GroupConjugacyClassInverses[g];
