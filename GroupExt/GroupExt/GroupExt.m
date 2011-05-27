@@ -1,8 +1,8 @@
 BeginPackage["GroupExt`"]
 
 (* list of public functions with usages *)
-NullQ::usage = ""
-GroupQ::usage = "GroupQ[g] determines whether g is a group or not."
+NullQ::usage = "NullQ[expr] gives True if expr is Null, and False otherwise."
+GroupQ::usage = "GroupQ[expr] gives True if expr is a group, and False otherwise."
 SubspaceIntersection::usage = ""
 GroupIdentity::usage = ""
 GroupElementOrder::usage = ""
@@ -14,22 +14,19 @@ GroupConjugacyClassSizes::usage = ""
 GroupConjugacyClassSize::usage = ""
 GroupConjugacyClassRepresentative::usage = ""
 GroupCharacterTable::usage = ""
+GroupCharacterTableFinite::usage = ""
+GroupCharacterTableDixonPrime::usage = ""
 GroupCharacterScalarProduct::usage = ""
 GroupElementFromImage::usage = ""
 GroupElementFromImages::usage =
 
-Begin["GroupExt`Private`"]
+Begin["`Private`"]
 
 (* there is no proper way to determine if something is null *)
 NullQ[x_] := ToString[x] == "Null" && !StringQ[x]
 
 (* we only deal with permutation groups so identity element is always an empty cycle *)
 GroupIdentity[g_?GroupQ] := Cycles[{}]
-
-(* in Mathematica 8.0.0 there is a bug that crashes GroupCentralizer[] if called with the identity element (fixed in 8.0.1) *)
-Off[General::shdw]
-GroupExt`GroupCentralizer[g_, x_] := If[GroupIdentity[g] == x, g, System`GroupCentralizer[g, x]]
-On[General::shdw]
 
 (* we declare our error messages here *)
 General::notelement = "`1` is not element of `2`"
@@ -47,6 +44,12 @@ GroupQ[g_] := True /; MemberQ[{
 	FischerGroupFi24Prime, TitsGroupT, ONanGroupON, HaradaNortonGroupHN,
 	ThompsonGroupTh, LyonsGroupLy, BabyMonsterGroupB, MonsterGroupM
 }, Head[g]]
+
+(* in Mathematica 8.0.0 there is a bug that crashes GroupCentralizer[] if called with the identity element (fixed in 8.0.1) *)
+Off[General::shdw]
+GroupExt`GroupCentralizer[g_?GroupQ, x_Cycles] := If[GroupIdentity[g] == x, g, System`GroupCentralizer[g, x]]
+On[General::shdw]
+
 
 (* we extend some operators here to work with permutations and groups *)
 
@@ -73,7 +76,7 @@ ClearAttributes[Power, Protected]
 SetAttributes[Power, Protected]
 
 (* for speed reasons, we don't check if a is in g or not *)
-GroupElementOrder[g_?GroupQ, a_] := PermutationOrder[a]
+GroupElementOrder[g_?GroupQ, a_Cycles] := PermutationOrder[a]
 
 (* TODO *)
 GroupElementFromImage[g_?GroupQ, a_Integer, b_Integer] := Module[{lk = 1, ln = 1, sn, s = GroupGenerators[g], l = {Cycles[{}] -> a}, c, x, i},
@@ -219,14 +222,14 @@ GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentati
 (* we determine numbers of conjugacy classes by computing the representatives and count them, we only compute this once for every group *)
 GroupNumOfConjugacyClasses[g_?GroupQ] := GroupNumOfConjugacyClasses[g] = Length[GroupConjugacyClassRepresentatives[g]]
 
-(* TODO *)
+(* we compute |G : C_G(a)| for all representatives and return them in a list *)
 GroupConjugacyClassSizes[g_?GroupQ] := GroupConjugacyClassSizes[g] = Module[{n},
 	n = GroupOrder[g];
 	Map[(n/GroupOrder[GroupCentralizer[g, #]])&, GroupConjugacyClassRepresentatives[g]]
 ]
 
-(* size of a's conjugacy class = (G : C_G(a)) *)
-GroupConjugacyClassSize[g_?GroupQ, a_] := GroupConjugacyClassSize[g, a] =
+(* size of a's conjugacy class = |G : C_G(a)| *)
+GroupConjugacyClassSize[g_?GroupQ, a_Cycles] :=
 	If[!GroupElementQ[g, a],
 		Message[GroupConjugacyClassSize::notelement, a, g];
 	, (* else *)
@@ -234,31 +237,34 @@ GroupConjugacyClassSize[g_?GroupQ, a_] := GroupConjugacyClassSize[g, a] =
 	]
 
 (* we determine number of the conjugacy class of a specific element by computing representatives and then try if they are conjugates *)
-GroupConjugacyClassNum[g_, a_] := Module[{repr},
+GroupConjugacyClassNum[g_?GroupQ, a_Cycles] := Module[{repr},
 	(* we calculate representatives *)
 	repr = GroupConjugacyClassRepresentatives[g];
-	(* we go through the elements *)
+	(* we iterate over them *)
 	Do[
 		(* if a~repr[[i]] then we return i *)
-		If[GroupConjugatesQ[g, a, repr[[i]]],
-			Return[i]
-		]
-	, {i, Length[repr]}]
+		If[GroupConjugatesQ[g, a, repr[[i]]], Return[i]]
+	, {i, Length[repr]}];
+	(* if we didn't found it then a is not in g *)
+	Message[GroupConjugacyClassNum::notelement, a, g];
 ]
 
 (* we determine number of class with previous function and return its representative element *)
-GroupConjugacyClassRepresentative[g_, a_] := GroupConjugacyClassRepresentatives[g][[GroupConjugacyClassNum[g, a]]]
+GroupConjugacyClassRepresentative[g_?GroupQ, a_Cycles] := GroupConjugacyClassRepresentatives[g][[GroupConjugacyClassNum[g, a]]]
 
-(* TODO *)
-GroupConjugacyClassInverses[g_] := Map[GroupConjugacyClassNum[g, #^(-1)]&, GroupConjugacyClassRepresentatives[g]]
+(* we compute indices of conjugacy classes for  *)
+GroupConjugacyClassInverses[g_?GroupQ] := GroupConjugacyClassInverses[g] = Map[GroupConjugacyClassNum[g, #^(-1)]&, GroupConjugacyClassRepresentatives[g]]
 
 (* exponent is the least common multiplier of orders of the class representatives *)
 GroupExponent[g_?GroupQ] := GroupExponent[g] = Apply[LCM, Map[GroupElementOrder[g, #]&, GroupConjugacyClassRepresentatives[g]]]
 
 (* we search for the smallest prime with e|p-1 and p > 2*sqrt(|G|) *)
-GroupCharacterTableDixonPrime[g_] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
+GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
+	(* e is the exponent *)
 	e = GroupExponent[g];
+	(* p is the first number that e|p-1 and p > 2*sqrt(|G| *)
 	p = (Floor[(2*Floor[Sqrt[GroupOrder[g]]]-1)/e]+1)*e+1;
+	(* while p is not a prime, we increase it by e *)
 	While [!PrimeQ[p], p = p + e];
 	p
 ]
@@ -280,24 +286,26 @@ GroupCharacterTableMTRow[g_, i_, k_] := GroupCharacterTableMTRow[g, i, k] = Modu
 	ret
 ]
 
-(* we put all the rows together to form the M table *)
-GroupCharacterTableMT[g_, i_] := Table[GroupCharacterTableMTRow[g, i, k], {k, 1, GroupNumOfConjugacyClasses[g]}]
+(* we put all the rows together to form the MT (transpose of M) table *)
+GroupCharacterTableMT[g_, i_] := GroupCharacterTableMT[g, i] = Table[GroupCharacterTableMTRow[g, i, k], {k, 1, GroupNumOfConjugacyClasses[g]}]
 
-(* TODO *)
-GroupCharacterScalarProduct[g_, a_, b_] := Sum[a[[i]]*Conjugate[b[[i]]], {i, Length[a]}]/GroupOrder[g]
+(* it is straightforward to compute the scalar product *)
+GroupCharacterScalarProduct[g_?GroupQ, a_, b_] := Module[{sizes},
+	sizes = GroupConjugacyClassSizes[g];
+	Sum[sizes[[i]]*a[[i]]*Conjugate[b[[i]]], {i, Length[sizes]}]/GroupOrder[g]
+]
 
 (* there is no internal Mathematica function which can compute intersection of two subspaces of a vector space, so we make a public one *)
 SubspaceIntersection[a_, b_, opts___] := Module[{result},
 	(* if one subspace is empty then the intersection is empty as well *)
 	If[Length[a] == 0 || Length[b] == 0, Return[{}]];
-	(* otherwise the intersection is the complementer subspace of their completementer's union *)
+	(* otherwise the intersection is the complementer subspace of their complementer's union *)
 	result = NullSpace[Union[NullSpace[a, opts], NullSpace[b, opts]], opts];
 	(* if result is empty we return *)
 	If[Length[result] == 0, Return[{}]];
 	(* otherwise we compute the echelonized base and return that *)
 	RowReduce[result, opts]
 ]
-
 (* we define Modulus option with 0 as default *)
 Options[SubspaceIntersection] = {Modulus -> 0}
 
@@ -361,7 +369,7 @@ GroupCharacterTableNormalize[g_, a_] := Module[{h, p, s, inv, d, n, x},
 ]
 
 (* TODO *)
-GroupCharacterTableFinite[g_] := Module[{x, r, i, p},
+GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{x, r, i, p},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	If[r == 1, Return[{{1}}]];
@@ -395,9 +403,5 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	, {i, 1, r}, {j, 1, r}]
 ]
 
-(* end of "GroupExt`Private`" *)
 End[]
-
-(* end of "GroupExt`" *)
 EndPackage[]
-
