@@ -14,6 +14,8 @@ GroupNumOfConjugacyClasses::usage = ""
 GroupConjugacyClassSizes::usage = ""
 GroupConjugacyClassSize::usage = ""
 GroupConjugacyClassRepresentative::usage = ""
+GroupConjugacyClassInverses::usage = ""
+GroupConjugacyClassNum::usage = ""
 GroupConjugacyClass::usage = ""
 GroupConjugacyClassOf::usage = ""
 GroupCharacterTable::usage = ""
@@ -21,7 +23,8 @@ GroupCharacterTableFinite::usage = ""
 GroupCharacterTableDixonPrime::usage = ""
 GroupCharacterScalarProduct::usage = ""
 GroupElementFromImage::usage = ""
-GroupElementFromImages::usage =
+GroupElementFromImages::usage = ""
+GroupIrredundantStabilizerChain::usage = ""
 
 Begin["GroupExt`Private`"]
 
@@ -82,24 +85,45 @@ SetAttributes[Power, Protected]
 (* for speed reasons, we don't check if a is in g or not *)
 GroupElementOrder[g_?GroupQ, a_Cycles] := PermutationOrder[a]
 
-(* TODO *)
-GroupElementFromImage[g_?GroupQ, a_Integer, b_Integer] := Module[{lk = 1, ln = 1, sn, s = GroupGenerators[g], l = {Cycles[{}] -> a}, c, x, i},
+(* breadth-first-search for an element that moves a to b *)
+GroupElementFromImage[g_?GroupQ, a_Integer, b_Integer] := Module[{lk = 1, list, c, x, i},
 	Catch[
-		sn = Length[s];
-		While[lk <= ln,
+		(* if a == b then the identity is good *)
+		If[a == b, Throw[GroupIdentity[g]]];
+		s = GroupGenerators[g];
+		(* we start bfs from the identity which moves a to a *)
+		list = {GroupIdentity[g] -> a};
+		lk = 1;
+		(* while we have new elements where we can move a to *)
+		While[lk <= Length[list],
+			(* we try every generator *)
 			Do[
-	 			c = l[[lk, 1]] ** s[[i]];
-				x = l[[lk, 2]]^s[[i]];
+				(* we compute the new group element (c), and where that moves a to (x) *)
+	 			c = list[[lk, 1]]**s[[i]];
+				x = list[[lk, 2]]^s[[i]];
+				(* if it moves a to b then we're done *)
 				If[x == b, Throw[c]];
-				If[Position[l, x, 2] == {},
-					l = Append[l, c -> x];
-					ln = ln + 1
-				]
-			,{i, sn}];
+				(* if we couldn't get to x yet then we add c->x to our list *)
+				If[Count[list, x, 2] == 0, list = Append[list, c -> x]]
+			, {i, Length[s]}];
 			lk = lk + 1
 		];
+		(* if we can't get to b then we return Null *)
 		Null
 	]
+]
+
+(* the builtin GroupStabilizerChain can give redundant base *)
+GroupIrredundantStabilizerChain[g_?GroupQ, opts:OptionsPattern[GroupStabilizerChain]] := Module[{sc, ret, i},
+	(* first we call the original version *)
+	sc = GroupStabilizerChain[g, opts];
+	(* the first element is always necessary *)
+	ret = {First[sc]};
+	Do[
+		(* we add an element if the group is not the same as the previously added, and we only add the last base element to the list *) 
+		If[ret[[-1, 2, 1]] != sc[[i, 2, 1]], ret = Append[ret, Append[ret[[-1, 1]], sc[[i, 1, -1]]] -> sc[[i, 2]]]]
+	, {i, 2, Length[sc]}];
+	ret
 ]
 
 (* TODO *)
@@ -111,7 +135,7 @@ GroupElementFromBaseImages[sc_, base_, basen_, img_] := Module[{i, x, ret = Cycl
 				If[NullQ[x], Throw[Null]];
 				ret = x**ret
 			]
-		,{i, basen}];
+		, {i, basen}];
 		ret
 	]
 ]
@@ -120,7 +144,7 @@ GroupElementFromBaseImages[sc_, base_, basen_, img_] := Module[{i, x, ret = Cycl
 GroupElementFromImages[g_?GroupQ, s_] := Module[{sc, wantedbase, base, basen, ret, i, x},
 	Catch[
 		wantedbase = Map[First, s];
-		sc = GroupStabilizerChain[g, GroupActionBase -> wantedbase];
+		sc = GroupIrredundantStabilizerChain[g, GroupActionBase -> wantedbase];
 		basen = Position[sc, PermutationGroup[{}]][[1, 1]] - 1;
 		base = sc[[basen + 1, 1]];
 		ret = GroupElementFromBaseImages[sc, base, basen, Map[(x = Position[wantedbase, #]; If [Length[x] == 0, Null, s[[x[[1,1]], 2]]])&, base]];
@@ -151,7 +175,7 @@ GroupConjugatesQBT[a_, b_, sc_, base_, cangoto_, follow_, img_] := Module[{e, im
 					If [Position[newimg, next, 1] == {},
 						If[GroupConjugatesQBT[a, b, sc, base, cangoto, follow, Append[newimg, next]] == True, Throw[True]];
 					];
-				,{i,Length[cangoto[[imgn+1]]]}];
+				, {i, Length[cangoto[[imgn+1]]]}];
 				False
 			]
 		]
@@ -167,7 +191,7 @@ GroupConjugatesQInner[g_, a_, b_] := Module[{as, bs, i, sc, basen, base, cangoto
 		bs = Sort[b[[1]], (Length[#1] > Length[#2]) &];
 		If[Map[Length, as] != Map[Length, bs], Throw[False]];
 
- 		sc = GroupStabilizerChain[g, GroupActionBase -> Flatten[as]];
+ 		sc = GroupIrredundantStabilizerChain[g, GroupActionBase -> Flatten[as]];
 		basen = Position[sc, PermutationGroup[{}]][[1, 1]] - 1;
 		sc = sc[[1 ;; basen + 1]];
 		base = sc[[basen + 1, 1]];
@@ -321,9 +345,6 @@ GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, ret
 	ret
 ]
 
-(* we put all the rows together to form the MT table *)
-GroupMTTable[g_, i_] := GroupMTTable[g, i] = Table[GroupMTTableRow[g, i, k], {k, 1, GroupNumOfConjugacyClasses[g]}]
-
 (* we calculate scalar product as 1/|G|\sum_{g \in G}a(g)b(g^-1) and not using conjugates as in the definition, because it works with finite fields as well *)
 Options[GroupCharacterScalarProduct] = {Modulus -> 0}
 GroupCharacterScalarProduct[g_?GroupQ, a_, b_, OptionsPattern[]] := Module[{sizes, inv, mod, ret},
@@ -402,13 +423,16 @@ GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{s
 ]
 
 (* we use the finite table to compute the normal one *)
-GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin, reprl},
+GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin, reprl, inv, skip, row},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	e = GroupExponent[g];
 	repr = GroupConjugacyClassRepresentatives[g];
+	inv = GroupConjugacyClassInverses[g];
 	(* we compute the finite version first *)
 	fin = GroupCharacterTableFinite[g];
+	(* we can skip computation of those columns whose inverses' column is already computed, because we can conjugate those *)
+	skip = Table[inv[[i]] < i, {i, r}];
 	(* t is a complex e-th root of unity *)
 	t = (-1)^(2/e);
 	(* s is an element which has order e in F_p *)
@@ -418,9 +442,15 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	einv = PowerMod[e, -1, p];
 	(* we finally compute the character table, and then try to simplify the result for at most 10 seconds *)
 	FullSimplify[Table[
-		(* we can compute the character table elements with this large sum using the finite one *)
-		Sum[Mod[einv*Sum[fin[[i, reprl[[j, l]]]]*PowerMod[s, -k*l, p], {l, e}], p]*t^k, {k, e}]
-	, {i, r}, {j, r}], TimeConstraint -> 10]
+		row = {};
+		Do[
+			(* we write the elements of the character table as a polynomial of t, row contains the coefficients *)
+			(* we can compute them with this sum (or we reverse the coefficients of the inverse column for conjugation) *)
+			row = Append[row, If[skip[[j]], RotateLeft[Reverse[row[[inv[[j]]]]]], Table[Mod[einv*Sum[fin[[i, reprl[[j, l]]]]*PowerMod[s, -k*l, p], {l, e}], p], {k, e}]]]
+		, {j, r}];
+		(* now we sum it *)
+		Table[Sum[row[[j, k]]*t^k, {k, e}], {j, r}]
+	, {i, r}], TimeConstraint -> 10]
 ]
 
 End[]
