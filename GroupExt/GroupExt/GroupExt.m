@@ -14,6 +14,8 @@ GroupNumOfConjugacyClasses::usage = ""
 GroupConjugacyClassSizes::usage = ""
 GroupConjugacyClassSize::usage = ""
 GroupConjugacyClassRepresentative::usage = ""
+GroupConjugacyClass::usage = ""
+GroupConjugacyClassOf::usage = ""
 GroupCharacterTable::usage = ""
 GroupCharacterTableFinite::usage = ""
 GroupCharacterTableDixonPrime::usage = ""
@@ -75,9 +77,6 @@ ClearAttributes[Power, Protected]
 
 	(* conjugaction of elements with ^ operator, example: Cycles[{{1,2}}]^Cycles[{{2,3}}] = Cycles[{{1,3}}] *)
 	Power[x_Cycles, y_Cycles] := y^(-1)**x**y
-
-	(* conjugaction of an element with a whole group with ^ operator, example: Cycles[{{1,2}}]^PermutationGroup[{Cycles[{{1,2}}], Cycles[{{1,4}}]}] =  *)
-	Power[x_Cycles, g_?GroupQ] := Union[x^GroupElements[g]]
 SetAttributes[Power, Protected]
 
 (* for speed reasons, we don't check if a is in g or not *)
@@ -268,6 +267,30 @@ GroupConjugacyClassNum[g_?GroupQ, a_Cycles] := Module[{repr},
 	]
 ]
 
+(* breadth-first-search for elements in the k-th conjugacy class *)
+GroupConjugacyClass[g_?GroupQ, k_Integer] := GroupConjugacyClass[g, k] = Module[{list, i, next, s},
+	(* we calculate the generators *)
+	s = GroupGenerators[g];
+	(* list contains found elements *)
+	list = {GroupConjugacyClassRepresentatives[g][[k]]};
+	(* next-th element of the list is coming *)
+	next = 1;
+	(* we go through the elements of the list *)
+	While[next <= Length[list],
+		Do[
+			(* x is the new element we get by conjugating the next-th element with the i-th generator *)
+			x = list[[next]]^s[[i]];
+			(* if we haven't found x yet then we add it to the list *)
+			If[Count[list, x] == 0, list = Append[list, x]]
+		, {i, Length[s]}];
+		next = next+1
+	];
+	list
+]
+
+(* this function is self-explanatory *)
+GroupConjugacyClassOf[g_?GroupQ, a_Cycles] := GroupConjugacyClass[g, GroupConjugacyClassNum[g, a]]
+
 (* we determine number of class with previous function and return its representative element *)
 GroupConjugacyClassRepresentative[g_?GroupQ, a_Cycles] := GroupConjugacyClassRepresentatives[g][[GroupConjugacyClassNum[g, a]]]
 
@@ -277,32 +300,24 @@ GroupConjugacyClassInverses[g_?GroupQ] := GroupConjugacyClassInverses[g] = Map[G
 (* exponent is the least common multiplier of orders of the class representatives *)
 GroupExponent[g_?GroupQ] := GroupExponent[g] = Apply[LCM, Map[GroupElementOrder[g, #]&, GroupConjugacyClassRepresentatives[g]]]
 
-(* we search for the smallest prime with e|p-1 and p > 2*sqrt(|G|) *)
-GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
-	(* e is the exponent *)
-	e = GroupExponent[g];
-	(* p is the first number that e|p-1 and p > 2*sqrt(|G|) *)
-	p = (Floor[(2*Floor[Sqrt[GroupOrder[g]]]-1)/e]+1)*e+1;
-	(* while p is not a prime, we increase it by e *)
-	While [!PrimeQ[p], p = p + e];
-	p
-]
-
 (* MT_i(k, j) = $|\{(a,b) \in G_1 \times G_2 \mid a \in C_i, b \in C_j, a*b=g_k\}|$  *)
-(* TODO *)
-GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, iclass, kelem, x, j, p, ret},
+GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, ret, iclass, j, l},
+	(* we calculate the representatives and inverses *)
 	repr = GroupConjugacyClassRepresentatives[g];
 	inv = GroupConjugacyClassInverses[g];
+	(* we will return a Length[repr] long array, initially it's all zero *)
 	ret = ConstantArray[0, Length[repr]];
+	(* if i == 1 then MT_i is the identity matrix, so in its kth row there is only one non-zerp element, the kth *) 
 	If[i == 1, Return[ReplacePart[ret, k -> 1]]];
-	p = GroupCharacterTableDixonPrime[g];
-	If[k == 1, Return[ReplacePart[ret, inv[[i]] -> Mod[GroupConjugacyClassSize[g, repr[[i]]], p]]]];
-	iclass = repr[[i]]^g;
-	kelem = repr[[k]];
+	(* the first row always has only one non-zero element, the inv[[i]]-th element is the size of its conjugacy class *)
+	If[k == 1, Return[ReplacePart[ret, inv[[i]] -> GroupConjugacyClassSize[g, repr[[i]]]]]];
+	(* otherwise we compute an element from the kth class and iterate through the ith class *)
+	iclass = GroupConjugacyClass[g, i];
 	Do[
-		j = GroupConjugacyClassNum[g, iclass[[x]]^(-1)**kelem];
-		ret = ReplacePart[ret, j -> Mod[ret[[j]]+1, p]]
-	, {x, Length[iclass]}];
+		j = GroupConjugacyClassNum[g, iclass[[l]]^(-1)**repr[[k]]];
+		(* we increase the j-th element by 1 *)
+		ret = ReplacePart[ret, j -> ret[[j]]+1]	
+	, {l, Length[iclass]}];
 	ret
 ]
 
@@ -315,7 +330,9 @@ GroupCharacterScalarProduct[g_?GroupQ, a_, b_, OptionsPattern[]] := Module[{size
 	sizes = GroupConjugacyClassSizes[g];
 	inv = GroupConjugacyClassInverses[g];
 	mod = OptionValue[Modulus];
+	(* we calculate the sum *)
 	ret = Sum[sizes[[i]]*a[[i]]*b[[inv[[i]]]], {i, Length[sizes]}];
+	(* we have to divide it by GroupOrder[g] *)
 	If[mod != 0, Mod[ret*PowerMod[GroupOrder[g], -1, mod], mod], ret/GroupOrder[g]]
 ]
 
@@ -332,6 +349,17 @@ SubspaceIntersection[a_, b_, OptionsPattern[]] := Module[{result, mod},
 	If[Length[result] == 0, Return[{}]];
 	(* otherwise we compute the echelonized base and return that *)
 	RowReduce[result, Modulus -> mod]
+]
+
+(* we search for the smallest prime with e|p-1 and p > 2*sqrt(|G|) *)
+GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
+	(* e is the exponent *)
+	e = GroupExponent[g];
+	(* p is the first number that e|p-1 and p > 2*sqrt(|G|) *)
+	p = (Floor[(2*Floor[Sqrt[GroupOrder[g]]]-1)/e]+1)*e+1;
+	(* while p is not a prime, we increase it by e *)
+	While [!PrimeQ[p], p = p + e];
+	p
 ]
 
 (* TODO *)
