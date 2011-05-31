@@ -310,7 +310,7 @@ GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, ret
 	(* if i == 1 then MT_i is the identity matrix, so in its kth row there is only one non-zero element, the kth *) 
 	If[i == 1, Return[ReplacePart[ret, k -> 1]]];
 	(* the first row always has only one non-zero element, the inv[[i]]-th element is the size of its conjugacy class *)
-	If[k == 1, Return[ReplacePart[ret, inv[[i]] -> GroupConjugacyClassSize[g, repr[[i]]]]]];
+	If[k == 1, Return[ReplacePart[ret, inv[[i]] -> GroupConjugacyClassSizes[g][[i]]]]];
 	(* otherwise we compute an element from the kth class and iterate through the ith class *)
 	iclass = GroupConjugacyClass[g, i];
 	Do[
@@ -336,21 +336,6 @@ GroupCharacterScalarProduct[g_?GroupQ, a_, b_, OptionsPattern[]] := Module[{size
 	If[mod != 0, Mod[ret*PowerMod[GroupOrder[g], -1, mod], mod], ret/GroupOrder[g]]
 ]
 
-(* there is no internal Mathematica function which can compute intersection of two subspaces of a vector space, so we make a public one *)
-(* we define Modulus option with 0 as default *)
-Options[SubspaceIntersection] = {Modulus -> 0}
-SubspaceIntersection[a_, b_, OptionsPattern[]] := Module[{result, mod},
-	(* if one subspace is empty then the intersection is empty as well *)
-	If[Length[a] == 0 || Length[b] == 0, Return[{}]];
-	mod = OptionValue[Modulus];
-	(* otherwise the intersection is the complementer subspace of their complementer's union *)
-	result = NullSpace[Union[NullSpace[a, Modulus -> mod], NullSpace[b, Modulus -> mod]], Modulus -> mod];
-	(* if result is empty we return *)
-	If[Length[result] == 0, Return[{}]];
-	(* otherwise we compute the echelonized base and return that *)
-	RowReduce[result, Modulus -> mod]
-]
-
 (* we search for the smallest prime with e|p-1 and p > 2*sqrt(|G|) *)
 GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
 	(* e is the exponent *)
@@ -362,17 +347,40 @@ GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = M
 	p
 ]
 
-(* TODO *)
-GroupCharacterTableSplit[g_, i_, v_] := Module[{r, p, x, m, id, w, j},
-	If[Length[v] == 1, Return[{v}]];
+(* we try to split V into direct sum of smaller subspaces based on GroupMTTable[g, i] *)
+GroupCharacterTableSplit[g_, i_, V_] := Module[{r, p, x, Mp, bp, id, j, s, iinv, A, c, im, eigenvalues, lin},
+	s = Length[V];
+	(* if V is 1-dimensional, we cannot split it *)
+	If[s == 1, Return[{V}]];
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
-	m = GroupMTTable[g, i];
-	w = Rest[v];
-	If[Count[Table[Length[SubspaceIntersection[{m.w[[j]]}, w, Modulus -> p]], {j, Length[w]}], 0] == 0, Return[{v}]];
-	id = IdentityMatrix[r];
-	eigenvalues = Map[#[[1,2]]&, Union[Solve[CharacteristicPolynomial[m, x] == 0, x, Modulus -> p]]];
-	Select[Map[SubspaceIntersection[v, NullSpace[m - #*id, Modulus -> p], Modulus -> p]&, eigenvalues], (Length[#] > 0)&]
+	iinv = GroupConjugacyClassInverses[g][[i]];
+	(* if all basevectors but the first has 0 at position iinv, then we cannot split *)
+	If[Count[Map[#[[iinv]]&, Rest[V]], 0] == Length[V]-1, Return[{V}]];
+	(* we compute the place of leading non-zero elements of the basevectors *)
+	c = Map[Position[#, Except[0], 1, Heads -> False][[1, 1]]&, V];
+	(* and the basevectors at c places *)
+	bp = Table[Map[V[[j, #]]&, c], {j, s}];
+	(* we need these rows of MT *)
+	Mp = Mod[Map[GroupMTTableRow[g, i, #]&, c], p];
+	(* we construct an A matrix such that MT.V^T = V^T.A where MT is GroupMTTable[g, i] *)  
+	A = Transpose[Map[Function[{b},
+		(* first we compute the image of the basevector, but only the values at the c places *)
+		im = Mod[b.Transpose[Mp], p];
+		(* next we want to have im as linear combination of basevectors *)
+		lin = {};
+		(* we do something like Gauss-elimination to get the coefficients (it works because V is a row-reduced base) *)
+		Do[
+			lin = Append[lin, im[[j]]];
+			im = Mod[im-im[[j]]*bp[[j]], p]
+		, {j, s}];
+		lin
+	], V]];
+	(* we find A's eigenvalues *)
+	eigenvalues = Map[#[[1,2]]&, Union[Solve[CharacteristicPolynomial[A, x] == 0, x, Modulus -> p]]];
+	(* for each eigenvalue we find its eigenspace, and calculate its generators in the normal coordinate system *)
+	id = IdentityMatrix[s];
+	Select[Map[RowReduce[NullSpace[A - #*id, Modulus -> p].V, Modulus -> p]&, eigenvalues], (Length[#] > 0)&]
 ]
 
 (* TODO *)
@@ -392,7 +400,7 @@ GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{x
 ]
 
 (* TODO *)
-GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin},
+GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin, reprl},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	e = GroupExponent[g];
@@ -401,11 +409,12 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	t = (-1)^(2/e);
 	s = PowerMod[PrimitiveRoot[p], (p-1)/e, p];
 	fin = GroupCharacterTableFinite[g];
+	reprl = Table[GroupConjugacyClassNum[g, repr[[j]]^(k-1)], {j, r}, {k, e}];
 	Table[
 		Sum[
 			Mod[
 				einv*Sum[
-					fin[[i, GroupConjugacyClassNum[g, repr[[j]]^l]]]*PowerMod[s, -k*l, p]
+					fin[[i, reprl[[j, l+1]]]]*PowerMod[s, -k*l, p]
 				, {l, 0, e-1}]
 			, p]*t^k
 		, {k, 0, e-1}]
