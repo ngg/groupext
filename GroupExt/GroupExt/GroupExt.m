@@ -307,7 +307,7 @@ GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, ret
 	inv = GroupConjugacyClassInverses[g];
 	(* we will return a Length[repr] long array, initially it's all zero *)
 	ret = ConstantArray[0, Length[repr]];
-	(* if i == 1 then MT_i is the identity matrix, so in its kth row there is only one non-zerp element, the kth *) 
+	(* if i == 1 then MT_i is the identity matrix, so in its kth row there is only one non-zero element, the kth *) 
 	If[i == 1, Return[ReplacePart[ret, k -> 1]]];
 	(* the first row always has only one non-zero element, the inv[[i]]-th element is the size of its conjugacy class *)
 	If[k == 1, Return[ReplacePart[ret, inv[[i]] -> GroupConjugacyClassSize[g, repr[[i]]]]]];
@@ -371,22 +371,8 @@ GroupCharacterTableSplit[g_, i_, v_] := Module[{r, p, x, m, id, w, j},
 	w = Rest[v];
 	If[Count[Table[Length[SubspaceIntersection[{m.w[[j]]}, w, Modulus -> p]], {j, Length[w]}], 0] == 0, Return[{v}]];
 	id = IdentityMatrix[r];
-	Select[
-		Map[
-			SubspaceIntersection[
-				v,
-				NullSpace[
-					m - #[[1, 2]]*id
-				, Modulus -> p],
-				Modulus -> p
-			] &,
- 			Union[
- 				Solve[
- 					CharacteristicPolynomial[m, x] == 0
-	 			, x, Modulus -> p]
- 			]
- 		]
-	, (Length[#] > 0)&]
+	eigenvalues = Map[#[[1,2]]&, Union[Solve[CharacteristicPolynomial[m, x] == 0, x, Modulus -> p]]];
+	Select[Map[SubspaceIntersection[v, NullSpace[m - #*id, Modulus -> p], Modulus -> p]&, eigenvalues], (Length[#] > 0)&]
 ]
 
 (* TODO *)

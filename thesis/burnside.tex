@@ -169,12 +169,12 @@ Nem esett szó eddig arról, hogy hogyan lehet az $M_j$ mátrixokat kiszámolni.
 Egyszerre $M_j$ egy oszlopát (legyen most az $l$-edik) tudjuk megadni, mégpedig úgy hogy minden $x \in C_j$-re kiszámoljuk
 $y=x^{-1}g_l$-t és azt, hogy $y$ melyik konjugáltosztályba esik.
 $M_j$ $(k,l)$-edik eleme azon $x$-ek száma, amikre $y\in C_k$.
-Általában az algoritmus futásának legnagyobb részét ez a számolás teszi ki, ezért arra kell törekednünk, hogy minél kevesebb oszlop kiszámolásával meghatározhatóak legyenek a sajátvektorok.
+Általában az egész algoritmus futásának legnagyobb részét ez a számolás teszi ki, ezért arra kell törekednünk, hogy minél kevesebb oszlop kiszámolásával meghatározhatóak legyenek a sajátvektorok.
 Vegyük észre, hogy $M_j$ első oszlopának $j'$-edik eleme $h_j$, az összes többi eleme $0$, így az első oszlopokat már ismerjük.
 $M_1$-et is ismerjük, hiszen annak $(k,l)$-edik eleme $\delta_{kl}$, vagyis $M_1=I_r$.
 
 Ebben a részben a sajátvektorok kiszámításához mutatunk egy gyorsabb módszert, amihez nem kell mindegyik $M_j$ mátrixot teljesen kiszámolnunk.
-Nevezzük karakteraltereknek $\mathbb{F}_p^r$ azon altereit, amelyeket néhány karakter generál, vagyis a $\langle \Theta(\chi^i) | i \in I \rangle$ alakban felírhatóakat, ahol $I \subseteq \{1,\dots,r\}$.
+Nevezzük karakteraltereknek $\mathbb{F}_p^r$ azon altereit, amelyeket néhány karakter generál, vagyis a $\langle \Theta(\chi^i) \mid i \in I \rangle$ alakban felírhatóakat, ahol $I \subseteq \{1,\dots,r\}$.
 A sajátvektorokat a következőképpen szeretnénk kiszámolni:
 kiindulunk egyetlen karakteraltérből (a teljes $\mathbb{F}_p^r$-ről), és minden lépésben egy legalább két dimenziós karakteralteret egy $M_j$ segítségével felbontunk több kisebb dimenziós karakteraltér direktösszegére,
 úgy hogy a karakteraltérnek nézzük a metszetét $M_j$ sajátaltereivel.
