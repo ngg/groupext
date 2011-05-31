@@ -383,42 +383,44 @@ GroupCharacterTableSplit[g_, i_, V_] := Module[{r, p, x, Mp, bp, id, j, s, iinv,
 	Select[Map[RowReduce[NullSpace[A - #*id, Modulus -> p].V, Modulus -> p]&, eigenvalues], (Length[#] > 0)&]
 ]
 
-(* TODO *)
-GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{x, r, i, p},
+(* we determine the character table over F_p by figuring out the common eigenvectors of the MT matrices *)
+GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{subspaces, r, i, p},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
-	If[r == 1, Return[{{1}}]];
-	x = {IdentityMatrix[r]};
+	(* initially we have the whole vectorspace as the single subspace *)
+	subspaces = {IdentityMatrix[r]};
+	(* we split subspaces into direct sums until each is 1-dimensional *)
 	Do[
-		x = Apply[Union, Map[GroupCharacterTableSplit[g, i, #]&, x]]
+		subspaces = Apply[Union, Map[GroupCharacterTableSplit[g, i, #]&, subspaces]]
 	, {i, 2, r}];
+	(* we calculate the characters from the eigenvectors and then sort them *)
 	Sort[Map[
 		(* we have to multiply each eigenvector with a constant such that their norms becomes 1 *)
 		Mod[#*PowerMod[GroupCharacterScalarProduct[g, #, #, Modulus -> p], -1/2, p], p]&,
-		Table[x[[i, 1]], {i, r}]
+		Table[subspaces[[i, 1]], {i, r}]
 	]]
 ]
 
-(* TODO *)
+(* we use the finite table to compute the normal one *)
 GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin, reprl},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	e = GroupExponent[g];
 	repr = GroupConjugacyClassRepresentatives[g];
-	einv = PowerMod[e, -1, p];
-	t = (-1)^(2/e);
-	s = PowerMod[PrimitiveRoot[p], (p-1)/e, p];
+	(* we compute the finite version first *)
 	fin = GroupCharacterTableFinite[g];
-	reprl = Table[GroupConjugacyClassNum[g, repr[[j]]^(k-1)], {j, r}, {k, e}];
-	Table[
-		Sum[
-			Mod[
-				einv*Sum[
-					fin[[i, reprl[[j, l+1]]]]*PowerMod[s, -k*l, p]
-				, {l, 0, e-1}]
-			, p]*t^k
-		, {k, 0, e-1}]
-	, {i, 1, r}, {j, 1, r}]
+	(* t is a complex e-th root of unity *)
+	t = (-1)^(2/e);
+	(* s is an element which has order e in F_p *)
+	s = PowerMod[PrimitiveRoot[p], (p-1)/e, p];
+	(* we precompute some expressions that will be used a lot *)
+	reprl = Table[GroupConjugacyClassNum[g, repr[[j]]^k], {j, r}, {k, e}];
+	einv = PowerMod[e, -1, p];
+	(* we finally compute the character table, and then try to simplify the result for at most 10 seconds *)
+	FullSimplify[Table[
+		(* we can compute the character table elements with this large sum using the finite one *)
+		Sum[Mod[einv*Sum[fin[[i, reprl[[j, l]]]]*PowerMod[s, -k*l, p], {l, e}], p]*t^k, {k, e}]
+	, {i, r}, {j, r}], TimeConstraint -> 10]
 ]
 
 End[]
