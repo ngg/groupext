@@ -7,6 +7,9 @@ QuaternionGroup::usage = ""
 SubspaceIntersection::usage = ""
 GroupIdentity::usage = ""
 GroupElementOrder::usage = ""
+CyclesActionSet::usage = ""
+GroupActionSet::usage = ""
+GroupActionSetSort::usage = ""
 GroupExponent::usage = ""
 GroupConjugatesQ::usage = ""
 GroupConjugacyClassRepresentatives::usage = ""
@@ -38,8 +41,7 @@ GroupIdentity[g_?GroupQ] := Cycles[{}]
 General::notelement = "`1` is not element of `2`"
 
 (* only way to check if something is a group is with a list like this *)
-GroupQ[g_] := False
-GroupQ[g_] := True /; MemberQ[{
+GroupQ[g_] := MemberQ[{
 	PermutationGroup, GroupStabilizer, GroupSetwiseStabilizer, GroupCentralizer,
 	SymmetricGroup, AlternatingGroup, CyclicGroup, AbelianGroup,
 	DihedralGroup, MathieuGroupM11, MathieuGroupM12, MathieuGroupM22,
@@ -60,9 +62,7 @@ Off[General::shdw]
 GroupExt`GroupCentralizer[g_?GroupQ, x_Cycles] := If[GroupIdentity[g] == x, g, System`GroupCentralizer[g, x]]
 On[General::shdw]
 
-
 (* we extend some operators here to work with permutations and groups *)
-
 ClearAttributes[NonCommutativeMultiply, Protected]
 	(* multiplication of two permutations with ** operator (we can't use *, because Mathematica assumes * is commutative), example: Cycles[{{1,2}}]**Cycles[{{2,3}}] = Cycles[{{1,3,2}}] *)
 	NonCommutativeMultiply[x_Cycles, y_Cycles] := PermutationProduct[x, y]
@@ -84,6 +84,20 @@ SetAttributes[Power, Protected]
 
 (* for speed reasons, we don't check if a is in g or not *)
 GroupElementOrder[g_?GroupQ, a_Cycles] := PermutationOrder[a]
+
+(* it can sort a subset of the group's action set by a base *)  
+Options[GroupActionSetSort] = {GroupActionBase -> {}}
+GroupActionSetSort[actset_List, OptionsPattern[]] := Module[{base},
+	base = OptionValue[GroupActionBase];
+	Join[Sort[Intersection[actset, base], (Position[base, #1][[1,1]] < Position[base, #2][[1,1]])&], Sort[Complement[actset, base]]]
+] 
+
+(* it gives the set a groupelement acts on (listable) *)
+CyclesActionSet[a_Cycles, opts:OptionsPattern[GroupActionSetSort]] := GroupActionSetSort[Flatten[a[[1]]], opts]
+SetAttributes[CyclesActionSet, Listable]
+
+(* it gives the set the group acts on *)
+GroupActionSet[g_?GroupQ, opts:OptionsPattern[GroupActionSetSort]] := GroupActionSetSort[Apply[Union, CyclesActionSet[GroupGenerators[g]]], opts]
 
 (* breadth-first-search for an element that moves a to b *)
 GroupElementFromImage[g_?GroupQ, a_Integer, b_Integer] := Module[{lk = 1, list, c, x, i},
@@ -126,103 +140,79 @@ GroupIrredundantStabilizerChain[g_?GroupQ, opts:OptionsPattern[GroupStabilizerCh
 	ret
 ]
 
-(* TODO *)
-GroupElementFromBaseImages[sc_, base_, basen_, img_] := Module[{i, x, ret = Cycles[{}]},
+(* Sifting procedure to get an element from some base images *)
+GroupElementFromBaseImages[sc_, base_, img_, imgn_] := Module[{i, x, ret},
 	Catch[
+		(* we start with the identity *)
+		ret = Cycles[{}];
+		(* we iterate through given images *)
 		Do[
-			If[!NullQ[img[[i]]],
-				x = GroupElementFromImage[sc[[i,2]], base[[i]], img[[i]]^(ret^(-1))];
-				If[NullQ[x], Throw[Null]];
-				ret = x**ret
-			]
-		, {i, basen}];
+			(* we look for an element that stabilizes the first i-1 base elements but moves base[[i]] to img[[i]]^(ret^(-1)) (this way x**ret moves base[[i]] to img[[i]] *)
+			x = GroupElementFromImage[sc[[i,2]], base[[i]], img[[i]]^(ret^(-1))];
+			(* if there are no such elemet then we return Null *)
+			If[NullQ[x], Throw[Null]];
+			(* we continue with x**ret *)
+			ret = x**ret
+		, {i, imgn}];
+		(* if we are done with all the given images then ret is good *)
 		ret
 	]
 ]
 
-(* TODO *)
-GroupElementFromImages[g_?GroupQ, s_] := Module[{sc, wantedbase, base, basen, ret, i, x},
-	Catch[
-		wantedbase = Map[First, s];
-		sc = GroupIrredundantStabilizerChain[g, GroupActionBase -> wantedbase];
-		basen = Position[sc, PermutationGroup[{}]][[1, 1]] - 1;
-		base = sc[[basen + 1, 1]];
-		ret = GroupElementFromBaseImages[sc, base, basen, Map[(x = Position[wantedbase, #]; If [Length[x] == 0, Null, s[[x[[1,1]], 2]]])&, base]];
-		If[NullQ[ret], Throw[Null]];
-		Do[If[s[[i, 1]]^ret != s[[i, 2]], Throw[Null]], {i,1,Length[s]}];
-		ret
-	]
-]
+(* we use a backtrack method to check if a and b are conjugates *)
+GroupConjugatesQ[g_?GroupQ, a_Cycles, b_Cycles] := Module[{acycles, bcycles, sc, base, pos, p, borbitfirst}, Catch[
+	(* we sort the cycles of a and b by length *)
+	acycles = Sort[a[[1]], (Length[#1] > Length[#2]) &];
+	bcycles = Sort[b[[1]], (Length[#1] > Length[#2]) &];
+	(* if a and b has cycles of different length then they are not conjugates *)
+	If[Map[Length, acycles] != Map[Length, bcycles], Throw[False]];
+	(* we compute the stabilizer chain with a base in which elements of a's cycles  *)
+	sc = GroupIrredundantStabilizerChain[g, GroupActionBase -> Flatten[acycles]];
+	(* we compute its base *)
+	base = sc[[-1, 1]];
+	(* we compute positions of base elements in a, {x, y, z} means it's the y-th in the x-th cycle (which is z long); {0, 0, 1} means it's stabilized by a *)
+	pos = Map[(p = Position[a, #, {3}]; If[Length[p] == 0, {0, 0, 1}, {p[[1, 2]], p[[1, 3]], Length[a[[1, p[[1, 2]]]]]}])&, base];
+	(* we compute <b>'s orbits' first elements *)
+	borbitfirst = Union[Complement[GroupActionSet[g], Flatten[b[[1]]]], Map[First[GroupActionSetSort[#, GroupActionBase -> base]]&, b[[1]]]];
+	(* we call our backtrack function with initially no base images *)
+	GroupConjugatesQBT[a, b, sc, base, Length[base], {}, 0, pos, borbitfirst]
+]]
 
-(* TODO *)
-GroupConjugatesQBT[a_, b_, sc_, base_, cangoto_, follow_, img_] := Module[{e, imgn, newimg = img, basen, i, next},
-	Catch[
-		imgn = Length[newimg];
-		basen = Length[base];
-		While[imgn < basen && follow[[imgn+1]],
-			next = newimg[[imgn]]^b;
-			If [Position[newimg, next, 1] != {}, Throw[False]];
-			newimg = Append[newimg, next];
-			imgn = imgn + 1;
-		];
-		If[imgn == basen,
-			e = GroupElementFromBaseImages[sc, base, basen, newimg];
-			If[!NullQ[e] && a^e == b, True, False]
-		, (* else *)
-			Catch[
-				Do[
-					next = cangoto[[imgn+1, i]];
-					If [Position[newimg, next, 1] == {},
-						If[GroupConjugatesQBT[a, b, sc, base, cangoto, follow, Append[newimg, next]] == True, Throw[True]];
-					];
-				, {i, Length[cangoto[[imgn+1]]]}];
-				False
-			]
-		]
-	]
-]
-
-(* we have an inner version of GroupConjugatesQ that doesn't check if a,b are elements of g *)
-(* TODO *)
-GroupConjugatesQInner[g_, a_, b_] := Module[{as, bs, i, sc, basen, base, cangoto, follow, pos, bcyclelen, set, len},
-	Catch[
-		set = Union[Flatten[Map[#[[1]] &, GroupGenerators[g]]]];
-		as = Sort[a[[1]], (Length[#1] > Length[#2]) &];
-		bs = Sort[b[[1]], (Length[#1] > Length[#2]) &];
-		If[Map[Length, as] != Map[Length, bs], Throw[False]];
-
- 		sc = GroupIrredundantStabilizerChain[g, GroupActionBase -> Flatten[as]];
-		basen = Position[sc, PermutationGroup[{}]][[1, 1]] - 1;
-		sc = sc[[1 ;; basen + 1]];
-		base = sc[[basen + 1, 1]];
-		follow = Table[i > 1 && base[[i-1]]^a == base[[i]], {i, basen}];
-
-		bcyclelen = Table[pos = Position[bs, set[[i]]]; If[pos == {}, 1, Length[bs[[pos[[1, 1]]]]]], {i, Length[set]}];
-
-		cangoto = Table[
-			pos = Position[as, base[[i]]];
-			len = If[pos == {}, 1, Length[as[[pos[[1, 1]]]]]];
-			Select[GroupOrbits[g, {base[[i]]}][[1]], (bcyclelen[[#]] == len)&]
-		, {i, basen}];
-
-		GroupConjugatesQBT[a, b, sc, base, cangoto, follow, {}]
-	]
-]
-
-(* this is the public version, we check if a,b are elements of g and then call the inner version *)
-GroupConjugatesQ[g_?GroupQ, a_Cycles, b_Cycles] :=
-	If[!GroupElementQ[g, a],
-		Message[GroupConjugatesQ::notelement, a, g];
-		If[!GroupElementQ[g, b],
-			Message[GroupConjugatesQ::notelement, b, g];
-		];
+(* the backtrack function *)
+GroupConjugatesQBT[a_, b_, sc_, base_, basen_, img_, imgn_, pos_, borbitfirst_] := Module[{try, elem, l, p}, Catch[
+	(* elem is an element whose base images start with img *)
+	elem = GroupElementFromBaseImages[sc, base, img, imgn];
+	(* if we have all the images then we check if it's good *)
+	If[imgn == basen, Throw[a^elem == b]];
+	(* l is the next base element's number *)
+	l = imgn+1;
+	(* try will be the list of possible images for the next base element *)
+	(* if base[[l]] is in the same cycle in a as base[[imgn]] then we know the next image *)
+	If[imgn > 0 && pos[[l, 1]] > 0 && pos[[l, 1]] == pos[[imgn, 1]],
+		p = Position[b, img[[imgn]], {3}];
+		try = {b[[1, p[[1, 2]], Mod[pos[[l, 2]]-pos[[imgn, 2]]+p[[1, 3]]-1, pos[[l, 3]]]+1]]}
 	, (* else *)
-		If[!GroupElementQ[g, b],
-			Message[GroupConjugatesQ::notelement, b, g];
+		(* the elements whose images start with img are a coset of sc[[imgn+1, 2]] and elem is one of them, so these are the possible images for base[[imgn+1]] *)
+		try = (base[[l]]^sc[[l, 2]])^elem;
+		(* if base[[l]] is stabilized by a then img[[l]] must be stabilized by b *)
+		If[pos[[l, 1]] == 0,
+			try = Select[try, (Count[b, #, {3}] == 0)&]
 		, (* else *)
-			GroupConjugatesQInner[g, a, b]
-		]
-	]
+			(* otherwise cycle-length must be the same *)
+			try = Select[try, (p = Position[b, #, {3}]; Length[p] > 0 && Length[b[[1, p[[1, 2]]]]] == pos[[l, 3]])&]
+		];
+		(* if b stabilizer all images thus far (if borbitfirst != {}) then we only have to check <b>'s orbits' first element *)
+		If[Length[borbitfirst] > 0, try = Intersection[try, borbitfirst]];
+	];
+	(* we try every possible image for base[[l]] in sorted order *)
+	try = GroupActionSetSort[try, GroupActionBase -> base];
+	Do[
+		(* if it's good then we return True *)
+		If[GroupConjugatesQBT[a, b, sc, base, basen, Append[img, try[[i]]], l, pos, If[Count[b, try[[i]], {3}] == 0, borbitfirst, {}]], Throw[True]]
+	, {i, Length[try]}];
+	(* if we didn't return True then it's False *)
+	False
+]]
 
 (* We find conjugacy classes by testing random elements, each taken from the last element's centralizer *)
 GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentatives[g] = Module[{repr, n, sum, x, k, cent, centorder},
