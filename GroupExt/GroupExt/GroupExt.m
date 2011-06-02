@@ -204,8 +204,7 @@ GroupConjugatesQBT[a_, b_, sc_, base_, basen_, img_, imgn_, pos_, borbitfirst_] 
 		(* if b stabilizer all images thus far (if borbitfirst != {}) then we only have to check <b>'s orbits' first element *)
 		If[Length[borbitfirst] > 0, try = Intersection[try, borbitfirst]];
 	];
-	(* we try every possible image for base[[l]] in sorted order *)
-	try = GroupActionSetSort[try, GroupActionBase -> base];
+	(* we try every possible image for base[[l]] *)
 	Do[
 		(* if it's good then we return True *)
 		If[GroupConjugatesQBT[a, b, sc, base, basen, Append[img, try[[i]]], l, pos, If[Count[b, try[[i]], {3}] == 0, borbitfirst, {}]], Throw[True]]
@@ -228,7 +227,7 @@ GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentati
 	k = 1;
 	(* sum is the total number of elements in the known classes *)
 	sum = 1;
-	(* we are done when we find all elements, so we repeat until sum = n *)
+	(* we are done when we find all elements, so we repeat until sum == n *)
 	While[sum < n,
 		(* we take 3 random elements before actually testing it *)
 		Do[
