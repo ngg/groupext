@@ -47,7 +47,7 @@ Ha $\gamma_1$-ből $\gamma_2$-be megy egy él $h$ cimkével, az azt jelenti, hog
 Így ha akármelyik $\gamma$-ból végigmegyünk éleken $\beta_i$-ig és a cimkéket összeszorozzuk, akkor megkapjuk hogy melyik
 permutáció viszi $\gamma$-t $\beta_i$-be. Így $T_i$ meghatározza a $G^{[i+1]}$ részcsoport mellékosztályainak 
 reprezentáns elemeinek az inverzét $G^{[i]}$-ben. Azért az inverzekkel csináltuk, mert a lentebb leírt, úgynevezett szitáló eljáráshoz az inverzekre lesz szükségünk.
-A gyakorlatban $S$ felírása után (ehhez $O(|S||\Omega|)$ memória szükséges) $T_i$-t el tudjuk tárolni egy $|\Omega|$-hosszú $V_i$ tömbben.
+A gyakorlatban $S$ felírása után (ehhez $\mathcal{O}(|S||\Omega|)$ memória szükséges) $T_i$-t el tudjuk tárolni egy $|\Omega|$-hosszú $V_i$ tömbben.
 $\gamma \in \Omega$-ra $V_i[\gamma]$-t akkor és csak akkor definiáljuk, ha $\gamma \in \beta_i^{G^{[i]}}$,
 és ilyenkor $V_i[\gamma]$ azt tartalmazza, hogy $S$ hányadik eleme van a $\gamma$-ból kiinduló egyetlen él cimkéjén.
 Emiatt a tárolási mód miatt Sims eredetileg Schreier-vektoroknak hívta az adatszerkezetet, és ennek használatával $S$ és az összes transzverzális összesen $\Theta((|S|+m)|\Omega|)$ memóriában eltárolható.
@@ -135,8 +135,8 @@ $l = m$ esetén $B$-hez vegyünk hozzá egy olyan $\Omega$-beli elemet, amit a m
 Ezután az algoritmus az $l+1$. szinten folytatódik.
 
 Az algoritmus mindenképpen véges, hiszen $\Omega$ véges, így csak véges sokszor tudtuk $B$-t növelni.
-Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $O(|\Omega|^2 \log^3|G| + |T||\Omega|^2 \log|G|)$ a futásidő, és $O(|\Omega|^2 \log|G| + |T||\Omega|)$ a memóriaigény.
-Ha Schreier-fákkal számoltunk, akkor $O(|\Omega|^3 \log^3|G| + |T||\Omega|^3 \log|G|)$ a futásidő, és $O(|\Omega| \log^2|G| + |T||\Omega|)$ a memóriaigény.
+Ha a transzverzálisok számolásakor explicit leírunk minden elemet, akkor $\mathcal{O}(|\Omega|^2 \log^3|G| + |T||\Omega|^2 \log|G|)$ a futásidő, és $\mathcal{O}(|\Omega|^2 \log|G| + |T||\Omega|)$ a memóriaigény.
+Ha Schreier-fákkal számoltunk, akkor $\mathcal{O}(|\Omega|^3 \log^3|G| + |T||\Omega|^3 \log|G|)$ a futásidő, és $\mathcal{O}(|\Omega| \log^2|G| + |T||\Omega|)$ a memóriaigény.
 Ezeknek a bizonyítása megtalálható \cite{Ser03}-ban, valamint \cite{Mur03}-ban olvashatjuk az algoritmusnak rengeteg változatát részletesen elemezve, hogy mikor melyik a legalkalmasabb.
 
 Sokszor elő fog fordulni, hogy az erős generátorrendszert nem akármilyen bázishoz szeretnénk megkapni.

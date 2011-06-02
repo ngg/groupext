@@ -143,18 +143,18 @@ Mivel $\chi^i_j$ $d_i$ darab $\zeta$-hatvány összege, ezért léteznek olyan $
 Jelöljük $j(l)$-lel annak a konjugáltosztálynak a számát, amiben $g_j^l$ van. Az előző egyenletből $\chi^i_{j(l)}$-t is ki tudjuk fejezni, mégpedig:
 \begin{equation}
 \label{eq:bdsmijk2}
-\chi^i_{j(l)} = \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{k'l}
+\chi^i_{j(l)} = \sum_{k^*=0}^{e-1} m_{ijk^*}\zeta^{k^*l}
 \end{equation}
 Ha a következő összeget tekintjük, majd ezt belehelyettesítjük:
 \begin{equation*}
 \label{eq:bdsmijk3a}
 \frac{1}{e}\sum_{l=0}^{e-1} \chi^i_{j(l)} \zeta^{-kl} =
-\frac{1}{e}\sum_{l=0}^{e-1} \sum_{k'=0}^{e-1} m_{ijk'}\zeta^{(k'-k)l} =
-\frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} \sum_{l=0}^{e-1} \zeta^{(k'-k)l} =
+\frac{1}{e}\sum_{l=0}^{e-1} \sum_{k^*=0}^{e-1} m_{ijk^*}\zeta^{(k^*-k)l} =
+\frac{1}{e}\sum_{k^*=0}^{e-1} m_{ijk^*} \sum_{l=0}^{e-1} \zeta^{(k^*-k)l} =
 \end{equation*}
 \begin{equation}
 \label{eq:bdsmijk3b}
-= \frac{1}{e}\sum_{k'=0}^{e-1} m_{ijk'} e \delta_{kk'} = m_{ijk}
+= \frac{1}{e}\sum_{k^*=0}^{e-1} m_{ijk^*} e \delta_{kk^*} = m_{ijk}
 \end{equation}
 $\Theta$-t ráalkalmazzuk az egyenletre:
 \begin{equation}
@@ -234,4 +234,5 @@ Lehet bizonyos esetekben gyorsabb módszert találni $\chi^i_j$-k kiszámolásá
 Miután $d_i$-t már kiszámoltuk és látjuk, hogy $d_i$ elég kicsi, akkor a leírt módszernél gyorsabb lehet minden lehetséges $d_i$ darab $\zeta$-hatvány összegére ellenőrizni,
 hogy melyikekre alkalmazva $\Theta$-t kapjuk a már kiszámolt $\Theta(\chi^i_j)$-t.
 Ha csak egy lehetséges összeg van, akkor megkaptuk $\chi^i_j$-t.
-Ez $e^{d_i}$ féle összeg ellenőrzését jelenti, míg a leírt módszer az összes $\chi^i_j$-t $O(e^4)$ időben kiszámolja, ezért tényleg csak kis $d_i$-kre érheti meg ez.
+Ez $e^{d_i}$ féle összeg ellenőrzését jelenti, míg a leírt módszer az összes $\chi^i_j$-t $\mathcal{O}(e^4)$ időben kiszámolja, ezért tényleg csak kis $d_i$-kre érheti meg ez.
+Ugyanitt másik gyorsítási lehetőség, hogy ha $\chi^i$-t egy konjugáltosztályra kiszámoltuk, akkor az inverz konjugáltosztályon felvett értékét is rögtön tudjuk, hiszen $\chi^i_{j'}=\overline{\chi^i_j}$.

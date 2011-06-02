@@ -43,7 +43,7 @@ Legyen $G=\langle S\rangle$. $\alpha^G$ az a legszűkebb részhalmaza $\Omega$-n
 Vegyük azt az irányított gráfot, aminek csúcsai $\Omega$ elemei és $\beta$-ból $\gamma$-ba akkor megy él, ha van olyan $S$-beli elem, ami $\beta$-t $\gamma$-ba viszi.
 Ebben a gráfban kell megkeresnünk az $\alpha$-t tartalmazó összefüggő komponenst.
 Mivel $G$ véges rendű, így $\beta^g=\gamma$ esetén létezik $l$, amire $\gamma^{g^l}=\beta$, vagyis az összefüggő komponensek erősen osszefüggők.
-A komponenst meg tudjuk találni szélességi kereséssel $O(|S| |\alpha^G|)$ idő alatt, $O(|\alpha^G|)$ memória használatával.
+A komponenst meg tudjuk találni szélességi kereséssel $\mathcal{O}(|S| |\alpha^G|)$ idő alatt, $\mathcal{O}(|\alpha^G|)$ memória használatával.
 
 Most nézzünk egy általánosabb verziót.
 Legyen adott $\Omega$-n egy algebrai struktúra, és tegyük fel, hogy $G$ hatása olyan, hogy az minden $*$ $\Omega$-beli műveletre nézve disztribuív,
@@ -60,7 +60,7 @@ Feltesszük, hogy tudjuk ellenőrizni, hogy $\Omega$ egy eleme benne van-e pár 
 Az algoritmus az előzőnek egy egyszerű változtatásával kapható, egyrészt az elején a szélességi bejárást $A$ minden eleméből egyszerre kell indítani,
 másrészt ha egy új csúcshoz érünk, akkor csak akkor kell felírnunk a generátorelemek listájába, ha az addigiak által generált struktúrában nincs benne.
 Érdemes itt megjegyeznünk, hogy ha $\Omega$-n legalább egy csoportstruktúra van, akkor minden új generátorelem a csoport elemszámát legalább megduplázza,
-vagyis legfeljebb $O(\log|\langle A^G\rangle |)$ generátorelemet írunk fel. A számítási idő nagyrésze jellemzően arra a számolásra megy el, amikor egy elemről
+vagyis legfeljebb $\mathcal{O}(\log|\langle A^G\rangle |)$ generátorelemet írunk fel. A számítási idő nagyrésze jellemzően arra a számolásra megy el, amikor egy elemről
 megpróbáljuk eldönteni, hogy benne van-e a már felírt elemek által generált struktúrában. Vannak olyan randomizált algoritmusok is erre a célra, amikhez nem szükséges feltennünk,
 hogy ezt el tudjuk dönteni, ezekről \cite{Ser03}-ban olvashatunk.
 
