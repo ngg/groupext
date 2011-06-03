@@ -3,42 +3,28 @@ BeginPackage["GroupExt`"]
 (* list of public functions with usages *)
 NullQ::usage = "NullQ[expr] gives True if expr is Null, and False otherwise."
 GroupQ::usage = "GroupQ[expr] gives True if expr is a group, and False otherwise."
-QuaternionGroup::usage = ""
-SubspaceIntersection::usage = ""
-GroupIdentity::usage = ""
-GroupElementOrder::usage = ""
-CyclesActionSet::usage = ""
-GroupActionSet::usage = ""
-GroupActionSetSort::usage = ""
-GroupExponent::usage = ""
-GroupConjugatesQ::usage = ""
-GroupConjugacyClassRepresentatives::usage = ""
-GroupNumOfConjugacyClasses::usage = ""
-GroupConjugacyClassSizes::usage = ""
-GroupConjugacyClassSize::usage = ""
-GroupConjugacyClassRepresentative::usage = ""
-GroupConjugacyClassInverses::usage = ""
-GroupConjugacyClassNum::usage = ""
-GroupConjugacyClass::usage = ""
-GroupConjugacyClassOf::usage = ""
-GroupCharacterTable::usage = ""
-GroupCharacterTableFinite::usage = ""
-GroupCharacterTableDixonPrime::usage = ""
-GroupCharacterScalarProduct::usage = ""
-GroupElementFromImage::usage = ""
-GroupElementFromImages::usage = ""
-GroupIrredundantStabilizerChain::usage = ""
+GroupActionSetSort::usage = "GroupActionSetSort[actset] sorts the elements of actset into an order in which elements of option GroupActionBase are the first ones and then other elements follow."
+CyclesActionSet::usage = "CyclesActionSet[elem] gives the action set of a group element."
+GroupActionSet::usage = "GroupActionSet[group] gives the action set of a group."
+GroupExponent::usage = "GroupExponent[group] gives the exponent of the group."
+GroupElementFromImage::usage = "GroupElementFromImage[group, a, b] gives an element of the group which moves a to b, or Null if there is no such element."
+GroupIrredundantStabilizerChain::usage = "GroupIrredundantStabilizerChain[group] gives a stabilizer chain of the group according to the option GroupActionBase, but skips redundant base elements."
+GroupConjugatesQ::usage = "GroupConjugatesQ[group, elem1, elem2] gives True if elem1 and elem2 are conjugates in the group, and False otherwise."
+GroupConjugacyClassRepresentatives::usage = "GroupConjugacyClassRepresentatives[group] gives a list of group elements which represent the conjugacy classes."
+GroupNumOfConjugacyClasses::usage = "GroupNumOfConjugacyClasses[group] gives the number of conjugacy classes in the group."
+GroupConjugacyClassSizes::usage = "GroupConjugacyClassSizes[group] gives the list of sizes of the conjugacy classes (in the same order as GroupConjugacyClassRepresentatives[group] gives the elements."
+GroupConjugacyClassInverses::usage = "GroupConjugacyClassInverses[group] gives the list whose k-th element is the index of the conjugacy class in which the inverses of the elements of the k-th conjugacy class are."
+GroupConjugacyClassNum::usage = "GroupConjugacyClassNum[group, elem] gives the index of the conjugacy class of elem in group."
+GroupConjugacyClass::usage = "GroupConjugacyClass[group, elem] gives the full list of elements in the conjugacy class of elem in group."
+GroupCharacterScalarProduct::usage = "GroupCharacterScalarProduct[group, chi, psi] gives the scalar product of two characters (chi and psi) of the group given by a list of values in the conjugacy classes."
+GroupCharacterTableDixonPrime::usage = "GroupCharacterTableDixonPrime[group] gives the smallest prime number (p) such that GF[p] can be used to represent all the complex characters in."
+GroupCharacterTableOverFiniteField::usage = "GroupCharacterTableOverFiniteField[group] gives the character table of the group over GF[p] where p is given by GroupCharacterTableDixonPrime[group]."
+GroupCharacterTable::usage = "GroupCharacterTable[group] gives the character table of the group."
 
 Begin["GroupExt`Private`"]
 
 (* there is no proper way to determine if something is null *)
 NullQ[x_] := ToString[x] == "Null" && !StringQ[x]
-
-(* we only deal with permutation groups so identity element is always an empty cycle *)
-GroupIdentity[g_?GroupQ] := Cycles[{}]
-
-(* we declare our error messages here *)
-General::notelement = "`1` is not element of `2`"
 
 (* only way to check if something is a group is with a list like this *)
 GroupQ[g_] := MemberQ[{
@@ -53,13 +39,9 @@ GroupQ[g_] := MemberQ[{
 	ThompsonGroupTh, LyonsGroupLy, BabyMonsterGroupB, MonsterGroupM
 }, Head[g]]
 
-(* we declare the quaternion group *)
-QuaternionGroup[] := PermutationGroup[{Cycles[{{1, 3, 2, 4}, {5, 8, 6, 7}}], Cycles[{{1, 5, 2, 6}, {3, 7, 4, 8}}]}]
-GroupQ[g_QuaternionGroup] := True
-
 (* in Mathematica 8.0.0 there is a bug that crashes GroupCentralizer[] if called with the identity element (fixed in 8.0.1) *)
 Off[General::shdw]
-GroupExt`GroupCentralizer[g_?GroupQ, x_Cycles] := If[GroupIdentity[g] == x, g, System`GroupCentralizer[g, x]]
+GroupExt`GroupCentralizer[g_?GroupQ, x_Cycles] := If[Cycles[{}] == x, g, System`GroupCentralizer[g, x]]
 On[General::shdw]
 
 (* we extend some operators here to work with permutations and groups *)
@@ -82,9 +64,6 @@ ClearAttributes[Power, Protected]
 	Power[x_Cycles, y_Cycles] := y^(-1)**x**y
 SetAttributes[Power, Protected]
 
-(* for speed reasons, we don't check if a is in g or not *)
-GroupElementOrder[g_?GroupQ, a_Cycles] := PermutationOrder[a]
-
 (* it can sort a subset of the group's action set by a base *)  
 Options[GroupActionSetSort] = {GroupActionBase -> {}}
 GroupActionSetSort[actset_List, OptionsPattern[]] := Module[{base},
@@ -99,14 +78,17 @@ SetAttributes[CyclesActionSet, Listable]
 (* it gives the set the group acts on *)
 GroupActionSet[g_?GroupQ, opts:OptionsPattern[GroupActionSetSort]] := GroupActionSetSort[Apply[Union, CyclesActionSet[GroupGenerators[g]]], opts]
 
+(* exponent is the least common multiplier of orders of the class representatives *)
+GroupExponent[g_?GroupQ] := GroupExponent[g] = Apply[LCM, Map[PermutationOrder, GroupConjugacyClassRepresentatives[g]]]
+
 (* breadth-first-search for an element that moves a to b *)
 GroupElementFromImage[g_?GroupQ, a_Integer, b_Integer] := Module[{lk = 1, list, c, x, i},
 	Catch[
 		(* if a == b then the identity is good *)
-		If[a == b, Throw[GroupIdentity[g]]];
+		If[a == b, Throw[Cycles[{}]]];
 		s = GroupGenerators[g];
 		(* we start bfs from the identity which moves a to a *)
-		list = {GroupIdentity[g] -> a};
+		list = {Cycles[{}] -> a};
 		lk = 1;
 		(* while we have new elements where we can move a to *)
 		While[lk <= Length[list],
@@ -140,7 +122,7 @@ GroupIrredundantStabilizerChain[g_?GroupQ, opts:OptionsPattern[GroupStabilizerCh
 	ret
 ]
 
-(* Sifting procedure to get an element from some base images *)
+(* private function: Sifting procedure to get an element from some base images *)
 GroupElementFromBaseImages[sc_, base_, img_, imgn_] := Module[{i, x, ret},
 	Catch[
 		(* we start with the identity *)
@@ -178,7 +160,7 @@ GroupConjugatesQ[g_?GroupQ, a_Cycles, b_Cycles] := Module[{acycles, bcycles, sc,
 	GroupConjugatesQBT[a, b, sc, base, Length[base], {}, 0, pos, borbitfirst]
 ]]
 
-(* the backtrack function *)
+(* private function: the backtrack function *)
 GroupConjugatesQBT[a_, b_, sc_, base_, basen_, img_, imgn_, pos_, borbitfirst_] := Module[{try, elem, l, p}, Catch[
 	(* elem is an element whose base images start with img *)
 	elem = GroupElementFromBaseImages[sc, base, img, imgn];
@@ -218,7 +200,7 @@ GroupConjugacyClassRepresentatives[g_?GroupQ] := GroupConjugacyClassRepresentati
 	n = GroupOrder[g];
 	(* at the beginning we only know the identity as a group representative *)
 	(* at each step, we have a group element (x), calculate its centralizer (cent) and its order (centorder) *) 
-	x = GroupIdentity[g];
+	x = Cycles[{}];
 	cent = g;
 	centorder = n;
 	(* we will store the representatives in repr *)
@@ -257,13 +239,8 @@ GroupConjugacyClassSizes[g_?GroupQ] := GroupConjugacyClassSizes[g] = Module[{n},
 	Map[(n/GroupOrder[GroupCentralizer[g, #]])&, GroupConjugacyClassRepresentatives[g]]
 ]
 
-(* size of a's conjugacy class = |G : C_G(a)| *)
-GroupConjugacyClassSize[g_?GroupQ, a_Cycles] :=
-	If[!GroupElementQ[g, a],
-		Message[GroupConjugacyClassSize::notelement, a, g];
-	, (* else *)
-		GroupOrder[g]/GroupOrder[GroupCentralizer[g, a]]
-	]
+(* we compute indices of the conjugacy classes' inverses *)
+GroupConjugacyClassInverses[g_?GroupQ] := GroupConjugacyClassInverses[g] = Map[GroupConjugacyClassNum[g, #^(-1)]&, GroupConjugacyClassRepresentatives[g]]
 
 (* we determine number of the conjugacy class of a specific element by computing representatives and then try if they are conjugates *)
 GroupConjugacyClassNum[g_?GroupQ, a_Cycles] := Module[{repr},
@@ -276,7 +253,7 @@ GroupConjugacyClassNum[g_?GroupQ, a_Cycles] := Module[{repr},
 			If[GroupConjugatesQ[g, a, repr[[i]]], Throw[i]]
 		, {i, Length[repr]}];
 		(* if we didn't found it then a is not in g *)
-		Message[GroupConjugacyClassNum::notelement, a, g]
+		Null
 	]
 ]
 
@@ -301,19 +278,7 @@ GroupConjugacyClass[g_?GroupQ, k_Integer] := GroupConjugacyClass[g, k] = Module[
 	list
 ]
 
-(* this function is self-explanatory *)
-GroupConjugacyClassOf[g_?GroupQ, a_Cycles] := GroupConjugacyClass[g, GroupConjugacyClassNum[g, a]]
-
-(* we determine number of class with previous function and return its representative element *)
-GroupConjugacyClassRepresentative[g_?GroupQ, a_Cycles] := GroupConjugacyClassRepresentatives[g][[GroupConjugacyClassNum[g, a]]]
-
-(* we compute indices of the conjugacy classes' inverses *)
-GroupConjugacyClassInverses[g_?GroupQ] := GroupConjugacyClassInverses[g] = Map[GroupConjugacyClassNum[g, #^(-1)]&, GroupConjugacyClassRepresentatives[g]]
-
-(* exponent is the least common multiplier of orders of the class representatives *)
-GroupExponent[g_?GroupQ] := GroupExponent[g] = Apply[LCM, Map[GroupElementOrder[g, #]&, GroupConjugacyClassRepresentatives[g]]]
-
-(* MT_i(k, j) = $|\{(a,b) \in G_1 \times G_2 \mid a \in C_i, b \in C_j, a*b=g_k\}|$  *)
+(* private function: MT_i(k, j) = $|\{(a,b) \in G_1 \times G_2 \mid a \in C_i, b \in C_j, a*b=g_k\}|$  *)
 GroupMTTableRow[g_, i_, k_] := GroupMTTableRow[g, i, k] = Module[{repr, inv, ret, iclass, j, l},
 	(* we calculate the representatives and inverses *)
 	repr = GroupConjugacyClassRepresentatives[g];
@@ -357,7 +322,7 @@ GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = M
 	p
 ]
 
-(* we try to split V into direct sum of smaller subspaces based on GroupMTTable[g, i] *)
+(* private function: we try to split V into direct sum of smaller subspaces based on GroupMTTable[g, i] *)
 GroupCharacterTableSplit[g_, i_, V_] := Module[{r, p, x, Mp, bp, id, j, s, iinv, A, c, im, eigenvalues, lin},
 	s = Length[V];
 	(* if V is 1-dimensional, we cannot split it *)
@@ -394,7 +359,7 @@ GroupCharacterTableSplit[g_, i_, V_] := Module[{r, p, x, Mp, bp, id, j, s, iinv,
 ]
 
 (* we determine the character table over F_p by figuring out the common eigenvectors of the MT matrices *)
-GroupCharacterTableFinite[g_?GroupQ] := GroupCharacterTableFinite[g] = Module[{subspaces, r, i, p},
+GroupCharacterTableOverFiniteField[g_?GroupQ] := GroupCharacterTableOverFiniteField[g] = Module[{subspaces, r, i, p},
 	r = GroupNumOfConjugacyClasses[g];
 	p = GroupCharacterTableDixonPrime[g];
 	(* initially we have the whole vectorspace as the single subspace *)
@@ -419,7 +384,7 @@ GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p
 	repr = GroupConjugacyClassRepresentatives[g];
 	inv = GroupConjugacyClassInverses[g];
 	(* we compute the finite version first *)
-	fin = GroupCharacterTableFinite[g];
+	fin = GroupCharacterTableOverFiniteField[g];
 	(* we can skip computation of those columns whose inverses' column is already computed, because we can conjugate those *)
 	skip = Table[inv[[i]] < i, {i, r}];
 	(* t is a complex e-th root of unity *)
