@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      9681,        408]
-NotebookOptionsPosition[      5683,        267]
-NotebookOutlinePosition[      6311,        291]
-CellTagsIndexPosition[      6233,        286]
+NotebookDataLength[     11029,        463]
+NotebookOptionsPosition[      6574,        304]
+NotebookOutlinePosition[      7202,        328]
+CellTagsIndexPosition[      7124,        323]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -192,6 +192,8 @@ Cell["XXXX", "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  InterpretationBox[GridBox[{
     {
@@ -204,6 +206,41 @@ Cell[BoxData[
    }],
   $Line = 0; Null]], "PrimaryExamplesSection",
  CellID->880084151],
+
+Cell["Test whether Null is Null:", "ExampleText",
+ CellChangeTimes->{{3.5161059525894003`*^9, 3.5161059675944*^9}},
+ CellID->143759784],
+
+Cell[CellGroupData[{
+
+Cell["NullQ[Null]", "Input",
+ CellChangeTimes->{{3.5161059686844*^9, 3.5161059711443996`*^9}},
+ CellLabel->"In[9]:=",
+ CellID->36369529],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{3.5161059719354*^9},
+ CellLabel->"Out[9]=",
+ CellID->21823877]
+}, Open  ]],
+
+Cell["Test whether \"Null\" is Null:", "ExampleText",
+ CellChangeTimes->{{3.5161059802324*^9, 3.5161059876164*^9}},
+ CellID->93323570],
+
+Cell[CellGroupData[{
+
+Cell["NullQ[\"Null\"]", "Input",
+ CellChangeTimes->{{3.5161059884404*^9, 3.5161059916454*^9}},
+ CellLabel->"In[10]:=",
+ CellID->23093586],
+
+Cell[BoxData["False"], "Output",
+ CellChangeTimes->{3.5161059920934*^9},
+ CellLabel->"Out[10]=",
+ CellID->314286843]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -278,14 +315,14 @@ StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb",
 (*CellTagsOutline
 CellTagsIndex->{
  "ExtendedExamples"->{
-  Cell[4163, 209, 100, 2, 53, "ExtendedExamplesSection",
+  Cell[5054, 246, 100, 2, 53, "ExtendedExamplesSection",
    CellTags->"ExtendedExamples",
    CellID->1854448968]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"ExtendedExamples", 6095, 279}
+ {"ExtendedExamples", 6986, 316}
  }
 *)
 (*NotebookFileOutline
@@ -381,33 +418,51 @@ Cell[3661, 187, 57, 1, 30, "MoreAboutSection",
 Cell[3721, 190, 46, 1, 16, "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
-Cell[3782, 194, 356, 11, 68, "PrimaryExamplesSection",
- CellID->880084151],
 Cell[CellGroupData[{
-Cell[4163, 209, 100, 2, 53, "ExtendedExamplesSection",
+Cell[3804, 196, 356, 11, 68, "PrimaryExamplesSection",
+ CellID->880084151],
+Cell[4163, 209, 135, 2, 20, "ExampleText",
+ CellID->143759784],
+Cell[CellGroupData[{
+Cell[4323, 215, 136, 3, 27, "Input",
+ CellID->36369529],
+Cell[4462, 220, 113, 3, 25, "Output",
+ CellID->21823877]
+}, Open  ]],
+Cell[4590, 226, 134, 2, 20, "ExampleText",
+ CellID->93323570],
+Cell[CellGroupData[{
+Cell[4749, 232, 137, 3, 27, "Input",
+ CellID->23093586],
+Cell[4889, 237, 116, 3, 25, "Output",
+ CellID->314286843]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5054, 246, 100, 2, 53, "ExtendedExamplesSection",
  CellTags->"ExtendedExamples",
  CellID->1854448968],
-Cell[4266, 213, 125, 3, 30, "ExampleSection",
+Cell[5157, 250, 125, 3, 30, "ExampleSection",
  CellID->1293636265],
-Cell[4394, 218, 148, 3, 18, "ExampleSection",
+Cell[5285, 255, 148, 3, 18, "ExampleSection",
  CellID->1020263627],
 Cell[CellGroupData[{
-Cell[4567, 225, 127, 3, 18, "ExampleSection",
+Cell[5458, 262, 127, 3, 18, "ExampleSection",
  CellID->2061341341],
-Cell[4697, 230, 130, 3, 70, "ExampleSubsection",
+Cell[5588, 267, 130, 3, 70, "ExampleSubsection",
  CellID->1757724783],
-Cell[4830, 235, 130, 3, 70, "ExampleSubsection",
+Cell[5721, 272, 130, 3, 70, "ExampleSubsection",
  CellID->1295379749]
 }, Closed]],
-Cell[4975, 241, 131, 3, 18, "ExampleSection",
+Cell[5866, 278, 131, 3, 18, "ExampleSection",
  CellID->258228157],
-Cell[5109, 246, 142, 3, 18, "ExampleSection",
+Cell[6000, 283, 142, 3, 18, "ExampleSection",
  CellID->2123667759],
-Cell[5254, 251, 135, 3, 18, "ExampleSection",
+Cell[6145, 288, 135, 3, 18, "ExampleSection",
  CellID->1305812373],
-Cell[5392, 256, 140, 3, 18, "ExampleSection",
+Cell[6283, 293, 140, 3, 18, "ExampleSection",
  CellID->1653164318],
-Cell[5535, 261, 132, 3, 18, "ExampleSection",
+Cell[6426, 298, 132, 3, 18, "ExampleSection",
  CellID->589267740]
 }, Open  ]]
 }
@@ -415,4 +470,3 @@ Cell[5535, 261, 132, 3, 18, "ExampleSection",
 *)
 
 (* End of internal cache information *)
-

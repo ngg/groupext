@@ -6,6 +6,7 @@ Paclet[
     Name -> "GroupExt",
     Version -> "1.0.0",
     MathematicaVersion -> "8+",
+    Description -> "Group Theory Extensions for Mathematica 8",
     Creator -> "Gergely Nagy",
     Extensions -> 
         {
