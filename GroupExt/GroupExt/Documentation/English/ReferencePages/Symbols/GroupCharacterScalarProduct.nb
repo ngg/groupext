@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     10156,        417]
-NotebookOptionsPosition[      6241,        280]
-NotebookOutlinePosition[      6869,        304]
-CellTagsIndexPosition[      6791,        299]
+NotebookDataLength[     13530,        537]
+NotebookOptionsPosition[      8937,        374]
+NotebookOutlinePosition[      9569,        398]
+CellTagsIndexPosition[      9491,        393]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -212,6 +212,8 @@ Cell["XXXX", "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  InterpretationBox[GridBox[{
     {
@@ -224,6 +226,98 @@ Cell[BoxData[
    }],
   $Line = 0; Null]], "PrimaryExamplesSection",
  CellID->880084151],
+
+Cell["\<\
+We can compute scalar product of two characters:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.516172762701172*^9, 3.516172773498047*^9}},
+ CellID->34738356],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupCharacterScalarProduct[AlternatingGroup[4], {1, 1, 1, 1}, {4, 0, 0, 0}]\
+\>", "Input",
+ CellChangeTimes->{{3.5161727752871094`*^9, 3.516172833616211*^9}},
+ CellLabel->"In[60]:=",
+ CellID->286989733],
+
+Cell[BoxData[
+ FractionBox["1", "3"]], "Output",
+ CellChangeTimes->{{3.5161728002617188`*^9, 3.5161728339365234`*^9}},
+ CellLabel->"Out[60]=",
+ CellID->64970782]
+}, Open  ]],
+
+Cell["\<\
+Irreducible characters form an ortonormal base in the space of characters:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.5161723922509766`*^9, 3.516172428524414*^9}, {
+  3.5161724712246094`*^9, 3.516172471232422*^9}, {3.5161725655751953`*^9, 
+  3.5161725868808594`*^9}},
+ CellID->455527180],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+g = AlternatingGroup[4]; tbl = GroupCharacterTable[g];
+MatrixForm[FullSimplify[Table[
+GroupCharacterScalarProduct[g, tbl[[i]], tbl[[j]]],
+{i, Length[tbl]}, {j, Length[tbl]}]]]\
+\>", "Input",
+ CellChangeTimes->{{3.5161725902685547`*^9, 3.5161725993203125`*^9}, {
+  3.516172644774414*^9, 3.516172650296875*^9}, {3.516172732080078*^9, 
+  3.5161727337470703`*^9}},
+ CellLabel->"In[54]:=",
+ CellID->909150478],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"1", "0", "0", "0"},
+     {"0", "1", "0", "0"},
+     {"0", "0", "1", "0"},
+     {"0", "0", "0", "1"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.5161727355185547`*^9},
+ CellLabel->"Out[55]//MatrixForm=",
+ CellID->333694489]
+}, Open  ]],
+
+Cell["\<\
+We can compute it over a finite field:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.516172903908203*^9, 3.5161729247509766`*^9}},
+ CellID->122998631],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupCharacterScalarProduct[AlternatingGroup[4], {1, 1, 1, 1},
+{4, 0, 0, 0}, Modulus -> 7]\
+\>", "Input",
+ CellChangeTimes->{{3.516172925095703*^9, 3.5161729327910156`*^9}},
+ CellLabel->"In[62]:=",
+ CellID->16715117],
+
+Cell[BoxData["5"], "Output",
+ CellChangeTimes->{{3.5161729292626953`*^9, 3.5161729350410156`*^9}},
+ CellLabel->"Out[62]=",
+ CellID->763324406]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -279,9 +373,9 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{700, 730},
-WindowMargins->{{4, Automatic}, {Automatic, 0}},
+WindowMargins->{{Automatic, 146}, {Automatic, 138}},
 CellContext->"Global`",
-FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (November 7, 2010)",
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (November 7, 2010)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb", 
   CharacterEncoding -> "WindowsEastEurope"]
 ]
@@ -291,14 +385,14 @@ StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb",
 (*CellTagsOutline
 CellTagsIndex->{
  "ExtendedExamples"->{
-  Cell[4893, 229, 100, 2, 53, "ExtendedExamplesSection",
+  Cell[7589, 323, 100, 2, 53, "ExtendedExamplesSection",
    CellTags->"ExtendedExamples",
    CellID->1854448968]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"ExtendedExamples", 6653, 292}
+ {"ExtendedExamples", 9353, 386}
  }
 *)
 (*NotebookFileOutline
@@ -394,29 +488,55 @@ Cell[4391, 207, 57, 1, 30, "MoreAboutSection",
 Cell[4451, 210, 46, 1, 16, "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
-Cell[4512, 214, 356, 11, 68, "PrimaryExamplesSection",
- CellID->880084151],
 Cell[CellGroupData[{
-Cell[4893, 229, 100, 2, 53, "ExtendedExamplesSection",
+Cell[4534, 216, 356, 11, 68, "PrimaryExamplesSection",
+ CellID->880084151],
+Cell[4893, 229, 164, 4, 20, "ExampleText",
+ CellID->34738356],
+Cell[CellGroupData[{
+Cell[5082, 237, 213, 5, 27, "Input",
+ CellID->286989733],
+Cell[5298, 244, 161, 4, 42, "Output",
+ CellID->64970782]
+}, Open  ]],
+Cell[5474, 251, 297, 6, 20, "ExampleText",
+ CellID->455527180],
+Cell[CellGroupData[{
+Cell[5796, 261, 414, 10, 78, "Input",
+ CellID->909150478],
+Cell[6213, 273, 759, 22, 67, "Output",
+ CellID->333694489]
+}, Open  ]],
+Cell[6987, 298, 157, 4, 20, "ExampleText",
+ CellID->122998631],
+Cell[CellGroupData[{
+Cell[7169, 306, 226, 6, 44, "Input",
+ CellID->16715117],
+Cell[7398, 314, 142, 3, 25, "Output",
+ CellID->763324406]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7589, 323, 100, 2, 53, "ExtendedExamplesSection",
  CellTags->"ExtendedExamples",
  CellID->1854448968],
-Cell[4996, 233, 125, 3, 30, "ExampleSection",
+Cell[7692, 327, 125, 3, 30, "ExampleSection",
  CellID->1293636265],
-Cell[5124, 238, 148, 3, 18, "ExampleSection",
+Cell[7820, 332, 148, 3, 18, "ExampleSection",
  CellID->1020263627],
 Cell[CellGroupData[{
-Cell[5297, 245, 106, 2, 18, "ExampleSection"],
-Cell[5406, 249, 112, 2, 70, "ExampleSubsection"]
+Cell[7993, 339, 106, 2, 18, "ExampleSection"],
+Cell[8102, 343, 112, 2, 70, "ExampleSubsection"]
 }, Closed]],
-Cell[5533, 254, 131, 3, 18, "ExampleSection",
+Cell[8229, 348, 131, 3, 18, "ExampleSection",
  CellID->258228157],
-Cell[5667, 259, 142, 3, 18, "ExampleSection",
+Cell[8363, 353, 142, 3, 18, "ExampleSection",
  CellID->2123667759],
-Cell[5812, 264, 135, 3, 18, "ExampleSection",
+Cell[8508, 358, 135, 3, 18, "ExampleSection",
  CellID->1305812373],
-Cell[5950, 269, 140, 3, 18, "ExampleSection",
+Cell[8646, 363, 140, 3, 18, "ExampleSection",
  CellID->1653164318],
-Cell[6093, 274, 132, 3, 18, "ExampleSection",
+Cell[8789, 368, 132, 3, 18, "ExampleSection",
  CellID->589267740]
 }, Open  ]]
 }
@@ -424,4 +544,3 @@ Cell[6093, 274, 132, 3, 18, "ExampleSection",
 *)
 
 (* End of internal cache information *)
-

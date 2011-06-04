@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      9934,        416]
-NotebookOptionsPosition[      5934,        275]
-NotebookOutlinePosition[      6562,        299]
-CellTagsIndexPosition[      6484,        294]
+NotebookDataLength[     12447,        511]
+NotebookOptionsPosition[      7769,        344]
+NotebookOutlinePosition[      8400,        368]
+CellTagsIndexPosition[      8322,        363]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -200,6 +200,8 @@ Cell["XXXX", "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  InterpretationBox[GridBox[{
     {
@@ -212,6 +214,73 @@ Cell[BoxData[
    }],
   $Line = 0; Null]], "PrimaryExamplesSection",
  CellID->880084151],
+
+Cell["\<\
+Cycles[{{1,2,3}}] and Cycles[{{1,3,2}}] are conjugates in SymmetricGroup[4]:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.516169187091797*^9, 3.5161692200791016`*^9}},
+ CellID->110735587],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupConjugatesQ[SymmetricGroup[4], Cycles[{{1,2,3}}], Cycles[{{1,3,2}}]]\
+\>", "Input",
+ CellChangeTimes->{{3.516169207368164*^9, 3.516169223350586*^9}, 
+   3.516169256888672*^9},
+ CellLabel->"In[12]:=",
+ CellID->467766111],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{{3.516169208376953*^9, 3.516169223963867*^9}},
+ CellLabel->"Out[12]=",
+ CellID->323275453]
+}, Open  ]],
+
+Cell["\<\
+But they are not conjugates in AlternatingGroup[4]:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.5161692284746094`*^9, 3.5161692485820312`*^9}},
+ CellID->450666677],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupConjugatesQ[AlternatingGroup[4], Cycles[{{1,2,3}}], Cycles[{{1,3,2}}]]\
+\>", "Input",
+ CellChangeTimes->{{3.516169248973633*^9, 3.5161692578359375`*^9}},
+ CellLabel->"In[13]:=",
+ CellID->424325056],
+
+Cell[BoxData["False"], "Output",
+ CellChangeTimes->{3.516169253254883*^9},
+ CellLabel->"Out[13]=",
+ CellID->203329173]
+}, Open  ]],
+
+Cell["\<\
+We can check conjugacy not just for group elements, in that case it gives \
+True iff there is a group element that conjugates elem1 to elem2:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.5161693488984375`*^9, 3.5161693833222656`*^9}},
+ CellID->197271863],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupConjugatesQ[SymmetricGroup[4], Cycles[{{1,2,3},{5,6}}],
+Cycles[{{1,3,2},{5,6}}]]\
+\>", "Input",
+ CellChangeTimes->{{3.5161693908466797`*^9, 3.516169408911133*^9}},
+ CellLabel->"In[15]:=",
+ CellID->170910264],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{3.51616939253125*^9},
+ CellLabel->"Out[15]=",
+ CellID->551000322]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -273,10 +342,10 @@ Cell[BoxData[
  CellID->589267740]
 }, Open  ]]
 },
-WindowSize->{700, 730},
-WindowMargins->{{4, Automatic}, {Automatic, 0}},
+WindowSize->{794, 751},
+WindowMargins->{{Automatic, 322}, {Automatic, 97}},
 CellContext->"Global`",
-FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (November 7, 2010)",
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (November 7, 2010)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb", 
   CharacterEncoding -> "WindowsEastEurope"]
 ]
@@ -286,14 +355,14 @@ StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb",
 (*CellTagsOutline
 CellTagsIndex->{
  "ExtendedExamples"->{
-  Cell[4414, 217, 100, 2, 53, "ExtendedExamplesSection",
+  Cell[6249, 286, 100, 2, 53, "ExtendedExamplesSection",
    CellTags->"ExtendedExamples",
    CellID->1854448968]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"ExtendedExamples", 6346, 287}
+ {"ExtendedExamples", 8184, 356}
  }
 *)
 (*NotebookFileOutline
@@ -389,33 +458,59 @@ Cell[3912, 195, 57, 1, 30, "MoreAboutSection",
 Cell[3972, 198, 46, 1, 16, "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
-Cell[4033, 202, 356, 11, 68, "PrimaryExamplesSection",
- CellID->880084151],
 Cell[CellGroupData[{
-Cell[4414, 217, 100, 2, 53, "ExtendedExamplesSection",
+Cell[4055, 204, 356, 11, 68, "PrimaryExamplesSection",
+ CellID->880084151],
+Cell[4414, 217, 195, 4, 20, "ExampleText",
+ CellID->110735587],
+Cell[CellGroupData[{
+Cell[4634, 225, 234, 6, 27, "Input",
+ CellID->467766111],
+Cell[4871, 233, 141, 3, 25, "Output",
+ CellID->323275453]
+}, Open  ]],
+Cell[5027, 239, 172, 4, 20, "ExampleText",
+ CellID->450666677],
+Cell[CellGroupData[{
+Cell[5224, 247, 212, 5, 27, "Input",
+ CellID->424325056],
+Cell[5439, 254, 118, 3, 25, "Output",
+ CellID->203329173]
+}, Open  ]],
+Cell[5572, 260, 262, 5, 33, "ExampleText",
+ CellID->197271863],
+Cell[CellGroupData[{
+Cell[5859, 269, 222, 6, 44, "Input",
+ CellID->170910264],
+Cell[6084, 277, 116, 3, 25, "Output",
+ CellID->551000322]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6249, 286, 100, 2, 53, "ExtendedExamplesSection",
  CellTags->"ExtendedExamples",
  CellID->1854448968],
-Cell[4517, 221, 125, 3, 30, "ExampleSection",
+Cell[6352, 290, 125, 3, 30, "ExampleSection",
  CellID->1293636265],
-Cell[4645, 226, 148, 3, 18, "ExampleSection",
+Cell[6480, 295, 148, 3, 18, "ExampleSection",
  CellID->1020263627],
 Cell[CellGroupData[{
-Cell[4818, 233, 127, 3, 18, "ExampleSection",
+Cell[6653, 302, 127, 3, 18, "ExampleSection",
  CellID->2061341341],
-Cell[4948, 238, 130, 3, 70, "ExampleSubsection",
+Cell[6783, 307, 130, 3, 70, "ExampleSubsection",
  CellID->1757724783],
-Cell[5081, 243, 130, 3, 70, "ExampleSubsection",
+Cell[6916, 312, 130, 3, 70, "ExampleSubsection",
  CellID->1295379749]
 }, Closed]],
-Cell[5226, 249, 131, 3, 18, "ExampleSection",
+Cell[7061, 318, 131, 3, 18, "ExampleSection",
  CellID->258228157],
-Cell[5360, 254, 142, 3, 18, "ExampleSection",
+Cell[7195, 323, 142, 3, 18, "ExampleSection",
  CellID->2123667759],
-Cell[5505, 259, 135, 3, 18, "ExampleSection",
+Cell[7340, 328, 135, 3, 18, "ExampleSection",
  CellID->1305812373],
-Cell[5643, 264, 140, 3, 18, "ExampleSection",
+Cell[7478, 333, 140, 3, 18, "ExampleSection",
  CellID->1653164318],
-Cell[5786, 269, 132, 3, 18, "ExampleSection",
+Cell[7621, 338, 132, 3, 18, "ExampleSection",
  CellID->589267740]
 }, Open  ]]
 }
@@ -423,4 +518,3 @@ Cell[5786, 269, 132, 3, 18, "ExampleSection",
 *)
 
 (* End of internal cache information *)
-

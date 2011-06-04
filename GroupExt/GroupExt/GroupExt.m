@@ -15,10 +15,10 @@ GroupNumOfConjugacyClasses::usage = "GroupNumOfConjugacyClasses[group] gives the
 GroupConjugacyClassSizes::usage = "GroupConjugacyClassSizes[group] gives the list of sizes of the conjugacy classes (in the same order as GroupConjugacyClassRepresentatives[group] gives the elements."
 GroupConjugacyClassInverses::usage = "GroupConjugacyClassInverses[group] gives the list whose k-th element is the index of the conjugacy class in which the inverses of the elements of the k-th conjugacy class are."
 GroupConjugacyClassNum::usage = "GroupConjugacyClassNum[group, elem] gives the index of the conjugacy class of elem in group."
-GroupConjugacyClass::usage = "GroupConjugacyClass[group, elem] gives the full list of elements in the conjugacy class of elem in group."
+GroupConjugacyClass::usage = "GroupConjugacyClass[group, n] gives the full list of elements in the n-th conjugacy class."
 GroupCharacterScalarProduct::usage = "GroupCharacterScalarProduct[group, chi, psi] gives the scalar product of two characters (chi and psi) of the group given by a list of values in the conjugacy classes."
-GroupCharacterTableDixonPrime::usage = "GroupCharacterTableDixonPrime[group] gives the smallest prime number (p) such that GF[p] can be used to represent all the complex characters in."
-GroupCharacterTableOverFiniteField::usage = "GroupCharacterTableOverFiniteField[group] gives the character table of the group over GF[p] where p is given by GroupCharacterTableDixonPrime[group]."
+GroupDixonPrime::usage = "GroupDixonPrime[group] gives the smallest prime number (p) such that GF[p] can be used to represent all the complex characters in."
+GroupCharacterTableOverFiniteField::usage = "GroupCharacterTableOverFiniteField[group] gives the character table of the group over GF[p] where p is given by GroupDixonPrime[group]."
 GroupCharacterTable::usage = "GroupCharacterTable[group] gives the character table of the group."
 
 Begin["GroupExt`Private`"]
@@ -312,7 +312,7 @@ GroupCharacterScalarProduct[g_?GroupQ, a_, b_, OptionsPattern[]] := Module[{size
 ]
 
 (* we search for the smallest prime with e|p-1 and p > 2*sqrt(|G|) *)
-GroupCharacterTableDixonPrime[g_?GroupQ] := GroupCharacterTableDixonPrime[g] = Module[{p, e},
+GroupDixonPrime[g_?GroupQ] := GroupDixonPrime[g] = Module[{p, e},
 	(* e is the exponent *)
 	e = GroupExponent[g];
 	(* p is the first number that e|p-1 and p > 2*sqrt(|G|) *)
@@ -328,7 +328,7 @@ GroupCharacterTableSplit[g_, i_, V_] := Module[{r, p, x, Mp, bp, id, j, s, iinv,
 	(* if V is 1-dimensional, we cannot split it *)
 	If[s == 1, Return[{V}]];
 	r = GroupNumOfConjugacyClasses[g];
-	p = GroupCharacterTableDixonPrime[g];
+	p = GroupDixonPrime[g];
 	iinv = GroupConjugacyClassInverses[g][[i]];
 	(* if all basevectors but the first has 0 at position iinv, then we cannot split *)
 	If[Count[Map[#[[iinv]]&, Rest[V]], 0] == Length[V]-1, Return[{V}]];
@@ -361,7 +361,7 @@ GroupCharacterTableSplit[g_, i_, V_] := Module[{r, p, x, Mp, bp, id, j, s, iinv,
 (* we determine the character table over F_p by figuring out the common eigenvectors of the MT matrices *)
 GroupCharacterTableOverFiniteField[g_?GroupQ] := GroupCharacterTableOverFiniteField[g] = Module[{subspaces, r, i, p},
 	r = GroupNumOfConjugacyClasses[g];
-	p = GroupCharacterTableDixonPrime[g];
+	p = GroupDixonPrime[g];
 	(* initially we have the whole vectorspace as the single subspace *)
 	subspaces = {IdentityMatrix[r]};
 	(* we split subspaces into direct sums until each is 1-dimensional *)
@@ -379,7 +379,7 @@ GroupCharacterTableOverFiniteField[g_?GroupQ] := GroupCharacterTableOverFiniteFi
 (* we use the finite table to compute the normal one *)
 GroupCharacterTable[g_?GroupQ] := GroupCharacterTable[g] = Module[{e, einv, r, p, t, s, i, j, k, l, repr, fin, reprl, inv, skip, row},
 	r = GroupNumOfConjugacyClasses[g];
-	p = GroupCharacterTableDixonPrime[g];
+	p = GroupDixonPrime[g];
 	e = GroupExponent[g];
 	repr = GroupConjugacyClassRepresentatives[g];
 	inv = GroupConjugacyClassInverses[g];

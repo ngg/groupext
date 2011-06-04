@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      9826,        409]
-NotebookOptionsPosition[      5826,        268]
-NotebookOutlinePosition[      6454,        292]
-CellTagsIndexPosition[      6376,        287]
+NotebookDataLength[     12586,        510]
+NotebookOptionsPosition[      8121,        351]
+NotebookOutlinePosition[      8753,        375]
+CellTagsIndexPosition[      8675,        370]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -193,6 +193,8 @@ Cell["XXXX", "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  InterpretationBox[GridBox[{
     {
@@ -205,6 +207,87 @@ Cell[BoxData[
    }],
   $Line = 0; Null]], "PrimaryExamplesSection",
  CellID->880084151],
+
+Cell["\<\
+The built-in GroupStabilizerChain function can give redundant stabilizer \
+chain:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.516168840801758*^9, 3.516168842020508*^9}, {
+  3.516168924166992*^9, 3.516168943060547*^9}},
+ CellID->257681779],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupStabilizerChain[CyclicGroup[5], GroupActionBase -> {1, 3}]\
+\>", "Input",
+ CellChangeTimes->{
+  3.5161689475341797`*^9, {3.516169005995117*^9, 3.516169035161133*^9}},
+ CellLabel->"In[7]:=",
+ CellID->8809747],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5"}], "}"}], "}"}], 
+       "]"}], "}"}], "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", "1", "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", "}"}], "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"1", ",", "3"}], "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", "}"}], "]"}]}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.5161690219648438`*^9, 3.516169035486328*^9}},
+ CellLabel->"Out[7]=",
+ CellID->251154083]
+}, Open  ]],
+
+Cell["\<\
+However, GroupIrredundantStabilizerChain always gives irredundant:\
+\>", "ExampleText",
+ CellChangeTimes->{{3.5161690448291016`*^9, 3.516169093307617*^9}},
+ CellID->289067634],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+GroupIrredundantStabilizerChain[CyclicGroup[5], GroupActionBase -> {1, 3}]\
+\>", "Input",
+ CellChangeTimes->{{3.5161690968691406`*^9, 3.5161690998154297`*^9}},
+ CellLabel->"In[8]:=",
+ CellID->108932410],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5"}], "}"}], "}"}], 
+       "]"}], "}"}], "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", "1", "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", "}"}], "]"}]}]}], "}"}]], "Output",
+ CellChangeTimes->{3.5161691002734375`*^9},
+ CellLabel->"Out[8]=",
+ CellID->316772101]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -267,9 +350,9 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{700, 730},
-WindowMargins->{{4, Automatic}, {Automatic, 0}},
+WindowMargins->{{Automatic, 264}, {Automatic, 100}},
 CellContext->"Global`",
-FrontEndVersion->"8.0 for Microsoft Windows (32-bit) (November 7, 2010)",
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (November 7, 2010)",
 StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb", 
   CharacterEncoding -> "WindowsEastEurope"]
 ]
@@ -279,14 +362,14 @@ StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "FunctionPageStyles.nb",
 (*CellTagsOutline
 CellTagsIndex->{
  "ExtendedExamples"->{
-  Cell[4306, 210, 100, 2, 53, "ExtendedExamplesSection",
+  Cell[6601, 293, 100, 2, 53, "ExtendedExamplesSection",
    CellTags->"ExtendedExamples",
    CellID->1854448968]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"ExtendedExamples", 6238, 280}
+ {"ExtendedExamples", 8537, 363}
  }
 *)
 (*NotebookFileOutline
@@ -382,33 +465,51 @@ Cell[3804, 188, 57, 1, 30, "MoreAboutSection",
 Cell[3864, 191, 46, 1, 16, "MoreAbout",
  CellID->1665078683]
 }, Open  ]],
-Cell[3925, 195, 356, 11, 68, "PrimaryExamplesSection",
- CellID->880084151],
 Cell[CellGroupData[{
-Cell[4306, 210, 100, 2, 53, "ExtendedExamplesSection",
+Cell[3947, 197, 356, 11, 68, "PrimaryExamplesSection",
+ CellID->880084151],
+Cell[4306, 210, 247, 6, 20, "ExampleText",
+ CellID->257681779],
+Cell[CellGroupData[{
+Cell[4578, 220, 222, 6, 27, "Input",
+ CellID->8809747],
+Cell[4803, 228, 745, 23, 45, "Output",
+ CellID->251154083]
+}, Open  ]],
+Cell[5563, 254, 185, 4, 20, "ExampleText",
+ CellID->289067634],
+Cell[CellGroupData[{
+Cell[5773, 262, 212, 5, 27, "Input",
+ CellID->108932410],
+Cell[5988, 269, 564, 18, 45, "Output",
+ CellID->316772101]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6601, 293, 100, 2, 53, "ExtendedExamplesSection",
  CellTags->"ExtendedExamples",
  CellID->1854448968],
-Cell[4409, 214, 125, 3, 30, "ExampleSection",
+Cell[6704, 297, 125, 3, 30, "ExampleSection",
  CellID->1293636265],
-Cell[4537, 219, 148, 3, 18, "ExampleSection",
+Cell[6832, 302, 148, 3, 18, "ExampleSection",
  CellID->1020263627],
 Cell[CellGroupData[{
-Cell[4710, 226, 127, 3, 18, "ExampleSection",
+Cell[7005, 309, 127, 3, 18, "ExampleSection",
  CellID->2061341341],
-Cell[4840, 231, 130, 3, 70, "ExampleSubsection",
+Cell[7135, 314, 130, 3, 70, "ExampleSubsection",
  CellID->1757724783],
-Cell[4973, 236, 130, 3, 70, "ExampleSubsection",
+Cell[7268, 319, 130, 3, 70, "ExampleSubsection",
  CellID->1295379749]
 }, Closed]],
-Cell[5118, 242, 131, 3, 18, "ExampleSection",
+Cell[7413, 325, 131, 3, 18, "ExampleSection",
  CellID->258228157],
-Cell[5252, 247, 142, 3, 18, "ExampleSection",
+Cell[7547, 330, 142, 3, 18, "ExampleSection",
  CellID->2123667759],
-Cell[5397, 252, 135, 3, 18, "ExampleSection",
+Cell[7692, 335, 135, 3, 18, "ExampleSection",
  CellID->1305812373],
-Cell[5535, 257, 140, 3, 18, "ExampleSection",
+Cell[7830, 340, 140, 3, 18, "ExampleSection",
  CellID->1653164318],
-Cell[5678, 262, 132, 3, 18, "ExampleSection",
+Cell[7973, 345, 132, 3, 18, "ExampleSection",
  CellID->589267740]
 }, Open  ]]
 }
@@ -416,4 +517,3 @@ Cell[5678, 262, 132, 3, 18, "ExampleSection",
 *)
 
 (* End of internal cache information *)
-
