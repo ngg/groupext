@@ -7,10 +7,11 @@ definiálni tudunk csoportokat, pár alap csoport előre benne van
 Le tudjuk kérdezni egy csoport erős generátorrendszerét (Schreier-Sims algoritmusnak egy változata bele van írva),
 valamint egy elem centralizátorát.
 Ezeken kívül a többi algoritmust az én implementációm biztosítja.
+A függelék innentől angol nyelven folytatódik.
 \clearpage
 
 \subsection{License}
-A csomag a BSD 2-clause license szabályai szerint használható:
+This package can be used under the rules of the 2-clause BSD license:
 \lstset{
 	breaklines=true,
 	showstringspaces=false,
@@ -28,31 +29,294 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 \end{lstlisting}
 \clearpage
 
-\subsection{Dokumentáció}
+\subsection{Documentation}
+\lstset{
+	language=Mathematica,
+	breaklines=true,
+	showstringspaces=false,
+	basicstyle=\footnotesize,
+	postbreak={\space\space\space\space\space\space\space\space\space\space},
+	breakindent=0pt,
+	breakautoindent=false,
+}
+
 \begin{itemize}
+
 \item NullQ[expr] gives True if expr is Null, and False otherwise.
+\begin{itemize}
+\item Test whether Null is Null:
+\begin{lstlisting}
+ In[1]:= NullQ[Null]
+Out[1]:= True
+\end{lstlisting}
+\item Test whether "Null" is Null:
+\begin{lstlisting}
+ In[2]:= NullQ["Null"]
+Out[2]:= False
+\end{lstlisting}
+\end{itemize}
+
 \item GroupQ[expr] gives True if expr is a group, and False otherwise.
+\begin{itemize}
+\item Test whether SymmetricGroup[3] is a group:
+\begin{lstlisting}
+ In[1]:= GroupQ[SymmetricGroup[3]]
+Out[1]:= True
+\end{lstlisting}
+\end{itemize}
+
 \item GroupActionSetSort[actset] sorts the elements of actset into an order in which elements of option GroupActionBase are the first ones and then other elements follow.
+\begin{itemize}
+\item If there are no base given, it is just a normal sort:
+\begin{lstlisting}
+ In[1]:= GroupActionSetSort[{3,1,5,2,7,9,6}]
+Out[1]:= {1, 2, 3, 5, 6, 7, 9}
+\end{lstlisting}
+\item If base is given, then base elements come first:
+\begin{lstlisting}
+ In[2]:= GroupActionSetSort[{3,1,5,2,7,9,6}, GroupActionBase -> {2,7,4,6}]
+Out[2]:= {2, 7, 6, 1, 3, 5, 9}
+\end{lstlisting}
+\end{itemize}
+
 \item CyclesActionSet[elem] gives the action set of a group element.
+\begin{itemize}
+\item Action set for Cycles[{{1,3},{2,7}}]:
+\begin{lstlisting}
+ In[1]:= CyclesActionSet[Cycles[{{1,3},{2,7}}]]
+Out[1]:= {1, 2, 3, 7}
+\end{lstlisting}
+\item We can use GroupActionBase to specify order:
+\begin{lstlisting}
+ In[2]:= CyclesActionSet[Cycles[{{1,3},{2,7}}], GroupActionBase -> {1,7,5,3}]
+Out[2]:= {1, 7, 3, 2}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupActionSet[group] gives the action set of a group.
+\begin{itemize}
+\item Action set for a group:
+\begin{lstlisting}
+ In[1]:= GroupActionSet[MathieuGroupM11[]]
+Out[1]:= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+\end{lstlisting}
+\item We can use GroupActionBase to specify order:
+\begin{lstlisting}
+ In[2]:= GroupActionSet[SymmetricGroup[4], GroupActionBase -> {3,2}]
+Out[2]:= {3, 2, 1, 4}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupExponent[group] gives the exponent of the group.
+\begin{itemize}
+\item Compute the exponent of a group:
+\begin{lstlisting}
+ In[1]:= GroupExponent[DihedralGroup[8]]
+Out[1]:= 8
+\end{lstlisting}
+\item The exponent of a group is always a divisor of its order:
+\begin{lstlisting}
+ In[2]:= GroupOrder[DihedralGroup[8]]/GroupExponent[DihedralGroup[8]]
+Out[2]:= 2
+\end{lstlisting}
+\end{itemize}
+
 \item GroupElementFromImage[group, a, b] gives an element of the group which moves a to b, or Null if there is no such element.
+\begin{itemize}
+\item We can get an element of CyclicGroup[5] which moves 1 to 3:
+\begin{lstlisting}
+ In[1]:= GroupElementFromImage[CyclicGroup[5], 1, 3]
+Out[1]:= Cycles[{{1, 3, 5, 2, 4}}]
+\end{lstlisting}
+\item If there are no such element it gives Null:
+\begin{lstlisting}
+ In[2]:= NullQ[GroupElementFromImage[CyclicGroup[5], 1, 6]]
+Out[2]:= True
+\end{lstlisting}
+\end{itemize}
+
 \item GroupIrredundantStabilizerChain[group] gives a stabilizer chain of the group according to the option GroupActionBase, but skips redundant base elements.
+\begin{itemize}
+\item The built-in GroupStabilizerChain function can give redundant stabilizer chain:
+\begin{lstlisting}
+ In[1]:= GroupStabilizerChain[CyclicGroup[5], GroupActionBase -> {1, 3}]
+Out[1]:= {{} -> PermutationGroup[{Cycles[{{1, 2, 3, 4, 5}}]}], {1} -> PermutationGroup[{}], {1, 3} -> PermutationGroup[{}]}
+\end{lstlisting}
+\item However, GroupIrredundantStabilizerChain always gives irredundant:
+\begin{lstlisting}
+ In[2]:= GroupIrredundantStabilizerChain[CyclicGroup[5], GroupActionBase -> {1, 3}]
+Out[2]:= {{} -> PermutationGroup[{Cycles[{{1, 2, 3, 4, 5}}]}], {1} -> PermutationGroup[{}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupConjugatesQ[group, elem1, elem2] gives True if elem1 and elem2 are conjugates in the group, and False otherwise.
+\begin{itemize}
+\item Cycles[{{1,2,3}}] and Cycles[{{1,3,2}}] are conjugates in SymmetricGroup[4]:
+\begin{lstlisting}
+ In[1]:= GroupConjugatesQ[SymmetricGroup[4], Cycles[{{1,2,3}}], Cycles[{{1,3,2}}]]
+Out[1]:= True
+\end{lstlisting}
+\item But they are not conjugates in AlternatingGroup[4]:
+\begin{lstlisting}
+ In[2]:= GroupConjugatesQ[AlternatingGroup[4], Cycles[{{1,2,3}}], Cycles[{{1,3,2}}]]
+Out[2]:= False
+\end{lstlisting}
+\item We can check conjugacy not just for group elements, in that case it gives True iff there is a group element that conjugates elem1 to elem2:
+\begin{lstlisting}
+ In[3]:= GroupConjugatesQ[SymmetricGroup[4], Cycles[{{1,2,3},{5,6}}], Cycles[{{1,3,2},{5,6}}]]
+Out[3]:= True
+\end{lstlisting}
+\end{itemize}
+
 \item GroupConjugacyClassRepresentatives[group] gives a list of group elements which represent the conjugacy classes.
+\begin{itemize}
+\item We can get class representatives for a group:
+\begin{lstlisting}
+ In[1]:= GroupConjugacyClassRepresentatives[AlternatingGroup[4]]
+Out[1]:= {Cycles[{}], Cycles[{{1, 4}, {2, 3}}], Cycles[{{1, 3, 2}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupNumOfConjugacyClasses[group] gives the number of conjugacy classes in the group.
+\begin{itemize}
+\item The number of conjugacy classes in SymmetricGroup[n] is always PartitionsP[n]:
+\begin{lstlisting}
+ In[1]:= Table[GroupNumOfConjugacyClasses[SymmetricGroup[n]], {n, 6}]
+Out[1]:= {1, 2, 3, 5, 7, 11}
+ In[2]:= Table[PartitionsP[n], {n, 6}]
+Out[2]:= {1, 2, 3, 5, 7, 11}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupConjugacyClassSizes[group] gives the list of sizes of the conjugacy classes (in the same order as GroupConjugacyClassRepresentatives[group] gives the elements.
+\begin{itemize}
+\item We can get sizes of conjugacy classes:
+\begin{lstlisting}
+ In[1]:= GroupConjugacyClassSizes[AlternatingGroup[4]]
+Out[1]:= {1, 3, 4, 4}
+\end{lstlisting}
+\item The ordering corresponds to GroupConjugacyClassRepresentatives:
+\begin{lstlisting}
+ In[2]:= GroupConjugacyClassRepresentatives[AlternatingGroup[4]]
+Out[2]:= {Cycles[{}], Cycles[{{1, 4}, {2, 3}}], Cycles[{{1, 3, 2}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupConjugacyClassInverses[group] gives the list whose k-th element is the index of the conjugacy class in which the inverses of the elements of the k-th conjugacy class are.
+\begin{itemize}
+\item We can get indices of inverse conjugacy classes:
+\begin{lstlisting}
+ In[1]:= GroupConjugacyClassInverses[AlternatingGroup[4]]
+Out[1]:= {1, 2, 4, 3}
+\end{lstlisting}
+\item The ordering corresponds to GroupConjugacyClassRepresentatives:
+\begin{lstlisting}
+ In[2]:= GroupConjugacyClassRepresentatives[AlternatingGroup[4]]
+Out[2]:= {Cycles[{}], Cycles[{{1, 4}, {2, 3}}], Cycles[{{1, 3, 2}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupConjugacyClassNum[group, elem] gives the index of the conjugacy class of elem in group.
+\begin{itemize}
+\item We can get index of the conjugacy class of an element:
+\begin{lstlisting}
+ In[1]:= GroupConjugacyClassNum[AlternatingGroup[4], Cycles[{{1,4,2}}]]
+Out[1]:= 4
+\end{lstlisting}
+\item The index corresponds to GroupConjugacyClassRepresentatives:
+\begin{lstlisting}
+ In[2]:= GroupConjugacyClassRepresentatives[AlternatingGroup[4]]
+Out[2]:= {Cycles[{}], Cycles[{{1, 4}, {2, 3}}], Cycles[{{1, 3, 2}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupConjugacyClass[group, n] gives the full list of elements in the n-th conjugacy class.
+\begin{itemize}
+\item We can get a full conjugacy class:
+\begin{lstlisting}
+ In[1]:= GroupConjugacyClass[AlternatingGroup[4], 4]
+Out[1]:= {Cycles[{{1, 4, 2}}], Cycles[{{2, 4, 3}}], Cycles[{{1, 2, 3}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\item The ordering corresponds to GroupConjugacyClassRepresentatives:
+\begin{lstlisting}
+ In[2]:= GroupConjugacyClassRepresentatives[AlternatingGroup[4]]
+Out[2]:= {Cycles[{}], Cycles[{{1, 4}, {2, 3}}], Cycles[{{1, 3, 2}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupCharacterScalarProduct[group, chi, psi] gives the scalar product of two characters (chi and psi) of the group given by a list of values in the conjugacy classes.
+\begin{itemize}
+\item We can compute scalar product of two characters:
+\begin{lstlisting}
+ In[1]:= GroupCharacterScalarProduct[AlternatingGroup[4], {1, 1, 1, 1}, {4, 0, 0, 0}]
+Out[1]:= 1/3
+\end{lstlisting}
+\item Irreducible characters form an ortonormal base in the space of characters:
+\begin{lstlisting}
+ In[2]:= g = AlternatingGroup[4]; tbl = GroupCharacterTable[g]; FullSimplify[Table[GroupCharacterScalarProduct[g, tbl[[i]], tbl[[j]]], {i, Length[tbl]}, {j, Length[tbl]}]]
+Out[2]:= {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}
+\end{lstlisting}
+\item We can compute it over a finite field:
+\begin{lstlisting}
+ In[2]:= GroupCharacterScalarProduct[AlternatingGroup[4], {1, 1, 1, 1}, {4, 0, 0, 0}, Modulus -> 7]
+Out[2]:= 5
+\end{lstlisting}
+\end{itemize}
+
 \item GroupDixonPrime[group] gives the smallest prime number (p) such that GF[p] can be used to represent all the complex characters in.
+\begin{itemize}
+\item It gives the smallest p prime of the form k*GroupExponent[group]+1 such that p > 2*Sqrt[GroupOrder[group]]:
+\begin{lstlisting}
+ In[1]:= GroupExponent[MathieuGroupM11[]]
+Out[1]:= 1320
+ In[2]:= N[2*Sqrt[GroupOrder[MathieuGroupM11[]]]]
+Out[2]:= 177.989
+ In[3]:= GroupDixonPrime[MathieuGroupM11[]]
+Out[3]:= 1321
+\end{lstlisting}
+\item Another example:
+\begin{lstlisting}
+ In[4]:= GroupDixonPrime[CyclicGroup[7]]
+Out[4]:= 29
+\end{lstlisting}
+\end{itemize}
+
 \item GroupCharacterTableOverFiniteField[group] gives the character table of the group over GF[p] where p is given by GroupDixonPrime[group].
+\begin{itemize}
+\item We can calculate the character table of a group over GF[GroupDixonPrime[group]]:
+\begin{lstlisting}
+ In[1]:= GroupDixonPrime[AlternatingGroup[4]]
+Out[1]:= 7
+ In[2]:= MatrixForm[GroupCharacterTableOverFiniteField[AlternatingGroup[4]]]
+Out[2]:= {{1, 1, 1, 1}, {1, 1, 2, 4}, {1, 1, 4, 2}, {3, 6, 0, 0}}
+ In[3]:= MatrixForm[GroupCharacterTable[AlternatingGroup[4]]]
+Out[3]:= {{1, 1, 1, 1}, {1, 1, (-1)^(2/3), -(-1)^(1/3)}, {1, 1, -(-1)^(1/3), (-1)^(2/3)}, {3, -1, 0, 0}}
+\end{lstlisting}
+\item The ordering of the columns corresponds to GroupConjugacyClassRepresentatives:
+\begin{lstlisting}
+ In[4]:= GroupConjugacyClassRepresentatives[AlternatingGroup[4]]
+Out[4]:= {Cycles[{}], Cycles[{{1, 4}, {2, 3}}], Cycles[{{1, 3, 2}}], Cycles[{{1, 3, 4}}]}
+\end{lstlisting}
+\end{itemize}
+
 \item GroupCharacterTable[group] gives the character table of the group.
+\begin{itemize}
+\item We can calculate the character table of a group:
+\begin{lstlisting}
+ In[1]:= GroupCharacterTable[DihedralGroup[5]]
+Out[1]:= {{1, 1, 1, 1}, {1, 1, 1, -1}, {2, (-1 - Sqrt[5])/2, (-1 + Sqrt[5])/2, 0}, {2, (-1 + Sqrt[5])/2, (-1 - Sqrt[5])/2, 0}}
+\end{lstlisting}
+\item The ordering of the columns corresponds to GroupConjugacyClassRepresentatives:
+\begin{lstlisting}
+ In[2]:= GroupConjugacyClassRepresentatives[DihedralGroup[5]]
+Out[2]:= {Cycles[{}], Cycles[{{1, 2, 3, 4, 5}}], Cycles[{{1, 3, 5, 2, 4}}], Cycles[{{1, 3}, {4, 5}}]}
+\end{lstlisting}
+\end{itemize}
+
 \end{itemize}
 
 \clearpage
-\subsection{Forráskód}
+\subsection{Source code}
 \lstset{
 	language=Mathematica,
 	tabsize=2,
@@ -60,6 +324,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	showstringspaces=false,
 	basicstyle=\footnotesize,
 	numbers=left,
-	numberstyle=\footnotesize
+	numberstyle=\footnotesize,
+	postbreak={},
+	breakindent=20pt,
+	breakautoindent=true,
 }
 \lstinputlisting{../GroupExt/GroupExt/GroupExt.m}
