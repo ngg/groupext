@@ -1,9 +1,57 @@
 \section{Mathematica 8 implementáció}
-csak 8+, link \cite{Nag11}, telepítés, mik vannak alapból benne Mathematica-ban, license
+Az alábbi implementáció Mathematica 8 (vagy annál újabb) környezethez készült, anélkül nem használható.
+Letölthető és installálható \cite{Nag11}-ben leírt módon.
+Permutációcsoportok kezelésére pár függvény már alapból benne van Mathematica-ban,
+definiálni tudunk csoportokat, pár alap csoport előre benne van
+(szimmetrikus, alternáló, ciklikus, diéder és ábel-csoportok, valamint a sporadikus csoportok nagy része).
+Le tudjuk kérdezni egy csoport erős generátorrendszerét (Schreier-Sims algoritmusnak egy változata bele van írva),
+valamint egy elem centralizátorát.
+Ezeken kívül a többi algoritmust az én implementációm biztosítja.
+\clearpage
+
+\subsection{License}
+A csomag a BSD 2-clause license szabályai szerint használható:
+\lstset{
+	breaklines=true,
+	showstringspaces=false,
+}
+\begin{lstlisting}
+Copyright (c) 2011, Gergely Nagy
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+\end{lstlisting}
+\clearpage
 
 \subsection{Dokumentáció}
-ide kell majd másolni a doksit
+\begin{itemize}
+\item NullQ[expr] gives True if expr is Null, and False otherwise.
+\item GroupQ[expr] gives True if expr is a group, and False otherwise.
+\item GroupActionSetSort[actset] sorts the elements of actset into an order in which elements of option GroupActionBase are the first ones and then other elements follow.
+\item CyclesActionSet[elem] gives the action set of a group element.
+\item GroupActionSet[group] gives the action set of a group.
+\item GroupExponent[group] gives the exponent of the group.
+\item GroupElementFromImage[group, a, b] gives an element of the group which moves a to b, or Null if there is no such element.
+\item GroupIrredundantStabilizerChain[group] gives a stabilizer chain of the group according to the option GroupActionBase, but skips redundant base elements.
+\item GroupConjugatesQ[group, elem1, elem2] gives True if elem1 and elem2 are conjugates in the group, and False otherwise.
+\item GroupConjugacyClassRepresentatives[group] gives a list of group elements which represent the conjugacy classes.
+\item GroupNumOfConjugacyClasses[group] gives the number of conjugacy classes in the group.
+\item GroupConjugacyClassSizes[group] gives the list of sizes of the conjugacy classes (in the same order as GroupConjugacyClassRepresentatives[group] gives the elements.
+\item GroupConjugacyClassInverses[group] gives the list whose k-th element is the index of the conjugacy class in which the inverses of the elements of the k-th conjugacy class are.
+\item GroupConjugacyClassNum[group, elem] gives the index of the conjugacy class of elem in group.
+\item GroupConjugacyClass[group, n] gives the full list of elements in the n-th conjugacy class.
+\item GroupCharacterScalarProduct[group, chi, psi] gives the scalar product of two characters (chi and psi) of the group given by a list of values in the conjugacy classes.
+\item GroupDixonPrime[group] gives the smallest prime number (p) such that GF[p] can be used to represent all the complex characters in.
+\item GroupCharacterTableOverFiniteField[group] gives the character table of the group over GF[p] where p is given by GroupDixonPrime[group].
+\item GroupCharacterTable[group] gives the character table of the group.
+\end{itemize}
 
+\clearpage
 \subsection{Forráskód}
 \lstset{
 	language=Mathematica,
