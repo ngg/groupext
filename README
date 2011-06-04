@@ -3,3 +3,10 @@ GroupExt and my BSc thesis
 You can download GroupExt from:
 https://github.com/ngg/groupext/raw/master/GroupExt/deploy.zip
 https://github.com/ngg/groupext/raw/master/GroupExt/deploy.tar.gz
+
+Installation:
+Extract the archive in the Applications folder in Mathematica 8's user base directory.
+You can get path to the user base directory by entering $UserBaseDirectory into Mathematica.
+
+Usage:
+After installing, enter this in Mathematica: <<GroupExt`
