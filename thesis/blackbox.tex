@@ -3,10 +3,10 @@
 A black-box csoportok eredeti ötlete és definíciója magyar matematikusoktól származik,
 Babai László és Szemerédi Endre publikálta \cite{BS84}-ben.
 Ma a legtöbb helyen inkább kicsit általánosabb definíciókat használnak, amivel kevésbé körülményes az
-egyes csoportok tényleges leírása. Az itt leírt definíciót \cite{Ser03}-ból vettem.
+egyes csoportok tényleges leírása. Az itt leírt definíció megegyezik a \cite{Ser03}-ban olvashatóval.
 
 A black-box csoport egy olyan csoport,
-aminek elemeit a véges $\Sigma$ ábécé feletti legfeljebb $N$ hosszú szavaival azonosítjuk.
+aminek elemeit a véges $\Sigma$ ábécé feletti legfeljebb $N$ hosszú szavakkal azonosítunk.
 Nincs megkövetelve, hogy egy elemnek csak egy szó felelhessen meg, se az hogy minden szó hozzátartozzon
 egy elemhez.
 A csoportműveleteket egy orákulum végzi.
@@ -46,7 +46,7 @@ Mivel $G$ véges rendű, így $\beta^g=\gamma$ esetén létezik $l$, amire $\gam
 A komponenst meg tudjuk találni szélességi kereséssel $\mathcal{O}(|S| |\alpha^G|)$ idő alatt, $\mathcal{O}(|\alpha^G|)$ memória használatával.
 
 Most nézzünk egy általánosabb verziót.
-Legyen adott $\Omega$-n egy algebrai struktúra, és tegyük fel, hogy $G$ hatása olyan, hogy az minden $*$ $\Omega$-beli műveletre nézve disztribuív,
+Legyen adott $\Omega$-n egy algebrai struktúra, és tegyük fel, hogy $G$ hatása olyan, hogy az minden $*$ $\Omega$-beli műveletre nézve disztributív,
 vagyis $(\alpha * \beta)^g = \alpha^g * \beta^g$.
 $A \subseteq \Omega$-ra szeretnénk kiszámolni $\langle A^G \rangle$-t, vagyis
 $\Omega$-nak azt a legszűkebb részhalmazát, ami tartalmazza $A$ minden elemét és zárt $G$ hatására és az $\Omega$-beli művelet(ek)re is.
@@ -73,8 +73,8 @@ Feladatunk, hogy megtaláljuk a konjugáltosztályokat a csoportban, vagyis az o
 Bár sok mindent felhasználunk, amit csak speciális csoportoknál tudunk megtenni, mégis az osztályok megtalálása minden csoport esetén ugyanazzal az algoritmussal történhet,
 azért írom a black-box csoportok fejezetében.
 
-A legegyszerűbb algoritmus annyiból áll csak, hogy sorban választunk véletlenszerű elemeket a csoportból, megnézzük, hogy konjugáltak-e az eddig megtalált reprezentáns elemekkel,
-és ha egyikkel sem az, akkor az új elemet is bevesszük a listába.
+A legegyszerűbb algoritmus annyiból áll, hogy sorban választunk véletlenszerű elemeket a csoportból, megnézzük, hogy az új elem konjugált-e az eddig megtalált reprezentáns elemek valamelyikével,
+és ha nem, akkor bevesszük a listába.
 Minden megtalált reprezentáns elemnek kiszámolhatjuk a konjugáltosztályának a méretét, ugyanis az a centralizátorának indexével egyenlő.
 Akkor fejezzük be az algoritmust, amikor az osztályok méretének összege eléri a csoport rendjét.
 Ennek az algoritmusnak a nagy hátránya, hogy ha egy nagy csoportban van egy kis elemszámú konjugáltosztály, akkor azt csak nagyon nehezen tudjuk megtalálni.
@@ -95,7 +95,7 @@ Mivel minden $g,h \in G$-re $1 \in C_G(g)$ és $h \in C_G(1)$, ezért akárhonna
 Minden $g$-re $p_{g,g} = 1/|C_G(g)| > 0$, tehát minden állapot aperiodikus.
 Így alkalmazhatjuk a Markov-láncok alaptételét, miszerint létezik (és csak egy létezik) stacionárius eloszlás ($v = (v_g \mid g \in G)$) és $\delta \in (0,1)$, amire
 minden $k \ge 0$-ra és $g \in G$-re $|\Prob(x_k = g) - v_g| \le \delta^k$.
-Jelöljük $r$-rel a konjugált osztályok számát, és legyen $v_g = C_G(g)/r|G|$.
+Jelöljük $r$-rel a konjugált osztályok számát, és legyen $v_g = C_G(g)/(r|G|)$.
 Könnyen látható, hogy $\sum_{g\in G} v_g = 1$, valamint hogy $v = vP$, tehát ez a $v$ a stacionárius eloszlás.
 Ha akármelyik konjugáltosztályra összeadjuk az abba tartozó $g$-kre $v_g$-ket, akkor $1/r$-et kapunk, tehát elég nagy $m$-re $x_m$ közel egyenlő valószínűséggel lehet az egyes konjugáltosztályokban.
 Tehát az előző algoritmusunkat változtassuk annyival, hogy ne teljesen véletlenszerű csoportelemeket vegyünk mindig, hanem mindig az előző centralizátorából válasszunk csak, és így gyorsabban megtalálhatjuk
