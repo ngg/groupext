@@ -4,7 +4,7 @@
 Az algoritmikus csoportelmélet a matematikának egy olyan ága, amivel a XX. század eleje óta foglalkoznak,
 de csak a '60-'70-es években kezdett el nagyon fejlődni.
 A szakdolgozat kitűzött célja az, hogy véges csoportoknak számítógéppel tudjuk kiszámolni a karaktertáblázatát.
-Ez egy elég összetett feladat ahhoz, hogy rengeteg más csoportelméleti algoritmust is magával húzzon,
+Ez egy elég összetett feladat ahhoz, hogy sok más csoportelméleti algoritmus is kelljen hozzá,
 ezekről fogunk beszélni.
 
 A legtöbb csoportelméleti algoritmus a csoport számítógépes megadásától függ, ugyanis
@@ -15,14 +15,14 @@ itt a csoportra, mint egy fekete dobozra tekintünk, aminek nem ismerjük a szer
 Innen jön az ilyen csoportokra a black-box elnevezés.
 Ezekre vonatkozó algoritmusokról szól az \ref{sec:blackbox}. fejezet.
 
-A megadási módszerek közül a permutációcsoportokat választottam ki, hatékony használatukról és a hozzájuk kapcsolódó algoritmusokról szól a \ref{sec:permutacio}. fejezet.
+A megadási módszerek közül a permutációcsoportokat választottam ki, hatékony használatukról és hozzájuk kapcsolódó algoritmusokról szól a \ref{sec:permutacio}. fejezet.
 
 Karaktertáblázatok kiszámolására jelenleg kettő, egymástól teljesen eltérő ötletre alapuló algoritmus ismert.
 Ezek közül amiről mi beszélünk, az a Burnside-Dixon-Schneider algoritmus, ami egy lineáris algebrai megközelítést alkalmaz,
 erről szól a \ref{sec:burnside}. fejezet.
 A másik algoritmusról nem fogunk részletesen beszélni, itt szeretnék pár mondatot írni róla.
 1986-ban Slattery \cite{Sla86} publikált egy eljárást, ami $p$-csoportokra meg tudja mondani, hogy hányadrendű irreducibilis reprezentációból hány darab van.
-Conlon 1990-ben \cite{Con90} ezt továbbfejlesztette, és $p$-csoportokra ki tudta számolni a karaktertáblázatot ugyanazon ötlet alapján.
+Conlon 1990-ben \cite{Con90} ezt az ötletet továbbfejlesztve ki tudta számolni $p$-csoportokra a karaktertáblázatot.
 A minden csoportra alkalmazható algoritmus Unger-nek köszönhető 2006-ból \cite{Ung06}, az ötlet Brauer tételén alapszik, miszerint az általánosított karakterek gyűrűjét generálják
 az úgynevezett elemi részcsoportok irreducibilis karaktereiből indukált karakterek.
 Elemi részcsoportoknak azokat a részcsoportokat hívjuk, amelyek előállnak egy $p$-csoport és egy ciklikus csoport direktszorzataként,
