@@ -2,9 +2,9 @@
 \label{sec:permutacio}
 Minden véges csoport felírható permutációcsoportként, így a permutációcsoportok hatékony használata kiemelten fontos.
 A ma is használt módszer Charles C. Sims-től származik 1970-ből \cite{Sim70}.
-Az \ref{subsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
-az \ref{subsec:permss}. alfejezet arról szól, hogy hogyan tudjuk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
-míg az \ref{subsec:permbt}. rész az itt előforduló főként backtrack-jellegű algoritmusokat részletezi.
+A \ref{subsec:permdef}. alfejezet az alapvető definíciókról szól, amik szükségesek Sims módszerének megértéséhez,
+a \ref{subsec:permss}. alfejezet arról szól, hogy hogyan tudjuk egy tetszőleges módon megadott permutációcsoportnak a hatékony megadását megkonstruálni,
+míg a \ref{subsec:permbt}. rész az itt előforduló főként backtrack-jellegű algoritmusokat részletezi.
 Ez a fejezet egy nagyon rövid kivonata lényegében Seress Ákos közel 300 oldalas könyvének \cite{Ser03}, ami részletesebben tárgyal erről a témakörröl.
 
 \subsection{Bázisok és erős generátorrendszerek}
@@ -31,7 +31,7 @@ Logaritmust véve (mint más algoritmusokkal kapcsolatos leírások esetén is, 
 \label{eq:permmeret2}
 \frac{\log |G|}{\log |\Omega|} \le m = |B| \le \log |G|
 \end{equation}
-Különböző irredundáns bázisok lehetnek különböző méretűek, de nem lehet egy bázis "túl nagy" emiatt.
+Különböző irredundáns bázisok lehetnek különböző méretűek, de nem lehet egy bázis sem "túl nagy" emiatt.
 
 Az $S \subseteq G$ részhalmazt $G$ erős generátorrendszerének hívjuk (a $B$ bázisra nézve), ha minden $1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
 Ha adott egy erős generátorrendszer, akkor az \ref{subsec:orbit}. fejezetben leírt algoritmussal a $\beta_i^{G^{[i]}}$ orbitok könnyen kiszámolhatóak.
@@ -46,7 +46,7 @@ Minden él a $\beta_i$ gyökér fele mutat és meg van cimkézve $S$ egy elemév
 Ha $\gamma_1$-ből $\gamma_2$-be megy egy él $h$ cimkével, az azt jelenti, hogy $\gamma_1^h=\gamma_2$.
 Így ha akármelyik $\gamma$-ból végigmegyünk éleken $\beta_i$-ig és a cimkéket összeszorozzuk, akkor megkapjuk hogy melyik
 permutáció viszi $\gamma$-t $\beta_i$-be. Így $T_i$ meghatározza a $G^{[i+1]}$ részcsoport mellékosztályainak 
-reprezentáns elemeinek az inverzét $G^{[i]}$-ben. Azért az inverzekkel csináltuk, mert a lentebb leírt, úgynevezett szitáló eljáráshoz az inverzekre lesz szükségünk.
+reprezentáns elemeinek az inverzét $G^{[i]}$-ben. Azért az inverzekkel csináltuk, mert az alább leírt, úgynevezett szitáló eljáráshoz az inverzekre lesz szükségünk.
 A gyakorlatban $S$ felírása után (ehhez $\mathcal{O}(|S||\Omega|)$ memória szükséges) $T_i$-t el tudjuk tárolni egy $|\Omega|$-hosszú $V_i$ tömbben.
 $\gamma \in \Omega$-ra $V_i[\gamma]$-t akkor és csak akkor definiáljuk, ha $\gamma \in \beta_i^{G^{[i]}}$,
 és ilyenkor $V_i[\gamma]$ azt tartalmazza, hogy $S$ hányadik eleme van a $\gamma$-ból kiinduló egyetlen él cimkéjén.
@@ -71,7 +71,7 @@ $G$ rendjét is könnyen kiszámolhatjuk egy erős generátorrendszer ismeretéb
 \subsection{Schreier-Sims algoritmus}
 \label{subsec:permss}
 Ha megadnak nekünk egy $G \le \Sym(\Omega)$ permutációcsoportot valahogyan (black-box csoportnak is tekinthetjük akár),
-akkor ki kell tudnunk számolni egy bázisát és egy erős generátorrendszert, ahhoz hogy hatékonyan tudjunk vele dolgozni.
+akkor ki kell tudnunk számolni egy bázisát és egy erős generátorrendszert ahhoz, hogy hatékonyan tudjunk vele dolgozni.
 Ez a Schreier-Sims algoritmussal történik, ami a következő két lemmán alapszik.
 \begin{lemma}[Schreier]
 \label{thm:sims1}
@@ -103,7 +103,7 @@ Ha $\langle S_1 \rangle = G$ és $\langle S_i \rangle_{\beta_i} = \langle S_{i+1
 $G$-nek bázisa, és $S = \bigcup_{i=1}^m S_i$ erős generátorrendszer $B$-re nézve.
 \end{lemma}
 \begin{proof}
-Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G^{*} = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S^{*} = \bigcup_{i=2}^m S_i$ erős generátorrendszere a $B^{*} = (\beta_2, \dots, \beta_m)$ bázisra nézva.
+Teljes indukciót alkalmazunk, az indukciós feltevésünk az, hogy a $G^{*} = \langle S_2 \rangle = G_{\beta_1}$ csoportnak $S^{*} = \bigcup_{i=2}^m S_i$ erős generátorrendszere a $B^{*} = (\beta_2, \dots, \beta_m)$ bázisra nézve.
 Ellenőriznünk kell, hogy minden $1\le i \le m+1$-re $\langle S \cap G^{[i]} \rangle = G^{[i]}$.
 $G^{[1]} = G$, így $i = 1$-re triviális.
 A lemma feltevéséből $G^{[2]} = G_{\beta_1} = \langle S_1 \rangle_{\beta_1} = \langle S_2 \rangle \le \langle S \cap G^{[2]} \rangle \le G_{\beta_1} = G^{[2]}$, vagyis $i = 2$-re is készen vagyunk.
@@ -124,7 +124,7 @@ Kezdetben az első szintről indulunk, az algoritmus futása akkor ér véget, a
 Amikor az $l$. szinten vagyunk, a következő történik:
 Megnézzük, hogy $\langle S_l \rangle_{\beta_l} = \langle S_{l+1} \rangle$ teljesül-e.
 Mivel $\langle S_l \rangle \ge \langle S_{l+1} \rangle$, valamint $S_l \subseteq G_{(\beta_1, \dots, \beta_{l-1})}$, ezért elegendő a $\langle S_l \rangle_{\beta_l} \le \langle S_{l+1} \rangle$ irányú tartalmazást ellenőrizni.
-A \ref{thm:sims1}. lemma alapján $\langle S_l \rangle_{\beta_l} = \langle rs(\overline{rs})^{-1} \mid r\in R_l, s\in S_l \rangle$, ahol $R_l$ az $\langle S_l \rangle_{\beta_l}$ részcsoport transzverzálisa $\langle S_l \rangle$-ban.
+A \ref{thm:sims1}. lemma alapján $\langle S_l \rangle_{\beta_l} = \langle rs(\overline{rs})^{-1} \mid r\in R_l, s\in S_l \rangle$, ahol $R_l$ az $\langle S_l \rangle_{\beta_l}$ részcsoport transzverzálisa $\langle S_l \rangle$-ben.
 Meg kell néznünk, hogy az összes Schreier-generátor benne van-e $\langle S_{l+1} \rangle$-ben.
 Ezt az előző részben leírt szitálással tudjuk ellenőrizni, mivel a \ref{thm:sims2}. lemma szerint $\langle S_{l+1} \rangle$-nek már ismerjük egy erős generátorrendszerét.
 Ha mind benne van, vagyis ha $\langle S_l \rangle_{\beta_l} = \langle S_{l+1} \rangle$ teljesül, akkor az $l-1$. szintre lépünk.
@@ -265,13 +265,7 @@ másrészt pedig hogy ha $\omega$ egy $l$-hosszú ciklus része $c$-ben, akkor $
 Ezeket a feltételeket akkor tudjuk hatékonyan kihasználni, hogyha olyan bázisban írjuk fel az erős generátorrendszert, amiben $c$ egyes ciklusainak az elemei egymást követik.
 Így tudunk $\omega, \omega^c, \omega^{c^2}, \dots$ közül minél többől báziselemet csinálni, tehát így lesz minél több $\mathcal{T}(t)$ eldobható.
 
-Második példának vegyünk $\Delta \subseteq \Omega$-t és legyen $G(\mathcal{P}) = G_{\Delta}$, vagyis a $\Delta$ halmaz stabilizátorát keressük.
-Ehhez először az $\Omega$ elemeinek egy olyan rendezése szerint csináljuk meg a bázist és az erős generátorrendszert, amiben a $\Delta$-beli elemek vannak elől.
-Legyen $\beta_k$ az első $\Omega \setminus \Delta$-beli báziselem, ilyenkor tudjuk, hogy $G^{[k]} = G_{(\Delta)} \le G(\mathcal{P})$.
-A \ref{thm:permbtcrit1}. lemma szerint $\varphi(t) \cap G(\mathcal{P}) = \emptyset$ vagy $\varphi(t) \subseteq G(\mathcal{P})$, minden $t \in \mathcal{T}_{k-1}$-re.
-Így elég csak az első $k-1$ báziselem képét vizsgálnunk.
-
-Harmadik példának nézzük a konjugáltság-ellenőrzés esetét, adott $a, b \in G$, $G(\mathcal{P}) = \{g \in G \mid a^g = b \}$.
+Másik példának nézzük a konjugáltság-ellenőrzés esetét, adott $a, b \in G$, $G(\mathcal{P}) = \{g \in G \mid a^g = b \}$.
 Ebben a problémában $G(\mathcal{P})$ vagy üres, vagy $C_G(a)$ egy jobboldali mellékosztálya, ezért hasonlít ez az eset a centralizátor-problémára, ahol hasonló feltételek jöttek ki.
 $g$-nek $a$ ciklusait $b$ ugyanolyan hosszú ciklusaihoz kell rendelnie, valamint ha $a$ egy ciklusának egy elemének a képét meghatározzuk, az az egész ciklus képét is megmondja.
 Itt is speciális bázisban érdemes felírni az erős generátorrendszert, mégpedig olyanban amiben $a$ ciklusainak elemei egymást követik.
