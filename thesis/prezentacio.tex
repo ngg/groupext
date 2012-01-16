@@ -2,6 +2,10 @@
 \usepackage[utf8]{inputenc}
 \def\magyarOptions{defaults=hu-min}
 \usepackage[magyar]{babel}
+\usepackage{ifpdf}
+\ifpdf
+	\usepackage{epstopdf}
+\fi
 \usepackage{amsmath,amssymb}
 \usepackage{faktor}
 \usetheme{Boadilla}
@@ -36,6 +40,7 @@
 	\item Burnside-Dixon-Schneider
 	\item Conlon, Unger
 	\end{itemize}
+\item Wolfram Mathematica
 \end{itemize}
 \end{frame}
 
@@ -101,6 +106,20 @@ Markov-láncokkal belátható, hogy így gyorsan megtaláljuk az összes osztál
 \item Elvárható, hogy ne csak közelítő eredményt kapjunk
 \item Dixon: $\mathbb{F}_p$ véges test felett számoljunk, végén vissza lehet kapni a komplex alakot
 \item Schneider: nem szükséges az összes $M_j$ mátrix kiszámolása, csak bizonyos oszlopok kellenek
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Wolfram Mathematica példa}
+\begin{itemize}
+\item $D_8$ karaktertáblája:
+\includegraphics[scale=0.25]{d8}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Wolfram Mathematica példa}
+\begin{itemize}
+\item $Z_2\times Z_4$ karaktertáblája:
+\includegraphics[scale=0.25]{z2z4}
 \end{itemize}
 \end{frame}
 
